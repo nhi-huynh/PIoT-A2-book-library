@@ -127,10 +127,10 @@ class Auth:
 
         invalid = []
 
-        if not self.__validate_username(username):
+        if not self.validate_username(username):
             invalid.append('username must be between 5 and 25 characters long')
 
-        if not self.__validate_email(email):
+        if not self.validate_email(email):
             invalid.append('invalid email address')
 
         if len(first_name) > 50:
@@ -191,14 +191,14 @@ class Auth:
         return User(**{x:y for x,y in user.items() if x in User.get_field_names()})
 
     @staticmethod
-    def __validate_username(uname):
+    def validate_username(uname):
         if not (4 < len(uname) < 26):
             return False
         
         return bool(re.match(r'^[a-z][a-z0-9-_]+[a-z0-9]$', uname, re.IGNORECASE))
         
     @staticmethod
-    def __validate_email(email):
+    def validate_email(email):
         if len(email) > 255:
             # Greater than db 255 char limit
             return False
