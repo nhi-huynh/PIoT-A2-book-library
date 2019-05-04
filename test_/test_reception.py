@@ -1,6 +1,6 @@
 from unittest.mock import patch
 import unittest
-from reception import Reception
+from class.reception import Reception
 
 
 class TestMasterSocket(unittest.TestCase):

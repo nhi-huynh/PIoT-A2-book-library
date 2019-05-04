@@ -1,6 +1,6 @@
 from unittest.mock import patch
 import unittest
-from master import Master
+from class_.master import Master
 
 
 class TestMasterSocket(unittest.TestCase):
