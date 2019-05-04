@@ -38,11 +38,11 @@ class Master():
             s.listen()
 
             while True:
-                # wait up 30 seconds for receiver Pi to connect
-                newReceiver, _, _ = select.select([s], [], [], 30)
+                # wait up 20 seconds for receiver Pi to connect
+                newReceiver, _, _ = select.select([s], [], [], 20)
                 if not(newReceiver):
                     print("master pi automatically shuts down")
-                    return
+                    return True
                 print("Listening on receiver Pi({})...".format(self.ADDRESS))
                 conn, addr = s.accept()
                 with conn:
@@ -51,12 +51,18 @@ class Master():
                           .format(username=username.decode()))
                     while True:
                         # shows booking menu
+                        # will run break when booking menu function returns
+                        # any value
+                        # terminate = bookingClass.showBookingMenu()
+                        # if (terminate):
+                        #     break
                         message = input("Please select option: ")
                         if(not message):
+                            conn.sendall("Logout successfully".encode())
                             break
                         print("Input chosen is {} ".format(message))
 
                     print("Disconnecting from receiver Pi")
 
-masterPi = Master()
-masterPi.start()
+# masterPi = Master()
+# masterPi.start()

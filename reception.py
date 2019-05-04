@@ -27,11 +27,11 @@ class Reception():
         Option 2 for login
         """
         while True:
-            msg = "first part"
+            print("Options:\n1.Register\n2.Login")
             option = input("Enter option(blank space to quit): ")
             if (not option):
                 print("Goodbye!")
-                return
+                return True
             elif(option == "1"):
                 # register new user
                 print("Sorry, function yet implemented")
@@ -39,8 +39,8 @@ class Reception():
                 # login user
                 self.login()
             else:
-                print("Invalid option")           
-
+                print("Invalid option")
+                    
     def login(self):
         """
         Prompt user input for login
@@ -50,23 +50,25 @@ class Reception():
         """
         while True:
             validation = input("Enter username(blank to cancel): ")
-            if(validation == "s3652122"):
+            if(validation == "test"):
                 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                    s.connect(self.ADDRESS)
-                    s.sendall(validation.encode())
                     print("Connecting to master Pi...")
+                    s.connect(self.ADDRESS)
+                    print("Successfully connected, awaiting for logout....")
+                    s.sendall(validation.encode())
                     while True:
                         # waiting for master Pi to terminate
                         data = s.recv(4096)
-                        if (not data):
+                        if (data):
+                            print(data.decode())
                             break
-                    print("Disconnecting from master Pi")
-                print("Successfully logout")
+                    # print("Disconnecting from master Pi")
+                # print("Successfully logout")
             elif (not validation):
                 break
             else:
                 print("Invalid username")
         return
 
-receptionPi = Reception()
-receptionPi.start()
+# receptionPi = Reception()
+# receptionPi.start()
