@@ -15,6 +15,44 @@ DATE_FORMAT = "%Y-%m-%d"
 
 
 class MasterApplication:
+    """
+    A class used to represent the Console Application on the Master Pi
+
+    Attributes
+    ----------
+    username : string
+        the username of the person logged in
+    validator : Validator
+        the
+
+    Methods
+    -------
+    showMenu()
+        A fuction created to display the main menu
+    printList(subject, listName, headers, data):
+        A fuction created to print the searched for items in a list
+    printSection(sectionName):
+        A fuction created to print a section
+    listBooks():
+    listBorrowsByUser():
+    searchBook():
+        A fuction created to print the main search menu options
+    searchBookByISBN():
+        A fuction created to search for a book by ISBN
+    searchBookByTitle():
+        A fuction created to search for a book by Title
+    searchBookByAuthor():
+        A fuction created to search for a book by Author
+    borrowISBN(isbn):
+        A fuction created to borrow a book based on its ISBN
+    borrowBook():
+        A fuction created to borrow a book
+    returnBook():
+        A fuction created to return a book
+    repeatsFunction(action):
+        A fuction created to ask the user if they wish to repeat the action
+
+    """
 
     def __init__(self, username):
         self.username = username
@@ -28,6 +66,14 @@ class MasterApplication:
         self.showMenu()
 
     def showMenu(self):
+        """
+        A fuction created to display the main menu
+
+        Args:
+
+        Returns:
+        """
+
         print()
         print ('-.-'*20)
         print("Welcome To the Library")
@@ -68,6 +114,18 @@ class MasterApplication:
                 print("Invalid input - please try again.")
 
     def printList(self, subject, listName, headers, data):
+        """
+        A fuction created to print the searched for items in a list
+
+        Args:
+            subject: which database to get the data from
+            listName: title to print
+            headers:
+            data: the list items
+
+        Returns:
+        """
+
         self.printSection(listName.upper())
 
         print("".join(["{:<25}".format(item) for item in headers]))
@@ -82,6 +140,15 @@ class MasterApplication:
         print()
 
     def printSection(self, sectionName):
+        """
+        A fuction created to print a section
+
+        Args:
+            sectionName: title to print
+
+        Returns:
+        """
+
         print()
         print ('-'*100)
         print("\t"*5 + sectionName.upper())
@@ -95,15 +162,25 @@ class MasterApplication:
     def listBorrowsByUser(self):
         with DatabaseUtils() as db:
             self.printList(
-                "user borrow records", "your borrow records", BORROW_HEADERS
+                "user borrow records", "your borrow records", BORROW_HEADERS,
                 db.getBorrowsByUsername(self.username))
 
     # def listBorrows(self):
-    #     BOOK_HEADERS = ["ISBN", "Username", "Borrow date", "Due date", "Return date"]
+    #     BOOK_HEADERS = [
+    # "ISBN", "Username", "Borrow date", "Due date", "Return date"]
     #     with DatabaseUtils() as db:
-    #         self.printList("borrow records", "all borrow records", BOOK_HEADERS, db.getBorrows())
+    #         self.printList(
+    # "borrow records", "all borrow records", BOOK_HEADERS, db.getBorrows())
 
     def searchBook(self):
+        """
+        A fuction created to print the main search menu options
+
+        Args:
+
+        Returns:
+        """
+
         self.printSection("SEARCH FOR A BOOK")
 
         while(True):
@@ -127,6 +204,14 @@ class MasterApplication:
                 print("Invalid input - please try again.")
 
     def searchBookByISBN(self):
+        """
+        A fuction created to search for a book by ISBN
+
+        Args:
+
+        Returns:
+        """
+
         self.printSection("SEARCH BY ISBN")
 
         isbn = input("ISBN: ")
@@ -145,6 +230,14 @@ class MasterApplication:
                     self.borrowFromSearch(isbn)
 
     def searchBookByTitle(self):
+        """
+        A fuction created to search for a book by Title
+
+        Args:
+
+        Returns:
+        """
+
         self.printSection("SEARCH BY TITLE")
 
         title = input("Title: ")
@@ -163,6 +256,14 @@ class MasterApplication:
                     self.borrowFromSearch(isbn)
 
     def searchBookByAuthor(self):
+        """
+        A fuction created to search for a book by Author
+
+        Args:
+
+        Returns:
+        """
+
         self.printSection("SEARCH BY AUTHOR")
 
         author = input("Author: ")
@@ -180,7 +281,16 @@ class MasterApplication:
                     isbn = input("Which isbn would you like to borrow?")
                     self.borrowFromSearch(isbn)
 
-    def borrowISBN(self, string isbn):
+    def borrowISBN(self, isbn):
+        """
+        A fuction created to borrow a book based on its ISBN
+
+        Args:
+            isbn: string of the isbn of the book looking to be borrowed
+
+        Returns:
+        """
+
         if self.validator.validateISBN(isbn):
                 if self.validator.isbnExists(isbn):
                     if self.validator.onLoan(self.username, isbn):
@@ -205,6 +315,14 @@ class MasterApplication:
                                 print("Book unsucessfully borrowed by")
 
     def borrowBook(self):
+        """
+        A fuction created to borrow a book
+
+        Args:
+
+        Returns:
+        """
+
         runAgain = True
 
         while(runAgain):
@@ -215,6 +333,14 @@ class MasterApplication:
             runAgain = self.repeatsFunction("borrow")
 
     def returnBook(self):
+        """
+        A fuction created to return a book
+
+        Args:
+
+        Returns:
+        """
+
         runAgain = True
 
         while(runAgain):
@@ -237,13 +363,23 @@ class MasterApplication:
                             else:
                                 print(
                                     "Book unsucessfully returned by {}"
-                                    .format(, self.username))
+                                    .format(self.username))
                     else:
                         print("You did not borrow Book ISBN {}".format(isbn))
                         print("Please return another book")
             runAgain = self.repeatsFunction("return")
 
     def repeatsFunction(self, action):
+        """
+        A fuction created to ask the user if they wish to repeat the action
+
+        Args:
+            action: borrow or return - action to be repeated if required
+
+        Returns:
+            True or False
+        """
+
         while True:
             print()
             print("Would you want to {} another book?".format(action))
