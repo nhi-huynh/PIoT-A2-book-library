@@ -10,7 +10,7 @@ import json
 import time
 
 BOOK_HEADERS = ["ISBN", "Title", "Author", "Year published"]
-BORROW_HEADERS = ["ISBN", "Username", "Borrow date", "Due date", "Return date"]
+BORROW_HEADERS = ["ISBN", "Username", "Borrow date", "Due date", "Return date", "Event ID"]
 DATE_FORMAT = "%Y-%m-%d"
 
 
