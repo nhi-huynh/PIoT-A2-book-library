@@ -1,31 +1,32 @@
 from database_utils import DatabaseUtils
 
+
 class Validator:
 
     def __init__(self):
         pass
 
-    def validateISBN(self, isbn): 
-        if len(isbn) > 13 or not isbn.isdigit():
+    def validateISBN(self, isbn):
+        if len(isbn) > 10 or not isbn.isdigit():
             print("Invalid ISBN")
-            print("ISBN is 13 digits long since December 2006.\
-            \nThe old 10-digit ISBN format is no longer supported.\
-            \nPlease try again\n""")    
+            print("ISBN's were 10 digits until December 2006, they now consist of 13 digits,\
+            \n you must enter atleast 10 digits.\
+            \nPlease try again\n""")
             return False
         else:
             return True
 
-    def validateTitle(self, title): 
-        if all(len(name) == 0 or not name.isalnum() for name in title):
+    def validateTitle(self, title):
+        if all(len(title) == 0 or not all(name.isalnum() or name.isspace() for name in title)):
             print("Invalid title.")
             print("Title must contain only letters and/or numbers.")
-            print("Please try again.\n")  
+            print("Please try again.\n")
             return False
         else:
             return True
-    
-    def validateAuthor(self, author): 
-        if all(len(name) == 0 or not name.isalpha() for name in author):
+
+    def validateAuthor(self, author):
+        if all(len(author) == 0 or not all(name.isalpha() or name.isspace() for name in author)):
             print("Invalid author name.")
             print("Name must be letters.")
             print("Please try again.\n")
@@ -34,26 +35,24 @@ class Validator:
             return True
 
     def isbnExists(self, isbn):
-        #check if isbn exits in the database
+        # check if isbn exits in the database
         with DatabaseUtils() as db:
             if not db.getBookByISBN(isbn):
-                print("Book ISBN {} does not exist in the database".format(isbn))
+                print("Book ISBN {} does not exist".format(isbn))
                 print("Please try again")
                 return False
             else:
                 return True
-    
-    def onLoan(self, username, isbn):       
-        #check if the user has not returned the book 
+
+    def onLoan(self, username, isbn):
+        # check if the user has not returned the book
         with DatabaseUtils() as db:
             currentLoan = db.stillOnLoan(username, isbn)
-            #print(currentLoan)
-            if currentLoan != None:
+            # print(currentLoan)
+            if currentLoan is not None:
                 print("You are currently borrowing book ISBN {}".format(isbn))
-                print("Book ISBN {} was borrowed on {} and will be due on {}".format(isbn, currentLoan[0], currentLoan[1]))
+                print("""Book ISBN {} was borrowed on {} and will be available
+                on the {}""".format(isbn, currentLoan[0], currentLoan[1]))
                 return True
             else:
                 return False
-
-    
-        

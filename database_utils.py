@@ -1,15 +1,22 @@
 import MySQLdb
 
+
 class DatabaseUtils:
-    
+
     HOST = "35.189.60.60"
     USER = "root"
     PASSWORD = "piot"
-    DATABASE = "Library"       #Database name
+    DATABASE = "Library"       # Database name
 
-    def __init__(self, connection = None):
-        if(connection == None):
-            connection = MySQLdb.connect(DatabaseUtils.HOST, DatabaseUtils.USER,
+    # HOST = "35.201.26.43"
+    # USER = "root"
+    # PASSWORD = "P19980314p"
+    # DATABASE = "TestBook"       # Database name
+
+    def __init__(self, connection=None):
+        if(connection is None):
+            connection = MySQLdb.connect(
+                DatabaseUtils.HOST, DatabaseUtils.USER,
                 DatabaseUtils.PASSWORD, DatabaseUtils.DATABASE)
         self.connection = connection
 
@@ -21,7 +28,7 @@ class DatabaseUtils:
 
     def __exit__(self, type, value, traceback):
         self.close()
-    
+
     def createBookTable(self):
         with self.connection.cursor() as cursor:
             cursor.execute("""
@@ -43,7 +50,9 @@ class DatabaseUtils:
                     borrowDate date not null,
                     dueDate date not null,
                     returnDate date DEFAULT null,
-                    constraint FK_Borrow_Book foreign key (ISBN) references Book (ISBN))
+                    eventid string not null,
+                    constraint FK_Borrow_Book foreign key (ISBN)
+                    references Book (ISBN))
                 """)
             self.connection.commit()
 
@@ -51,9 +60,9 @@ class DatabaseUtils:
         with self.connection.cursor() as cursor:
             isEmpty = cursor.execute("""
                 select isbn from Book
-                """) 
+                """)
 
-            #print("Book table has {} rows".format(isEmpty))
+            # print("Book table has {} rows".format(isEmpty))
             if isEmpty == 0:
                 self.insertBook("Frankenstein", "Mary Shelley", "1818")
                 self.insertBook("Doraemon", "Fujiko Fujio", "1969")
@@ -79,13 +88,14 @@ class DatabaseUtils:
             cursor.execute("""select ISBN, Title, Author, YearPublished from Book
             where Author like %s""", ("%" + author + "%",))
             return cursor.fetchall()
-        
+
     def getBooks(self):
         """
         Return all entries in the Book table
         """
         with self.connection.cursor() as cursor:
-            cursor.execute("select ISBN, Title, Author, YearPublished from Book")
+            cursor.execute("""select ISBN, Title, Author,
+            YearPublished from Book""")
             return cursor.fetchall()
 
     def getBorrows(self):
@@ -93,33 +103,37 @@ class DatabaseUtils:
         Return all entries in the Borrow table
         """
         with self.connection.cursor() as cursor:
-            cursor.execute("select ISBN, username, borrowDate, dueDate, returnDate from Borrow")
+            cursor.execute(
+                """select ISBN, username, borrowDate, dueDate,
+                returnDate from Borrow""")
             return cursor.fetchall()
 
     def stillOnLoan(self, username, isbn):
         """
-        Return the borrowDate and returnDate for the username if the book is still on loan.
+        Return the borrowDate and returnDate for the username
+        if the book is still on loan.
         """
         with self.connection.cursor() as cursor:
             cursor.execute("""select borrowDate, dueDate from Borrow
-                where username = %s and ISBN = %s and returnDate IS NULL LIMIT 1""", 
-            (username, isbn,))
-            return cursor.fetchone() 
+                where username = %s and ISBN = %s and
+                returnDate IS NULL LIMIT 1""", (username, isbn,))
+            return cursor.fetchone()
 
     def getBorrowsByUsername(self, username):
         """
         Return all loans record belongs to username
         """
         with self.connection.cursor() as cursor:
-            cursor.execute("select ISBN, username, borrowDate, dueDate, returnDate from Borrow where username = %s", (username,))
+            cursor.execute(
+                """select ISBN, username, borrowDate, dueDate,
+                returnDate from Borrow where username = %s""", (username,))
             return cursor.fetchall()
-    
+
     def insertBook(self, title, author, yearPublished):
         with self.connection.cursor() as cursor:
             cursor.execute("""
-            insert into Book (Title, Author, YearPublished) 
-            values (%s, %s, %s)""",
-            (title, author, yearPublished))
+            insert into Book (Title, Author, YearPublished)
+            values (%s, %s, %s)""", (title, author, yearPublished))
         self.connection.commit()
 
         return cursor.rowcount == 1
@@ -127,22 +141,20 @@ class DatabaseUtils:
     def insertBorrow(self, isbn, username):
         with self.connection.cursor() as cursor:
             cursor.execute("""
-            insert into Borrow (ISBN, username, borrowDate, dueDate) 
-            values (%s, %s, CURRENT_DATE(), DATE_ADD(CURRENT_DATE(), INTERVAL 7 DAY))""",(isbn, username,))
+            insert into Borrow (ISBN, username, borrowDate, dueDate, eventID)
+            values (%s, %s, CURRENT_DATE(), DATE_ADD(CURRENT_DATE(),
+            INTERVAL 7 DAY), %s)""", (isbn, username, eventID))
         self.connection.commit()
 
         return cursor.rowcount == 1
 
-    def updateReturnDate(self, isbn, username): #, returnDate
+    def updateReturnDate(self, isbn, username):  # returnDate
         with self.connection.cursor() as cursor:
             cursor.execute("""
             UPDATE Borrow
-            SET returnDate = CURRENT_DATE() 
+            SET returnDate = CURRENT_DATE()
             WHERE ISBN = %s AND username = %s AND returnDate IS NULL
-            """,
-            (isbn, username,))   #returnDate, 
+            """, (isbn, username,))   # returnDate,
         self.connection.commit()
 
         return cursor.rowcount == 1
-
-
