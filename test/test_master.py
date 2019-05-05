@@ -17,6 +17,7 @@ class TestMasterSocket(unittest.TestCase):
         """
         self.master = Master()
 
+    @unittest.skip("Skipping until able to test without user input")
     def test_connection(self):
         """
         Test should be successful with master Pi shuts down automatically
@@ -29,7 +30,3 @@ class TestMasterSocket(unittest.TestCase):
             self.assertTrue(success)
         except Exception as e:
             print("Exception is {}".format(e))    
-
-
-if __name__ == "__main__":
-    unittest.main()         
