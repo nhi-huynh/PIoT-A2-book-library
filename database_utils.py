@@ -6,11 +6,6 @@ class DatabaseUtils:
     USER = "root"
     PASSWORD = "piot"
     DATABASE = "Library"       #Database name
-    
-    # HOST = "35.201.26.43"
-    # USER = "root"
-    # PASSWORD = "P19980314p"
-    # DATABASE = "TestBook"       #Database name
 
     def __init__(self, connection = None):
         if(connection == None):
