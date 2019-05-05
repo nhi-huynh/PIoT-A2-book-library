@@ -71,6 +71,14 @@ class DatabaseUtils:
                 self.insertBook("One Piece", "Eiichiro Oda", "1997")
                 self.connection.commit()
 
+    def getEventID(self, isbn, username){
+        with self.connection.cursor() as cursor:
+            cursor.execute(
+                """select eventID from Borrow where username = %
+                and ISBN = %s""", (username, isbn,))
+            return cursor.fetchone()
+    }
+
     def getBookByISBN(self, isbn):
         with self.connection.cursor() as cursor:
             cursor.execute("""select ISBN, Title, Author, YearPublished from Book

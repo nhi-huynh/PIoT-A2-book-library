@@ -189,8 +189,10 @@ class MasterApplication:
                         currentdate = date.today()
                         dueDate = currentdate + timedelta(days=7)
                         with DatabaseUtils() as db:
-                            #made change here to create event then add the borrow with the eventID
-                            eventid = self.calendar.createCalendarEvent(dueDate.strftime(DATE_FORMAT), isbn)
+                            # made change here to create event then
+                            # add the borrow with the eventID
+                            eventid = self.calendar.createCalendarEvent(
+                                dueDate.strftime(DATE_FORMAT), isbn)
                             if(db.insertBorrow(isbn, self.username, eventid)):
                                 print(
                                     "Book ISBN {} sucessfully borrowed by {}."
@@ -201,7 +203,6 @@ class MasterApplication:
                             else:
                                 self.calendar.removeCalendarEvent(eventid)
                                 print("Book unsucessfully borrowed by")
-
 
     def borrowBook(self):
         runAgain = True
@@ -230,9 +231,9 @@ class MasterApplication:
                                     .format(isbn, self.username))
 
                                 # get id from database
-                                db.
+                                eventString = db.getEventID(username, isbn)
                                 # remove google calendar event
-                                self.calendar.removeCalendarEvent()
+                                self.calendar.removeCalendarEvent(eventString)
                             else:
                                 print(
                                     "Book unsucessfully returned by {}"
