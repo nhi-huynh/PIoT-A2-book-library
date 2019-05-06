@@ -5,9 +5,6 @@ class Validator:
     """
     A class used to represent the validation of input
 
-    Attributes
-    ----------
-
     Methods
     -------
     validateISBN(isbn):
@@ -20,7 +17,6 @@ class Validator:
         A fuction to check that the isbn exists in the library
     onLoan(username, isbn):
         A fuction to check if the user has the isbn book on loan
-
     """
 
     def __init__(self):
@@ -56,7 +52,8 @@ class Validator:
         Returns:
             True or False
         """
-        if all(len(title) == 0 or not all(name.isalnum() or name.isspace() for name in title)):
+        if (all(len(title) == 0 or not all(
+                name.isalnum() or name.isspace() for name in title))):
             print("Invalid title.")
             print("Title must contain only letters and/or numbers.")
             print("Please try again.\n")
@@ -75,7 +72,8 @@ class Validator:
             True or False
         """
 
-        if all(len(author) == 0 or not all(name.isalpha() or name.isspace() for name in author)):
+        if (all(len(author) == 0 or not all(
+                name.isalpha() or name.isspace() for name in author))):
             print("Invalid author name.")
             print("Name must be letters.")
             print("Please try again.\n")

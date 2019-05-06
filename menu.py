@@ -10,7 +10,8 @@ import json
 import time
 
 BOOK_HEADERS = ["ISBN", "Title", "Author", "Year published"]
-BORROW_HEADERS = ["ISBN", "Username", "Borrow date", "Due date", "Return date", "Event ID"]
+BORROW_HEADERS = ["ISBN", "Username", "Borrow date", "Due date",
+                  "Return date", "Event ID"]
 DATE_FORMAT = "%Y-%m-%d"
 
 
@@ -23,7 +24,7 @@ class MasterApplication:
     username : string
         the username of the person logged in
     validator : Validator
-        the
+        the _____
 
     Methods
     -------
@@ -51,7 +52,6 @@ class MasterApplication:
         A fuction created to return a book
     repeatsFunction(action):
         A fuction created to ask the user if they wish to repeat the action
-
     """
 
     def __init__(self, username):
@@ -66,13 +66,7 @@ class MasterApplication:
         self.showMenu()
 
     def showMenu(self):
-        """
-        A fuction created to display the main menu
-
-        Args:
-
-        Returns:
-        """
+        """A fuction created to display the main menu"""
 
         print()
         print ('-.-'*20)
@@ -123,7 +117,6 @@ class MasterApplication:
             headers:
             data: the list items
 
-        Returns:
         """
 
         self.printSection(listName.upper())
@@ -146,7 +139,6 @@ class MasterApplication:
         Args:
             sectionName: title to print
 
-        Returns:
         """
 
         print()
@@ -173,13 +165,7 @@ class MasterApplication:
     # "borrow records", "all borrow records", BOOK_HEADERS, db.getBorrows())
 
     def searchBook(self):
-        """
-        A fuction created to print the main search menu options
-
-        Args:
-
-        Returns:
-        """
+        """A fuction created to print the main search menu options"""
 
         self.printSection("SEARCH FOR A BOOK")
 
@@ -193,7 +179,7 @@ class MasterApplication:
             print()
 
             if(selection == "A"):
-                self.searchBookByISBN()
+                self.searchBooksByISBN()
             elif(selection == "B"):
                 self.searchBookByAuthor()
             elif(selection == "C"):
@@ -204,13 +190,7 @@ class MasterApplication:
                 print("Invalid input - please try again.")
 
     def searchBookByISBN(self):
-        """
-        A fuction created to search for a book by ISBN
-
-        Args:
-
-        Returns:
-        """
+        """A fuction created to search for a book by ISBN"""
 
         self.printSection("SEARCH BY ISBN")
 
@@ -230,13 +210,7 @@ class MasterApplication:
                     self.borrowFromSearch(isbn)
 
     def searchBookByTitle(self):
-        """
-        A fuction created to search for a book by Title
-
-        Args:
-
-        Returns:
-        """
+        """A fuction created to search for a book by Title"""
 
         self.printSection("SEARCH BY TITLE")
 
@@ -256,13 +230,7 @@ class MasterApplication:
                     self.borrowFromSearch(isbn)
 
     def searchBookByAuthor(self):
-        """
-        A fuction created to search for a book by Author
-
-        Args:
-
-        Returns:
-        """
+        """A fuction created to search for a book by Author"""
 
         self.printSection("SEARCH BY AUTHOR")
 
@@ -288,7 +256,6 @@ class MasterApplication:
         Args:
             isbn: string of the isbn of the book looking to be borrowed
 
-        Returns:
         """
 
         if self.validator.validateISBN(isbn):
@@ -315,13 +282,7 @@ class MasterApplication:
                                 print("Book unsucessfully borrowed by")
 
     def borrowBook(self):
-        """
-        A fuction created to borrow a book
-
-        Args:
-
-        Returns:
-        """
+        """A fuction created to borrow a book"""
 
         runAgain = True
 
@@ -333,13 +294,7 @@ class MasterApplication:
             runAgain = self.repeatsFunction("borrow")
 
     def returnBook(self):
-        """
-        A fuction created to return a book
-
-        Args:
-
-        Returns:
-        """
+        """A fuction created to return a book"""
 
         runAgain = True
 
