@@ -24,36 +24,36 @@ class DatabaseUtils:
     __enter__():
     __exit__(type, value, traceback):
     createBookTable():
-        A fuction created to create the book database
+        A function created to create the book database
         if it doesnt already exist
     createBorrowTable():
-        A fuction created to create the borrow database
+        A function created to create the borrow database
         if it doesnt already exist
     insertSampleBook():
-        A fuction created to insert a sample book to the book database
+        A function created to insert a sample book to the book database
     getEventID(isbn, username):
-        A fuction created to get the event id from a specific row
+        A function created to get the event id from a specific row
     getBooksByISBN(isbn):
-        A fuction created to get all the books that match the isbn
+        A function created to get all the books that match the isbn
     getBooksByTitle(title):
-        A fuction created to get all the books that match the title
+        A function created to get all the books that match the title
     getBooksByAuthor(author):
-        A fuction created to get all the books that match the author
+        A function created to get all the books that match the author
     getBooks():
-        A fuction created to return all entries in the Book table
+        A function created to return all entries in the Book table
     getBorrows():
-        A fuction created to return all entries in the Borrow table
+        A function created to return all entries in the Borrow table
     stillOnLoan(username, isbn):
-        A fuction created to get the borrow date and return date of
+        A function created to get the borrow date and return date of
         a book the user has borrowed
     getBorrowsByUsername(username):
-        A fuction created to get all the books the user has borrowed
+        A function created to get all the books the user has borrowed
     insertBook(title, author, yearPublished):
-        A fuction created to insert a book into the book table
+        A function created to insert a book into the book table
     insertBorrow(isbn, username):
-        A fuction created to insert a book into the borrow table
+        A function created to insert a book into the borrow table
     updateReturnDate(isbn, username):
-        A fuction created to update the return date value
+        A function created to update the return date value
     """
 
     HOST = "35.189.60.60"
@@ -82,7 +82,7 @@ class DatabaseUtils:
         self.close()
 
     def createBookTable(self):
-        """A fuction created to create the book database
+        """A function created to create the book database
         if it doesnt already exist"""
 
         with self.connection.cursor() as cursor:
@@ -97,25 +97,27 @@ class DatabaseUtils:
             self.connection.commit()
 
     def createBorrowTable(self):
-        """A fuction created to create the borrow database
+        """A function created to create the borrow database
         if it doesnt already exist"""
 
         with self.connection.cursor() as cursor:
             cursor.execute("""
                 create table if not exists Borrow (
+                    borrowID int not null auto_increment,
                     ISBN int not null,
                     username VARCHAR(50) not null,
                     borrowDate date not null,
                     dueDate date not null,
                     returnDate date DEFAULT null,
                     eventid string not null,
+                    constraint PK_Borrow primary key (borrowID),
                     constraint FK_Borrow_Book foreign key (ISBN)
                     references Book (ISBN))
                 """)
             self.connection.commit()
 
     def insertSampleBook(self):
-        """A fuction created to insert a sample book to the book database"""
+        """A function created to insert a sample book to the book database"""
 
         with self.connection.cursor() as cursor:
             isEmpty = cursor.execute("""
@@ -133,7 +135,7 @@ class DatabaseUtils:
 
     def getEventID(self, isbn, username):
         """
-        A fuction created to get the event id from a specific row
+        A function created to get the event id from a specific row
 
         Args:
             isbn: string to find in table
@@ -145,13 +147,13 @@ class DatabaseUtils:
 
         with self.connection.cursor() as cursor:
             cursor.execute(
-                """select eventID from Borrow where username = %
+                """select eventID from Borrow where username = %s
                 and ISBN = %s""", (username, isbn,))
             return cursor.fetchone()
 
     def getBooksByISBN(self, isbn):
         """
-        A fuction created to get all the books that match the isbn
+        A function created to get all the books that match the isbn
 
         Args:
             isbn: string to find in table
@@ -167,7 +169,7 @@ class DatabaseUtils:
 
     def getBooksByTitle(self, title):
         """
-        A fuction created to get all the books that match the title
+        A function created to get all the books that match the title
 
         Args:
             title: string to find in table
@@ -183,7 +185,7 @@ class DatabaseUtils:
 
     def getBooksByAuthor(self, author):
         """
-        A fuction created to get all the books that match the author
+        A function created to get all the books that match the author
 
         Args:
             author: string to find in table
@@ -198,7 +200,7 @@ class DatabaseUtils:
             return cursor.fetchall()
 
     def getBooks(self):
-        """A fuction created to return all entries in the Book table"""
+        """A function created to return all entries in the Book table"""
 
         with self.connection.cursor() as cursor:
             cursor.execute("""select ISBN, Title, Author,
@@ -206,17 +208,17 @@ class DatabaseUtils:
             return cursor.fetchall()
 
     def getBorrows(self):
-        """A fuction created to return all entries in the Borrow table"""
+        """A function created to return all entries in the Borrow table"""
 
         with self.connection.cursor() as cursor:
             cursor.execute(
-                """select ISBN, username, borrowDate, dueDate,
+                """select borrowID, ISBN, username, borrowDate, dueDate,
                 returnDate from Borrow""")
             return cursor.fetchall()
 
     def stillOnLoan(self, username, isbn):
         """
-        A fuction created to get the borrow date and return date of a
+        A function created to get the borrow date and return date of a
         book the user has borrowed
 
         Args:
@@ -235,7 +237,7 @@ class DatabaseUtils:
 
     def getBorrowsByUsername(self, username):
         """
-        A fuction created to get all the books the user has borrowed
+        A function created to get all the books the user has borrowed
 
         Args:
             username: string to find in table
@@ -246,13 +248,13 @@ class DatabaseUtils:
 
         with self.connection.cursor() as cursor:
             cursor.execute(
-                """select ISBN, username, borrowDate, dueDate,
+                """select borrowID, ISBN, username, borrowDate, dueDate,
                 returnDate from Borrow where username = %s""", (username,))
             return cursor.fetchall()
 
     def insertBook(self, title, author, yearPublished):
         """
-        A fuction created to insert a book into the book table
+        A function created to insert a book into the book table
 
         Args:
             isbn: string to find in table
@@ -273,7 +275,7 @@ class DatabaseUtils:
 
     def insertBorrow(self, isbn, username):
         """
-        A fuction created to insert a book into the borrow table
+        A function created to insert a book into the borrow table
 
         Args:
             isbn: string that is the ISBN of the book
@@ -295,7 +297,7 @@ class DatabaseUtils:
 
     def updateReturnDate(self, isbn, username):  # returnDate
         """
-        A fuction created to update the return date value
+        A function created to update the return date value
 
         Args:
             isbn: string that is the ISBN of the book
