@@ -3,7 +3,7 @@
 # password: A2abc123
 
 from database_utils import DatabaseUtils
-from calendar import *
+from calendar import CalendarUtils
 from validator import Validator
 from datetime import datetime, date, timedelta
 import json
@@ -29,34 +29,35 @@ class MasterApplication:
     Methods
     -------
     showMenu()
-        A fuction created to display the main menu
+        A function created to display the main menu
     printList(subject, listName, headers, data):
-        A fuction created to print the searched for items in a list
+        A function created to print the searched for items in a list
     printSection(sectionName):
-        A fuction created to print a section
+        A function created to print a section
     listBooks():
     listBorrowsByUser():
     searchBook():
-        A fuction created to print the main search menu options
+        A function created to print the main search menu options
     searchBookByISBN():
-        A fuction created to search for a book by ISBN
+        A function created to search for a book by ISBN
     searchBookByTitle():
-        A fuction created to search for a book by Title
+        A function created to search for a book by Title
     searchBookByAuthor():
-        A fuction created to search for a book by Author
+        A function created to search for a book by Author
     borrowISBN(isbn):
-        A fuction created to borrow a book based on its ISBN
+        A function created to borrow a book based on its ISBN
     borrowBook():
-        A fuction created to borrow a book
+        A function created to borrow a book
     returnBook():
-        A fuction created to return a book
+        A function created to return a book
     repeatsFunction(action):
-        A fuction created to ask the user if they wish to repeat the action
+        A function created to ask the user if they wish to repeat the action
     """
 
     def __init__(self, username):
         self.username = username
         self.validator = Validator()
+        self.calendar = CalendarUtils()
 
         with DatabaseUtils() as db:
             db.createBookTable()
@@ -66,12 +67,12 @@ class MasterApplication:
         self.showMenu()
 
     def showMenu(self):
-        """A fuction created to display the main menu"""
+        """A function created to display the main menu"""
 
         print()
-        print ('-.-'*20)
+        print('-.-'*20)
         print("Welcome To the Library")
-        print ('-.-'*20)
+        print('-.-'*20)
 
         while(True):
             print()
@@ -109,7 +110,7 @@ class MasterApplication:
 
     def printList(self, subject, listName, headers, data):
         """
-        A fuction created to print the searched for items in a list
+        A function created to print the searched for items in a list
 
         Args:
             subject: which database to get the data from
@@ -134,7 +135,7 @@ class MasterApplication:
 
     def printSection(self, sectionName):
         """
-        A fuction created to print a section
+        A function created to print a section
 
         Args:
             sectionName: title to print
@@ -165,7 +166,7 @@ class MasterApplication:
     # "borrow records", "all borrow records", BOOK_HEADERS, db.getBorrows())
 
     def searchBook(self):
-        """A fuction created to print the main search menu options"""
+        """A function created to print the main search menu options"""
 
         self.printSection("SEARCH FOR A BOOK")
 
@@ -179,7 +180,7 @@ class MasterApplication:
             print()
 
             if(selection == "A"):
-                self.searchBooksByISBN()
+                self.searchBookByISBN()
             elif(selection == "B"):
                 self.searchBookByAuthor()
             elif(selection == "C"):
@@ -190,7 +191,7 @@ class MasterApplication:
                 print("Invalid input - please try again.")
 
     def searchBookByISBN(self):
-        """A fuction created to search for a book by ISBN"""
+        """A function created to search for a book by ISBN"""
 
         self.printSection("SEARCH BY ISBN")
 
@@ -204,13 +205,13 @@ class MasterApplication:
                 answer = input(
                     "Would you like to borrow based one of these books? Y/N"
                     ).upper()
-                if answer is 'Y':
+                if answer == 'Y':
                     # get isbn
                     isbn = input("Which isbn would you like to borrow?")
                     self.borrowFromSearch(isbn)
 
     def searchBookByTitle(self):
-        """A fuction created to search for a book by Title"""
+        """A function created to search for a book by Title"""
 
         self.printSection("SEARCH BY TITLE")
 
@@ -230,7 +231,7 @@ class MasterApplication:
                     self.borrowFromSearch(isbn)
 
     def searchBookByAuthor(self):
-        """A fuction created to search for a book by Author"""
+        """A function created to search for a book by Author"""
 
         self.printSection("SEARCH BY AUTHOR")
 
@@ -251,7 +252,7 @@ class MasterApplication:
 
     def borrowISBN(self, isbn):
         """
-        A fuction created to borrow a book based on its ISBN
+        A function created to borrow a book based on its ISBN
 
         Args:
             isbn: string of the isbn of the book looking to be borrowed
@@ -282,7 +283,7 @@ class MasterApplication:
                                 print("Book unsucessfully borrowed by")
 
     def borrowBook(self):
-        """A fuction created to borrow a book"""
+        """A function created to borrow a book"""
 
         runAgain = True
 
@@ -294,7 +295,7 @@ class MasterApplication:
             runAgain = self.repeatsFunction("borrow")
 
     def returnBook(self):
-        """A fuction created to return a book"""
+        """A function created to return a book"""
 
         runAgain = True
 
@@ -312,7 +313,7 @@ class MasterApplication:
                                     .format(isbn, self.username))
 
                                 # get id from database
-                                eventString = db.getEventID(username, isbn)
+                                eventString = db.getEventID(self.username, isbn)
                                 # remove google calendar event
                                 self.calendar.removeCalendarEvent(eventString)
                             else:
@@ -326,7 +327,7 @@ class MasterApplication:
 
     def repeatsFunction(self, action):
         """
-        A fuction created to ask the user if they wish to repeat the action
+        A function created to ask the user if they wish to repeat the action
 
         Args:
             action: borrow or return - action to be repeated if required

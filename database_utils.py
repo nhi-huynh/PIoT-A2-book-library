@@ -109,10 +109,10 @@ class DatabaseUtils:
                     borrowDate date not null,
                     dueDate date not null,
                     returnDate date DEFAULT null,
-                    eventid string not null,
+                    eventID VARCHAR(50) not null,
                     constraint PK_Borrow primary key (borrowID),
-                    constraint FK_Borrow_Book foreign key (ISBN)
-                    references Book (ISBN))
+                    constraint FK_Borrow_Book foreign key (ISBN)"""
+                    + """ references Book (ISBN))
                 """)
             self.connection.commit()
 
@@ -151,7 +151,7 @@ class DatabaseUtils:
                 and ISBN = %s""", (username, isbn,))
             return cursor.fetchone()
 
-    def getBooksByISBN(self, isbn):
+    def getBookByISBN(self, isbn):
         """
         A function created to get all the books that match the isbn
 
@@ -273,7 +273,7 @@ class DatabaseUtils:
 
         return cursor.rowcount == 1
 
-    def insertBorrow(self, isbn, username):
+    def insertBorrow(self, isbn, username, eventID):
         """
         A function created to insert a book into the borrow table
 

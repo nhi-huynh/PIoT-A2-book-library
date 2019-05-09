@@ -6,7 +6,7 @@ from httplib2 import Http
 from oauth2client import file, client, tools
 
 
-class calendarUtils:
+class CalendarUtils:
     """
     A class used to represent different functions for the google calendar
 
@@ -17,7 +17,7 @@ class calendarUtils:
     createCalendarEvent(Duedate, ISBN, username):
         A fuction created to add a google calendar event at a specific date
     """
-
+    
     def removeCalendarEvent(self, eventid):
         """
         A fuction created to remove a specific google calendar event
@@ -58,7 +58,7 @@ class calendarUtils:
                 "timeZone": "Australia/Melbourne",
             },
             "attendees": [
-                {"email": "RMIT.PIOT.A2@gmail.com},
+                {"email": "RMIT.PIOT.A2@gmail.com"},
             ],
             "reminders": {
                 "useDefault": False,
