@@ -24,29 +24,37 @@ class Reception():
         """
         Shows main menu for receiver Pi
         Option 1 for register new user
-        Option 2 for login
+        Option 2 for login via console
+        Option 3 for login via face recognition
+        Blank input exits reception
+        return: True
+        rtype: boolean
         """
         while True:
-            print("Options:\n1.Register\n2.Login")
-            option = input("Enter option(blank space to quit): ")
+            print("Options:\n1.Register new user")
+            print("2.Login by username and password")
+            print("3.Login by face recognition")  
+            option = input("\nEnter option(blank space to quit): ")
             if (not option):
                 print("Goodbye!")
                 return True
             elif(option == "1"):
                 # register new user
-                print("Sorry, function yet implemented")
+                print("Sorry, function 1 yet implemented")
             elif(option == "2"):
                 # login user
                 self.login()
+            elif(option == "3"):
+                print("Sorry, function 3 yet implemented")    
             else:
                 print("Invalid option")
-                    
+               
     def login(self):
         """
         Prompt user input for login
         TODO: add login functionality based on local database
 
-        Returns None after cancel login
+        Return: None
         """
         while True:
             validation = input("Enter username(blank to cancel): ")
@@ -61,9 +69,8 @@ class Reception():
                         data = s.recv(4096)
                         if (data):
                             print(data.decode())
+                            print()
                             break
-                    # print("Disconnecting from master Pi")
-                # print("Successfully logout")
             elif (not validation):
                 break
             else:
