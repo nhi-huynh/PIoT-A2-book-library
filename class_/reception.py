@@ -1,6 +1,7 @@
 #!/usr/bin/env/ python3
 
 import socket
+from Config import Config
 
 
 class Reception():
@@ -8,17 +9,16 @@ class Reception():
     The receiver Pi class as a client socket
     """
 
-    def __init__(self, HOST="127.0.0.1", PORT=12345):
+    def __init__(self):
         """
         Instantiates the receiver Pi class
-
-        :type HOST: string
-        :param HOST: The server's(master Pi) IP address
-
-        :type PORT: int
-        :param PORT: The port used by the server
+        
         """
-        self.ADDRESS = (HOST, PORT)
+        cfg = Config()
+        socketConfig = cfg.get_socket_config()
+        port = socketConfig["port"]
+        host = socketConfig["master_ip"]  
+        self.ADDRESS = (host, port)
 
     def start(self):
         """
@@ -77,5 +77,5 @@ class Reception():
                 print("Invalid username")
         return
 
-# receptionPi = Reception()
-# receptionPi.start()
+receptionPi = Reception()
+receptionPi.start()

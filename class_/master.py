@@ -2,6 +2,7 @@
 
 import socket
 import select
+from Config import Config
 
 
 class Master():
@@ -9,17 +10,16 @@ class Master():
     The master Pi class as a server socket
     """
 
-    def __init__(self, HOST="", PORT=12345):
+    def __init__(self):
         """
         Instantiates the master Pi class
 
-        :type HOST: string
-        :param HOST: IP address of receiver Pi
-
-        :type PORT: int
-        :param PORT: Port to listen on
         """
-        self.ADDRESS = (HOST, PORT)
+        cfg = Config()
+        socketConfig = cfg.get_socket_config()
+        port = socketConfig["port"]
+        host = socketConfig["reception_ip"]  
+        self.ADDRESS = (host, port)
 
     def start(self):
         """
@@ -38,8 +38,8 @@ class Master():
             s.listen()
 
             while True:
-                # wait up 20 seconds for receiver Pi to connect
-                newReceiver, _, _ = select.select([s], [], [], 20)
+                # wait up 30 seconds for receiver Pi to connect
+                newReceiver, _, _ = select.select([s], [], [], 30)
                 if not(newReceiver):
                     print("master pi automatically shuts down")
                     return True
@@ -64,5 +64,5 @@ class Master():
 
                     print("Disconnecting from receiver Pi")
 
-# masterPi = Master()
-# masterPi.start()
+masterPi = Master()
+masterPi.start()
