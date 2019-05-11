@@ -7,7 +7,24 @@ from Config import Config
 
 class Master():
     """
-    The master Pi class as a server socket
+    A class used to represent the master pi class as a client socket
+
+    Attributes
+    ----------
+    cfg : file
+        file that contains the ip address and port numbers
+    socketConfig : dict
+        contains the ip address and port numbers
+    port : int
+        port number to connect to
+    host : string
+        ip address
+
+    Methods
+    -------
+    start():
+        A fuction created to connect to the reception pi
+        and to run the menu class
     """
 
     def __init__(self):
@@ -18,20 +35,17 @@ class Master():
         cfg = Config()
         socketConfig = cfg.get_socket_config()
         port = socketConfig["port"]
-        host = socketConfig["reception_ip"]  
+        host = socketConfig["reception_ip"]
         self.ADDRESS = (host, port)
 
     def start(self):
-        """
-        Starts to listen and make connection with receiver Pi
-        after successful login.
-        Once connection is made, runs the menu class for borrowing books.
+        """A fuction created to connect to the reception pi
+        and to run the menu class"""
 
+        """
         TODO: add menu class functionality in while loop
-
-        Returns None after master Pi automatically shuts down listening
-
         """
+
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.bind(self.ADDRESS)
             print("master Pi currently listening...")

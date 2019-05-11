@@ -1,9 +1,4 @@
-""" vim: set et sw=4 ts=4 sts=4:
-
-Database Interface
-
-
-"""
+""" vim: set et sw=4 ts=4 sts=4: """
 
 # Imports
 try:
@@ -18,21 +13,40 @@ except:
 
 
 class DBInterface:
+    """
+    A class used to represent the Database Interface
+
+    Attributes
+    ----------
+    __is_valid : bool
+        is the database valid
+    __dbi : database
+        mysql database
+    __dbi_cursor : cursor
+        database cursor
+    __last_result : none
+    __config : dict
+        dict include host, user, passwd, database, port (optional)
+
+    Methods
+    -------
+    run(sql, vals):
+        A fuction created to run a query
+    run_many(sql, vals):
+        A fuction created to run a query multiple times using supplied vals
+    view(sql, vals):
+        A fuction created to view queries
+    view_single(sql, vals):
+        A fuction created to view a query
+    """
 
     __is_valid = False
     __dbi = None
     __dbi_cursor = None
     __last_result = None
-
     __config = None
 
-
     def __init__(self, config):
-        """
-        Args:
-            config: dict include host, user, passwd, database, port (optional)
-        """
-
         if config is None or not isinstance(config, dict):
             raise Exception('Invalid db config')
 
@@ -53,13 +67,16 @@ class DBInterface:
         self.__is_valid = True
 
     def run(self, sql, vals=None):
-        """ Return mixed
-        False if query failed
-        dict if successful/applicable
+        """
+        A fuction created to run a query
 
         Args:
             sql: string, sql query
             vals: optional, type can be list, tuple, or non-collection value
+
+        Returns:
+            False if query failed
+            dict if successful/applicable
         """
 
         if not self.__is_valid:
@@ -89,14 +106,17 @@ class DBInterface:
             return False
 
     def run_many(self, sql, vals):
-        """Return bool
-        Run query multiple times using supplied vals
-        Return True on success, else False
+        """
+        A fuction created to run a query multiple times using supplied vals
 
         Args:
             sql: string, sql query
             vals: list of tuples or list of non-collection values
+
+        Returns:
+            True on success, else False
         """
+
         if not self.__is_valid:
             return False
 
@@ -110,13 +130,16 @@ class DBInterface:
             return False
 
     def view(self, sql, vals=None):
-        """ Return mixed
-        False if query failed
-        dict if successful/applicable
+        """
+        A fuction created to view queries
 
         Args:
             sql: string, sql query
             vals: optional, type can be list, tuple, or non-collection value
+
+        Returns:
+            False if query failed
+            dict if successful/applicable
         """
 
         if not self.__is_valid:
@@ -150,14 +173,18 @@ class DBInterface:
         return res if len(res) > 0 else False
 
     def view_single(self, sql, vals=None):
-        """ Return mixed
-        False if query failed or number of rows returned != 1
-        dict if successful/applicable
+        """
+        A fuction created to view a query
 
         Args:
             sql: string, sql query
             vals: optional, type can be list, tuple, or non-collection value
+
+        Returns:
+            False if query failed or number of rows returned != 1
+            dict if successful/applicable
         """
+
         res = self.view(sql, vals)
 
         if not res or len(res) != 1:
