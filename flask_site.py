@@ -15,10 +15,10 @@ def index():
     return render_template("index.html", books = data)
 
 # Client webpage.
-@site.route("/")
-def index():
+@site.route("/all_borrows")
+def borrows_index():
     # Use REST API.
-    response = requests.get("http://127.0.0.1:5000/books")
+    response = requests.get("http://127.0.0.1:5000/borrows")
     data = json.loads(response.text)
 
-    return render_template("index.html", books = data)
+    return render_template("borrows_index.html", borrows = data)

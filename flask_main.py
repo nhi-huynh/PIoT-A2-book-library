@@ -6,8 +6,9 @@ from flask_marshmallow import Marshmallow
 import os, requests, json
 # from flask_api import api, db
 from flask_site import site
-from flask_api_book import api as book_api
-from flask_api_book import db as book_db
+from flask_api import api as library_api
+from flask_api import db as library_db
+
 
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -21,9 +22,9 @@ DATABASE = "Library"       #Database name
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://{}:{}@{}/{}".format(USER, PASSWORD, HOST, DATABASE)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 
-book_db.init_app(app)
+library_db.init_app(app)
 
-app.register_blueprint(book_api)
+app.register_blueprint(library_api)
 app.register_blueprint(site)
 
 if __name__ == "__main__":
