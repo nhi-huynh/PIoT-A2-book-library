@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+    <head>
+        <title>All borrows</title>
+    </head>
+    <body>
+        <table>
+            <tr>
+                <th>BorrowID</th>
+                <th>ISBN</th>
+                <th>Username</th>
+                <th>Borrow Date</th>
+                <th>Due Date</th>
+                <th>Return Date</th>
+                <th>EventID</th>
+            </tr>
+            {%for borrow in borrows%}
+                <tr>
+                    <td>{{borrow.borrowID}}</td>
+                    <td>{{borrow.ISBN}}</td>
+                    <td>{{borrow.username}}</td>
+                    <td>{{borrow.borrowDate}}</td>
+                    <td>{{borrow.dueDate}}</td>
+                    <td>{{borrow.returnDate}}</td>
+                    <td>{{borrow.eventID}}</td>
+                </tr>
+            {%endfor%}
+        </table>
+    </body>
+</html>
