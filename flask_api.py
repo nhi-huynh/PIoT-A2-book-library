@@ -224,3 +224,32 @@ def borrowDelete(borrowID):
     db.session.commit()
 
     return borrowSchema.jsonify(borrow)
+
+# Endpoint to get weekly borrows
+@api.route("/borrows/weekly", methods=["GET"])
+def getWeeklyBorrow():
+    now = date.today()
+    seven_days_ago = now - timedelta(days=7)
+
+    # weeklyBorrow = Borrow.query.filter(
+    #     func.date(Borrow.borrowDate) > seven_days_ago).all()
+    weeklyBorrow = Session.query(Book, Borrow).filter(Book.ISBN == Borrow.ISBN).filter(func.date(Borrow.borrowDate) > seven_days_ago).all()
+    result = borrowsSchema.dump(weeklyBorrow)    
+    return jsonify(result.data)
+
+
+# Endpoint to get daily borrows
+@api.route("/borrows/daily", methods=["GET"])
+def getDailyBorrow():
+    dailyBorrow = Borrow.query.filter(func.date(Borrow.borrowDate) == func.date(func.current_date())).all()
+
+    result = borrowsSchema.dump(dailyBorrow)    
+    return jsonify(result.data)
+
+    
+# Endpoint to get currently borrowed books
+def getCurrentBorrow():
+    currentBorrow = Borrow.query.filter(Borrow.returnDate.is_(None)).all()
+    result = borrowsSchema.dump(currentBorrow)
+
+    return jsonify(result.data)    
