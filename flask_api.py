@@ -3,6 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import os, requests, json
 from datetime import datetime, date, timedelta
+from sqlalchemy import func
+
 
 api = Blueprint("library_api", __name__)
 
@@ -247,6 +249,7 @@ def getDailyBorrow():
 
 
 # Endpoint to get currently borrowed books
+@api.route("/borrows/current", methods=["GET"])
 def getCurrentBorrow():
     currentBorrow = Borrow.query.filter(Borrow.returnDate.is_(None)).all()
     result = borrowsSchema.dump(currentBorrow)
