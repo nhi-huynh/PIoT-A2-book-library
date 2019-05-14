@@ -18,13 +18,6 @@ class Reception():
         port number to connect to
     host : string
         ip address
-
-    Methods
-    -------
-    start():
-        A fuction created to show the main menu for logging in
-    login():
-        A fuction created to prompt user for login information
     """
 
     def __init__(self):

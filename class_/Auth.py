@@ -58,27 +58,6 @@ class Auth:
     ----------
     __dbi : database interface
         Database interface from DBInterface
-
-    Methods
-    -------
-    login(username, email, password):
-        A fuction created to log in a user if their information is correct
-    register(username, first_name, surname, email, password):
-        A fuction created to register a user
-    validate_username(uname):
-        A fuction created to validate a username
-    validate_email(email):
-        A fuction created to validate a email
-    __load_user(username, email):
-        A fuction created to load a user
-    __search_for_user(username, email):
-        A fuction created to search for a user
-    encrypt_passwd(passwd):
-        A fuction created to encrypt a password
-    verify_passwd(passwd, cipher):
-        A fuction created to verify a password
-    __get_fernet(passwd, salt):
-        A fuction created to symmetrically encrypt
     """
 
     __dbi = None

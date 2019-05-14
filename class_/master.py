@@ -19,12 +19,6 @@ class Master():
         port number to connect to
     host : string
         ip address
-
-    Methods
-    -------
-    start():
-        A fuction created to connect to the reception pi
-        and to run the menu class
     """
 
     def __init__(self):

@@ -17,14 +17,6 @@ class User:
         last name of the user
     email : string
         the users email address
-
-    Methods
-    -------
-    get_info(var=None):
-        A fuction created to return specified information
-    get_field_names():
-        A fuction created to get feild names
-
     """
 
     __data = {

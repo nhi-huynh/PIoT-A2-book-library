@@ -27,17 +27,6 @@ class DBInterface:
     __last_result : none
     __config : dict
         dict include host, user, passwd, database, port (optional)
-
-    Methods
-    -------
-    run(sql, vals):
-        A fuction created to run a query
-    run_many(sql, vals):
-        A fuction created to run a query multiple times using supplied vals
-    view(sql, vals):
-        A fuction created to view queries
-    view_single(sql, vals):
-        A fuction created to view a query
     """
 
     __is_valid = False
