@@ -3,7 +3,9 @@
 from flask import Flask, request, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
-import os, requests, json
+import os
+import requests
+import json
 # from flask_api import api, db
 from flask_site import site
 from flask_api import api as library_api
@@ -17,9 +19,10 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 HOST = "35.189.60.60"
 USER = "root"
 PASSWORD = "piot"
-DATABASE = "Library"       #Database name
+DATABASE = "Library"       # Database name
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://{}:{}@{}/{}".format(USER, PASSWORD, HOST, DATABASE)
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://{}:{}@{}/{}".format(
+    USER, PASSWORD, HOST, DATABASE)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 
 library_db.init_app(app)
@@ -28,4 +31,4 @@ app.register_blueprint(library_api)
 app.register_blueprint(site)
 
 if __name__ == "__main__":
-    app.run(host = "0.0.0.0")
+    app.run(host="0.0.0.0")
