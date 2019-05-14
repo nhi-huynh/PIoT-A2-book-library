@@ -231,9 +231,8 @@ def getWeeklyBorrow():
     now = date.today()
     seven_days_ago = now - timedelta(days=7)
 
-    # weeklyBorrow = Borrow.query.filter(
-    #     func.date(Borrow.borrowDate) > seven_days_ago).all()
-    weeklyBorrow = Session.query(Book, Borrow).filter(Book.ISBN == Borrow.ISBN).filter(func.date(Borrow.borrowDate) > seven_days_ago).all()
+    weeklyBorrow = Borrow.query.filter(func.date(Borrow.borrowDate) > seven_days_ago).all()
+    # weeklyBorrow = Session.query(Book, Borrow).filter(Book.ISBN == Borrow.ISBN).filter(func.date(Borrow.borrowDate) > seven_days_ago).all()
     result = borrowsSchema.dump(weeklyBorrow)    
     return jsonify(result.data)
 
@@ -246,10 +245,10 @@ def getDailyBorrow():
     result = borrowsSchema.dump(dailyBorrow)    
     return jsonify(result.data)
 
-    
+
 # Endpoint to get currently borrowed books
 def getCurrentBorrow():
     currentBorrow = Borrow.query.filter(Borrow.returnDate.is_(None)).all()
     result = borrowsSchema.dump(currentBorrow)
 
-    return jsonify(result.data)    
+    return jsonify(result.data)
