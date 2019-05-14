@@ -19,6 +19,25 @@ The aim of assignment is to...
 
 ### Built With
 * Sense Hat
+* MySQLdb
+* flask
+* os
+* requests
+* JSON
+* datetime
+* time
+* googleapiclient
+* httplib2
+* oauth2client
+* imutils
+* pyzbar
+* cv2
+* sys
+* pickle
+* numpy
+* face_recognition
+* socket
+* select
 
 
 ### Acknowledgments
