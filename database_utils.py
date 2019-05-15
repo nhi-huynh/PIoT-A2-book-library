@@ -106,9 +106,9 @@ class DatabaseUtils:
                     borrowID int not null auto_increment,
                     ISBN int not null,
                     username VARCHAR(50) not null,
-                    borrowDate date not null,
-                    dueDate date not null,
-                    returnDate date DEFAULT null,
+                    borrowDate DATETIME not null,
+                    dueDate DATETIME not null,
+                    returnDate DATETIME DEFAULT null,
                     eventID VARCHAR(50) not null,
                     constraint PK_Borrow primary key (borrowID),
                     constraint FK_Borrow_Book foreign key (ISBN)"""
@@ -289,7 +289,7 @@ class DatabaseUtils:
         with self.connection.cursor() as cursor:
             cursor.execute("""
             insert into Borrow (ISBN, username, borrowDate, dueDate, eventID)
-            values (%s, %s, CURRENT_DATE(), DATE_ADD(CURRENT_DATE(),
+            values (%s, %s, NOW(), DATE_ADD(NOW(),
             INTERVAL 7 DAY), %s)""", (isbn, username, eventID))
         self.connection.commit()
 
@@ -311,7 +311,7 @@ class DatabaseUtils:
         with self.connection.cursor() as cursor:
             cursor.execute("""
             UPDATE Borrow
-            SET returnDate = CURRENT_DATE()
+            SET returnDate = NOW()
             WHERE ISBN = %s AND username = %s AND returnDate IS NULL
             """, (isbn, username,))   # returnDate,
         self.connection.commit()
