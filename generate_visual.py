@@ -21,16 +21,22 @@ class GenerateVisual:
         return False
 
     def graph_daily_data(self, query):
+        hourCategory = self.daily_hour_category(query)
+        if hourCategory is True:
+            return True
         return False
 
     def weekly_book_category(self, query):
         books = []
+        bookTitle = []
         count = []
         try:
             for q in query:
                 book = q["ISBN"]
                 if book not in books:
                     books.append(q["ISBN"])
+                    getBookTable = q["book"]
+                    bookTitle.append(getBookTable["Title"])
                     count.append(1) 
                 else:    
                     for i in range(len(books)):
@@ -39,7 +45,7 @@ class GenerateVisual:
                             break
             
             trace = go.Bar(
-                x=books,
+                x=bookTitle,
                 y=count
             )
 
@@ -105,4 +111,59 @@ class GenerateVisual:
         except Exception:
             print("Error generate weekly_day_category graph: ")
             traceback.print_exc()
-            return False            
+            return False
+
+    def daily_hour_category(self, query):
+        borrow_times = []
+        count = []
+        date = None
+        try:
+            for q in query:
+                if not date:
+                    date = q["borrowDate"].strftime("%Y-%m-%d")
+                borrowtime = q["borrowDate"].strftime("%H")
+                if borrowtime not in borrow_times:
+                    borrow_times.append(borrowtime)
+                    count.append(1)
+                else:
+                    for i in range(len(borrow_times)):
+                        if borrowtime == borrow_times[i]:
+                            count[i] += 1
+                            break
+            trace = go.Scatter(
+                x=borrow_times,
+                y=count
+            )
+
+            layout = go.Layout(
+                title=go.layout.Title(
+                    text='Books borrowed on {}'.format(date)
+                ),
+                xaxis=go.layout.XAxis(
+                    title=go.layout.xaxis.Title(
+                        text='Hour',
+                        font=dict(
+                            family='Courier New, monospace',
+                            size=15
+                        )
+                    ) 
+                ),
+                yaxis=go.layout.YAxis(
+                    title=go.layout.yaxis.Title(
+                        text='Num of books',
+                        font=dict(
+                            family='Courier New, monospace',
+                            size=15
+                        )
+                    ) 
+                )
+            )
+
+            data = [trace]
+            fig = go.Figure(data=data, layout=layout)
+            py.plot(fig, filename='daily by hour')        
+            return True
+        except Exception:
+            print("Error generate weekly_day_category graph: ")
+            traceback.print_exc()
+            return False                
