@@ -42,6 +42,9 @@ class DBInterface:
             if x not in config:
                 raise Exception('Incomplete db config')
 
+        if 'port' in config and config['port'] is None:
+            del config['port']
+
         self.__config = config
 
         try:

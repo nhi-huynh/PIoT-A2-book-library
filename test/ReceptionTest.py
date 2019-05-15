@@ -3,7 +3,7 @@ import unittest
 from class_.reception import Reception
 
 
-class TestMasterSocket(unittest.TestCase):
+class ReceptionTest(unittest.TestCase):
     """
     Serves as a test case for reception Pi as the client socket
     To be run along with test_master.py to establish connection
@@ -31,4 +31,4 @@ class TestMasterSocket(unittest.TestCase):
             success = self.reception.start()
             self.assertTrue(success)
         except Exception as e:
-            print("Exception is {}".format(e))    
+            print("Exception is {}".format(e))

@@ -54,7 +54,7 @@ try:
     import re
 except:
     raise Exception('Failed to import regex module')
-    
+
 
 
 class Auth:
@@ -69,7 +69,7 @@ class Auth:
         if dbi is None:
             raise Exception('Database interface missing')
         self.__dbi = dbi
-        
+
     def login(self, username=None, email=None, password=None):
         if password is None or (username is None and email is None):
             raise Exception('Missing arguments to Auth.login')
@@ -77,8 +77,6 @@ class Auth:
         if len(password) < 1:
             raise LoginException('Missing password')
 
-            
-        
         value = email if email is not None else username
 
         if len(value) < 1:
@@ -91,7 +89,7 @@ class Auth:
         if not res or not Auth.verify_passwd(password, res['passwd']):
             # Consistent check time on fail
             time.sleep(3.0 - (time.time() - time_start))
-            raise Exception('Invalid login credentials')
+            return False
 
         return User(**{x:y for x,y in res.items() if x in User.get_field_names()})
 
@@ -149,7 +147,7 @@ class Auth:
             msg = 'Please fix the following issues:\n{}'.format('\n'.join(invalid))
             raise RegisterException(msg)
 
-        
+
         existing = self.__search_for_user(username=username, email=email)
 
         if existing:
@@ -164,7 +162,7 @@ class Auth:
 
             msg = 'Account(s) already exist with the entered {}'.format(' and '.join(taken))
             raise RegsiterException(msg)
-        
+
         enc_passwd = Auth.encrypt_passwd(password)
 
         if len(enc_passwd) > 255:
@@ -182,7 +180,7 @@ class Auth:
 
         if not res:
             raise RegisterException('Failed to create user (1)')
-        
+
         user = self.__load_user(username=username)
 
         if not user:
@@ -194,9 +192,9 @@ class Auth:
     def validate_username(uname):
         if not (4 < len(uname) < 26):
             return False
-        
+
         return bool(re.match(r'^[a-z][a-z0-9-_]+[a-z0-9]$', uname, re.IGNORECASE))
-        
+
     @staticmethod
     def validate_email(email):
         if len(email) > 255:
@@ -204,6 +202,19 @@ class Auth:
             return False
 
         return bool(re.match(r'^[a-z0-9.+%]+@[a-z0-9-.]+\.[a-z0-9-.]+$', email, re.IGNORECASE))
+
+
+    def username_available(self, uname):
+        res = self.__search_for_user(username=uname)
+
+        return not res or not len(res)
+
+    def email_taken(self, email):
+        res = self.__search_for_user(email=email)
+
+        return len(res) < 1
+
+
 
     def __load_user(self, username=None, email=None):
         if username is None and email is None:
@@ -307,6 +318,10 @@ class Auth:
             return False
 
     @staticmethod
+    def hash_password(passwd, iters=200000):
+        pass
+
+    @staticmethod
     def __get_fernet(passwd, salt):
         backend = default_backend()
 
@@ -314,7 +329,7 @@ class Auth:
             algorithm=hashes.SHA256(),
             length=32,
             salt=salt,
-            iterations=100000,
+            iterations=300000,
             backend=backend
         )
 
