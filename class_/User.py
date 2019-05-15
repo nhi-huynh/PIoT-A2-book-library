@@ -1,11 +1,24 @@
-""" vim: set et sw=4 ts=4 sts=4:
+""" vim: set et sw=4 ts=4 sts=4: """
 
-User class
-Just tracks user information
-
-"""
 
 class User:
+    """
+    A class used to represent the User
+
+    Attributes
+    ----------
+    user_id : string
+        the users identification number
+    username : string
+        the users login username
+    first_name : string
+        first name of the user
+    surname : string
+        last name of the user
+    email : string
+        the users email address
+    """
+
     __data = {
         'user_id': None,
         'username': None,
@@ -29,14 +42,20 @@ class User:
         self.__data['email'] = email
 
     def get_info(self, var=None):
-        """ Return mixed
-        if var is None, return dict with all user data
-        otherwise return the field specified by var if valid
-        If not valid, returns False
+        """
+        A fuction created to return specified information
+
+        Args:
+            var: the information being requested
+
+        Returns:
+            if var is none, a dict with all user date
+            if var is specified return the feild specified by var
+            else return False
         """
 
         if var is None:
-            return {x:y for x,y in self.__data.items()}
+            return {x: y for x, y in self.__data.items()}
 
         if var not in self.__data:
             return False

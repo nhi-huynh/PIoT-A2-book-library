@@ -12,7 +12,7 @@ class Reception():
     dbi = None
     auth = None
 
-    def __init__(self, host="127.0.0.1", port=12345, dbi=None, auth=None):
+    def __init__(self, config=None, dbi=None, auth=None):
         """
         Instantiates the receiver Pi class
 
@@ -28,7 +28,19 @@ class Reception():
         :type auth: Auth
         :param auth: used for user authentication
         """
-        self.ADDRESS = (host, port)
+
+        if config is None:
+            raise Exception('Config required')
+
+        if dbi is None:
+            raise Exception('Database interface required')
+
+        if auth is None:
+            raise Exception('Auth object required')
+
+        self.ip = config['ip']
+        self.port = config['port']
+        self.address = (host, port)
 
         self.dbi = dbi
         self.auth = auth
