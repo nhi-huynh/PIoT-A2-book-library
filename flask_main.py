@@ -15,7 +15,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 # Update HOST and PASSWORD appropriately.
 HOST = "35.189.60.60"
-USER = "root"
+USER = "adam-piot"
 PASSWORD = "piot"
 DATABASE = "Library"       #Database name
 

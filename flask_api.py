@@ -20,7 +20,7 @@ class Book(db.Model):
     Title = db.Column(db.Text, nullable=False)
     Author = db.Column(db.Text, nullable=False)
     YearPublished = db.Column(db.Integer, nullable=False)
-    borrows = db.relationship("Borrow")
+    borrows = db.relationship("Borrow", backref="book", lazy=True)
 
     def __init__(self, Title, Author, YearPublished, ISBN = None):
         """
@@ -80,7 +80,9 @@ class BorrowSchema(ma.Schema):
     class Meta:
         table = Borrow.__table__
         # Fields to expose.
-        fields = ("borrowID", "username", "borrowDate", "dueDate", "returnDate", "eventID")
+        fields = ("borrowID", "username", "borrowDate", "dueDate", "returnDate","ISBN","eventID", "book")
+   
+    book = ma.Nested(BookSchema)
 
 borrowSchema = BorrowSchema()
 borrowsSchema = BorrowSchema(many = True)
