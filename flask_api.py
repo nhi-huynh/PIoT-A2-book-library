@@ -5,6 +5,8 @@ import os
 import requests
 import json
 from datetime import datetime, date, timedelta
+from sqlalchemy import func
+
 
 api = Blueprint("library_api", __name__)
 
@@ -34,7 +36,7 @@ class Book(db.Model):
     Title = db.Column(db.Text, nullable=False)
     Author = db.Column(db.Text, nullable=False)
     YearPublished = db.Column(db.Integer, nullable=False)
-    borrows = db.relationship("Borrow")
+    borrows = db.relationship("Borrow", backref="book", lazy=True)
 
     def __init__(self, Title, Author, YearPublished, ISBN=None):
         """
@@ -76,12 +78,12 @@ class Borrow(db.Model):
         the isbn of the book
     username : string
         the username of the person borrowing the book
-    borrowDate : date
-        the date the book has been borrowed
-    dueDate : date
-        the date the book is due to be returned
-    returnDate : date
-        the actual returned date
+    borrowDate : datetime
+        the date and time the book has been borrowed
+    dueDate : datetime
+        the date and time the book is due to be returned
+    returnDate : datetime
+        the actual returned date and time
     eventID : string
         the calendar event id string
     """
@@ -103,8 +105,8 @@ class Borrow(db.Model):
         self.borrowID = borrowID
         self.ISBN = isbn
         self.username = username
-        self.borrowDate = date.today()
-        self.dueDate = date.today() + timedelta(days=7)
+        self.borrowDate = datetime.now()
+        self.dueDate = self.borrowDate + timedelta(days=7)
         self.returnDate = None
         self.eventID = None
 
@@ -126,7 +128,10 @@ class BorrowSchema(ma.Schema):
             "borrowDate",
             "dueDate",
             "returnDate",
-            "eventID")
+            "eventID",
+            "book")
+   
+    book = ma.Nested(BookSchema)
 
 borrowSchema = BorrowSchema()
 borrowsSchema = BorrowSchema(many=True)
@@ -272,7 +277,6 @@ def getBorrows():
 
     borrow = Borrow.query.all()
     result = borrowsSchema.dump(borrow)
-    print (result)
     return jsonify(result.data)
 
 
@@ -377,3 +381,34 @@ def borrowDelete(borrowID):
     db.session.commit()
 
     return borrowSchema.jsonify(borrow)
+
+
+# Endpoint to get weekly borrows
+@api.route("/borrows/weekly", methods=["GET"])
+def getWeeklyBorrow():
+    now = date.today()
+    seven_days_ago = now - timedelta(days=7)
+
+    weeklyBorrow = Borrow.query.filter(
+        func.date(Borrow.borrowDate) > seven_days_ago).all()
+    result = borrowsSchema.dump(weeklyBorrow)    
+    return jsonify(result.data)
+
+
+# Endpoint to get daily borrows
+@api.route("/borrows/daily", methods=["GET"])
+def getDailyBorrow():
+    dailyBorrow = Borrow.query.filter(
+        func.date(Borrow.borrowDate) == func.date(func.current_date())).all()
+
+    result = borrowsSchema.dump(dailyBorrow)    
+    return jsonify(result.data)
+
+
+# Endpoint to get currently borrowed books
+@api.route("/borrows/current", methods=["GET"])
+def getCurrentBorrow():
+    currentBorrow = Borrow.query.filter(Borrow.returnDate.is_(None)).all()
+    result = borrowsSchema.dump(currentBorrow)
+
+    return jsonify(result.data)

@@ -17,27 +17,36 @@ class TestVisualData(unittest.TestCase):
             "borrowID": 1,
             "ISBN": 1,
             "username": "adam",
-            "borrowDate": date(2019, 5, 12),
-            "dueDate": date(2019, 5, 12) + timedelta(days=7),
-            "returnDate": date(2019, 5, 12)
+            "borrowDate": datetime(2019, 5, 15, 12, 30, 0),
+            "dueDate": datetime(2019, 5, 15, 12, 30, 0) + timedelta(days=7),
+            "returnDate": datetime(2019, 5, 15, 12, 30, 00),
+            "book": {
+                "Title": "My Hero Academia"
+            }
         }
         data2 = {
             "borrowID": 2,
             "ISBN": 2,
             "username": "claire",
-            "borrowDate": date(2019, 5, 12),
-            "dueDate": date(2019, 5, 12) + timedelta(days=7),
-            "returnDate": None
+            "borrowDate": datetime(2019, 5, 15, 3, 0, 0),
+            "dueDate": datetime(2019, 5, 15, 3, 0, 0) + timedelta(days=7),
+            "returnDate": None,
+            "book": {
+                "Title": "Fairy Tail"
+            }
         }
         data3 = {
             "borrowID": 3,
             "ISBN": 2,
             "username": "graeme",
-            "borrowDate": date.today(),
-            "dueDate": date.today() + timedelta(days=7),
-            "returnDate": None
+            "borrowDate": datetime.now(),
+            "dueDate": datetime.now() + timedelta(days=7),
+            "returnDate": None,
+            "book": {
+                "Title": "Fairy Tail"
+            }
         }
-        
+
         self.borrows.append(data1)
         self.borrows.append(data2)
         self.borrows.append(data3)
