@@ -52,8 +52,9 @@ class Validator:
         Returns:
             True or False
         """
-        if (all(len(title) == 0 or not all(
-                name.isalnum() or name.isspace() for name in title))):
+        if (len(title) == 0 or not all(
+                name.isalnum() or name.isspace() for name in title)
+                ):
             print("Invalid title.")
             print("Title must contain only letters and/or numbers.")
             print("Please try again.\n")
@@ -72,8 +73,9 @@ class Validator:
             True or False
         """
 
-        if (all(len(author) == 0 or not all(
-                name.isalpha() or name.isspace() for name in author))):
+        if (len(author) == 0 or not all(
+                name.isalpha() or name.isspace() for name in author)
+                ):
             print("Invalid author name.")
             print("Name must be letters.")
             print("Please try again.\n")
@@ -119,8 +121,9 @@ class Validator:
             # print(currentLoan)
             if currentLoan is not None:
                 print("You are currently borrowing book ISBN {}".format(isbn))
-                print("""Book ISBN {} was borrowed on {} and will be available
-                on the {}""".format(isbn, currentLoan[0], currentLoan[1]))
+                print("Book ISBN {} was borrowed on {}"
+                .format(isbn, currentLoan[0]))
+                print("It will be due on {}".format(currentLoan[1]))
                 return True
             else:
                 return False

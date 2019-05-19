@@ -13,14 +13,26 @@ class CalendarUtils:
     Methods
     -------
     removeCalendarEvent(eventid):
-        A fuction created to remove a specific google calendar event
+        A function created to remove a specific google calendar event
     createCalendarEvent(Duedate, ISBN, username):
-        A fuction created to add a google calendar event at a specific date
+        A function created to add a google calendar event at a specific date
     """
+
+    # def __init__(self):
+    #     # If modifying these scopes, delete the file token.json.
+    #     SCOPES = "https://www.googleapis.com/auth/calendar"
+    #     store = file.Storage("token.json")
+    #     creds = store.get()
+    #     if(not creds or creds.invalid):
+    #         flow = client.flow_from_clientsecrets("credentials.json", SCOPES)
+    #         creds = tools.run_flow(flow, store)
+    #     service = build("calendar", "v3", http=creds.authorize(Http()))
     
+    #Variable service is not defined. 
+    #This is a source of error.
     def removeCalendarEvent(self, eventid):
         """
-        A fuction created to remove a specific google calendar event
+        A function created to remove a specific google calendar event
 
         Args:
             eventid: the string that identifies the specific event
@@ -28,9 +40,9 @@ class CalendarUtils:
         event = service.events().delete(
             calendarId="primary", eventId='eventid').execute()
 
-    def createCalendarEvent(self, Duedate, ISBN, username):
+    def createCalendarEvent(self, duedate, ISBN, username):
         """
-        A fuction created to add a google calendar event at a specific date
+        A function created to add a google calendar event at a specific date
 
         Args:
             Duedate: the date the event is to be created on
@@ -41,14 +53,14 @@ class CalendarUtils:
             eventID string
         """
 
-        date = Duedate
+        date = duedate
         time_start = "T06:00:00+10:00"
         time_end = "T07:00:00+10:00"
         event = {
             "summary": "ISBN: {}".format(ISBN),
             "location": "RMIT Building 14",
             "description": "borrowed by:{}, due date:{}".format(
-                username, Duedate),
+                username, duedate),
             "start": {
                 "dateTime": time_start,
                 "timeZone": "Australia/Melbourne",

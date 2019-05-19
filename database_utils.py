@@ -60,10 +60,6 @@ class DatabaseUtils:
     USER = "root"
     PASSWORD = "piot"
     DATABASE = "Library"       # Database name
-    # HOST = "35.201.26.43"
-    # USER = "root"
-    # PASSWORD = "P19980314p"
-    # DATABASE = "TestBook"       # Database name
 
     def __init__(self, connection=None):
         if(connection is None):
@@ -107,7 +103,7 @@ class DatabaseUtils:
                     ISBN int not null,
                     username VARCHAR(50) not null,
                     borrowDate DATETIME not null,
-                    dueDate DATETIME not null,
+                    dueDate DATE not null,
                     returnDate DATETIME DEFAULT null,
                     eventID VARCHAR(50) not null,
                     constraint PK_Borrow primary key (borrowID),
@@ -133,23 +129,23 @@ class DatabaseUtils:
                 self.insertBook("One Piece", "Eiichiro Oda", "1997")
                 self.connection.commit()
 
-    def getEventID(self, isbn, username):
-        """
-        A function created to get the event id from a specific row
+    # def getEventID(self, isbn, username):
+    #     """
+    #     A function created to get the event id from a specific row
 
-        Args:
-            isbn: string to find in table
-            username: string to find in table
+    #     Args:
+    #         isbn: string to find in table
+    #         username: string to find in table
 
-        Returns:
-            the eventid that matches the row that the username and isbn match
-        """
+    #     Returns:
+    #         the eventid that matches the row that the username and isbn match
+    #     """
 
-        with self.connection.cursor() as cursor:
-            cursor.execute(
-                """select eventID from Borrow where username = %s
-                and ISBN = %s""", (username, isbn,))
-            return cursor.fetchone()
+    #     with self.connection.cursor() as cursor:
+    #         cursor.execute(
+    #             """select eventID from Borrow where username = %s
+    #             and ISBN = %s""", (username, isbn,))
+    #         return cursor.fetchone()
 
     def getBookByISBN(self, isbn):
         """
@@ -249,7 +245,7 @@ class DatabaseUtils:
         with self.connection.cursor() as cursor:
             cursor.execute(
                 """select borrowID, ISBN, username, borrowDate, dueDate,
-                returnDate from Borrow where username = %s""", (username,))
+                returnDate, eventID from Borrow where username = %s""", (username,))
             return cursor.fetchall()
 
     def insertBook(self, title, author, yearPublished):
@@ -297,23 +293,36 @@ class DatabaseUtils:
 
     def updateReturnDate(self, isbn, username):  # returnDate
         """
-        A function created to update the return date value
+        A function created to update the return date value and return the eventID for that borrow
 
         Args:
             isbn: string that is the ISBN of the book
             username: the username of the person who borrowed the book
 
         Returns:
-            True if exactly one row in the table is added or modified
-            False if otherwise
+            the eventid that matches the row that the username and isbn match
         """
 
+        eventID = None
+
         with self.connection.cursor() as cursor:
-            cursor.execute("""
-            UPDATE Borrow
-            SET returnDate = NOW()
-            WHERE ISBN = %s AND username = %s AND returnDate IS NULL
-            """, (isbn, username,))   # returnDate,
+            cursor.execute(
+                """select eventID 
+                from Borrow 
+                where username = %s
+                and ISBN = %s 
+                AND returnDate IS NULL""", 
+                (username, isbn,))
+            eventID = cursor.fetchone()
+        
+        with self.connection.cursor() as cursor:
+            cursor.execute(
+                """UPDATE Borrow
+                SET returnDate = NOW()
+                WHERE ISBN = %s AND username = %s AND returnDate IS NULL""", 
+                (isbn, username,))  
+
         self.connection.commit()
 
-        return cursor.rowcount == 1
+        return eventID
+        #return cursor.rowcount == 1

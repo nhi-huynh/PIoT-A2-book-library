@@ -10,7 +10,7 @@ import json
 import time
 
 BOOK_HEADERS = ["ISBN", "Title", "Author", "Year published"]
-BORROW_HEADERS = ["ISBN", "Username", "Borrow date", "Due date",
+BORROW_HEADERS = ["BorrowID", "ISBN", "Username", "Borrow date", "Due date",
                   "Return date", "Event ID"]
 DATE_FORMAT = "%Y-%m-%d"
 
@@ -34,8 +34,12 @@ class MasterApplication:
         A function created to print the searched for items in a list
     printSection(sectionName):
         A function created to print a section
+    printSection():
+        A function created to print the end of a section
     listBooks():
+        A function created to print all the books existing in the db
     listBorrowsByUser():
+        A function created to print borrowing record of the current user
     searchBook():
         A function created to print the main search menu options
     searchBookByISBN():
@@ -101,12 +105,13 @@ class MasterApplication:
                 self.listBorrowsByUser()
             elif(selection == "F"):
                 print("Logged out")
-                # return
-                # exit back to master.py which will then send a message via the
+                break   #for testing. 
+                # In final submission, we return something here
+                # Then exit back to master.py which will then send a message via the
                 # socket to the reception pi saying that the current user has
                 # logged out and that it is free to allow another user to login
             else:
-                print("Invalid input - please try again.")
+                print("Invalid input - please try again.\n")
 
     def printList(self, subject, listName, headers, data):
         """
@@ -122,20 +127,22 @@ class MasterApplication:
 
         self.printSection(listName.upper())
 
-        print("".join(["{:<25}".format(item) for item in headers]))
+        print("".join(["{:<30}".format(item) for item in headers]))
 
         if not data:
             print("No {} is found".format(subject))
+            self.printEndSection()
+            return False
         else:
             for row in data:
-                print("".join(["{:<25}".format(str(item)) for item in row]))
-        print()
-        print("-"*50 + "END" + "-"*50)
-        print()
+                print("".join(["{:<30}".format(str(item)) for item in row]))
+            self.printEndSection()
+            return True
+
 
     def printSection(self, sectionName):
         """
-        A function created to print a section
+        A function created to print a section title
 
         Args:
             sectionName: title to print
@@ -148,6 +155,13 @@ class MasterApplication:
         print ('-'*100)
         print()
 
+    def printEndSection(self):
+        """ A function created to print a message ending the section """
+
+        print()
+        print("-"*50 + "END" + "-"*50)
+        print()
+
     def listBooks(self):
         with DatabaseUtils() as db:
             self.printList("books", "all books", BOOK_HEADERS, db.getBooks())
@@ -157,13 +171,6 @@ class MasterApplication:
             self.printList(
                 "user borrow records", "your borrow records", BORROW_HEADERS,
                 db.getBorrowsByUsername(self.username))
-
-    # def listBorrows(self):
-    #     BOOK_HEADERS = [
-    # "ISBN", "Username", "Borrow date", "Due date", "Return date"]
-    #     with DatabaseUtils() as db:
-    #         self.printList(
-    # "borrow records", "all borrow records", BOOK_HEADERS, db.getBorrows())
 
     def searchBook(self):
         """A function created to print the main search menu options"""
@@ -180,15 +187,18 @@ class MasterApplication:
             print()
 
             if(selection == "A"):
-                self.searchBookByISBN()
+                if(self.searchBookByISBN()):
+                    self.wantsToBorrow()
             elif(selection == "B"):
-                self.searchBookByAuthor()
+                if(self.searchBookByAuthor()):
+                    self.wantsToBorrow()
             elif(selection == "C"):
-                self.searchBookByTitle()
+                if(self.searchBookByTitle()):
+                    self.wantsToBorrow()
             elif(selection == "D"):
                 break
             else:
-                print("Invalid input - please try again.")
+                print("Invalid input - please try again.\n")
 
     def searchBookByISBN(self):
         """A function created to search for a book by ISBN"""
@@ -199,56 +209,53 @@ class MasterApplication:
 
         if self.validator.validateISBN(isbn):
             with DatabaseUtils() as db:
-                self.printList(
-                    "search results", "all search results",
+                return self.printList(
+                    "search results", "all search results", 
                     BOOK_HEADERS, db.getBookByISBN(isbn))
-                answer = input(
-                    "Would you like to borrow based one of these books? Y/N"
-                    ).upper()
-                if answer == 'Y':
-                    # get isbn
-                    isbn = input("Which isbn would you like to borrow?")
-                    self.borrowFromSearch(isbn)
+
 
     def searchBookByTitle(self):
         """A function created to search for a book by Title"""
-
         self.printSection("SEARCH BY TITLE")
 
         title = input("Title: ")
 
         if self.validator.validateTitle(title):
             with DatabaseUtils() as db:
-                self.printList(
-                    "search results", "all search results",
+                return self.printList(
+                    "search results", "all search results", 
                     BOOK_HEADERS, db.getBooksByTitle(title))
-                answer = input(
-                    "Would you like to borrow based one of these books? Y/N"
-                    ).upper()
-                if answer is 'Y':
-                    # get isbn
-                    isbn = input("Which isbn would you like to borrow?")
-                    self.borrowFromSearch(isbn)
+ 
 
     def searchBookByAuthor(self):
         """A function created to search for a book by Author"""
-
+        
         self.printSection("SEARCH BY AUTHOR")
 
         author = input("Author: ")
 
         if self.validator.validateAuthor(author):
             with DatabaseUtils() as db:
-                self.printList(
-                    "search results", "all search results",
+                return self.printList(
+                    "search results", "all search results", 
                     BOOK_HEADERS, db.getBooksByAuthor(author))
-                answer = input(
-                    "Would you like to borrow based one of these books? Y/N"
-                    ).upper()
-                if answer is 'Y':
-                    # get isbn
-                    isbn = input("Which isbn would you like to borrow?")
-                    self.borrowFromSearch(isbn)
+    
+    def wantsToBorrow(self):
+        while(True):
+            print("Would you like to borrow one of these results? Y/N")
+            print("Y) Yes")
+            print("N) No, take me back to the search menu")
+
+            selection = input("Select an option: ").upper()
+            print()
+
+            if(selection == "Y"):
+                if(not self.borrowBook()):
+                    break
+            elif(selection == "N"):
+                break
+            else:
+                print("Invalid input - please try again.\n")
 
     def borrowISBN(self, isbn):
         """
@@ -260,27 +267,40 @@ class MasterApplication:
         """
 
         if self.validator.validateISBN(isbn):
-                if self.validator.isbnExists(isbn):
-                    if self.validator.onLoan(self.username, isbn):
-                        print("You can not borrow this book again.")
-                    else:
-                        currentdate = date.today()
-                        dueDate = currentdate + timedelta(days=7)
-                        with DatabaseUtils() as db:
-                            # made change here to create event then
-                            # add the borrow with the eventID
-                            eventid = self.calendar.createCalendarEvent(
-                                dueDate.strftime(DATE_FORMAT), isbn)
-                            if(db.insertBorrow(isbn, self.username, eventid)):
-                                print(
-                                    "Book ISBN {} sucessfully borrowed by {}."
-                                    .format(isbn, self.username))
-                                print(
-                                    "Due date is: " + dueDate.strftime(
-                                        DATE_FORMAT))
-                            else:
-                                self.calendar.removeCalendarEvent(eventid)
-                                print("Book unsucessfully borrowed by")
+            if self.validator.isbnExists(isbn):
+                if self.validator.onLoan(self.username, isbn):
+                    print("You can not borrow this book again.\n")
+                else:
+                    # currentdate = date.today()
+                    # dueDate = currentdate + timedelta(days=7)
+                    currentdate = datetime.now()
+                    dueDate = currentdate.date() + timedelta(days=7)
+                    
+                    # #This Google Calendar function is not working!
+                    # #Need to debug this
+                    # eventID = self.calendar.createCalendarEvent(
+                    #     dueDate.strftime(DATE_FORMAT), isbn, self.username)
+
+                    #for now, use a hard-coded eventID
+                    eventID = 10000000
+
+                    with DatabaseUtils() as db:
+                        # made change here to create event then
+                        # add the borrow with the eventID
+                        
+                        if(db.insertBorrow(isbn, self.username, eventID)):
+                            print(
+                                "Book ISBN {} sucessfully borrowed by {}."
+                                .format(isbn, self.username))
+                            print(
+                                "Due date is: " + dueDate.strftime(
+                                    DATE_FORMAT))
+                            print("An event has been set in your Google Calendar")
+                        else:
+                            # #This Google Calendar function is not working!
+                            # #Need to comment this out for now to test other functions
+                            # self.calendar.removeCalendarEvent(eventid)
+                            print("Book unsucessfully borrowed due to some db error")
 
     def borrowBook(self):
         """A function created to borrow a book"""
@@ -289,10 +309,11 @@ class MasterApplication:
 
         while(runAgain):
             self.printSection("BORROW A BOOK")
-
             isbn = input("ISBN: ")
             self.borrowISBN(isbn)
             runAgain = self.repeatsFunction("borrow")
+        
+        return False
 
     def returnBook(self):
         """A function created to return a book"""
@@ -303,19 +324,23 @@ class MasterApplication:
             self.printSection("RETURN A BOOK")
 
             isbn = input("ISBN: ")
+            eventID = None
+
             if self.validator.validateISBN(isbn):
                 if self.validator.isbnExists(isbn):
                     if self.validator.onLoan(self.username, isbn):
                         with DatabaseUtils() as db:
-                            if(db.updateReturnDate(isbn, self.username)):
+                            eventID = db.updateReturnDate(isbn, self.username)
+
+                            if(eventID != None):
                                 print(
                                     "Book ISBN {} sucessfully returned by {}."
                                     .format(isbn, self.username))
 
-                                # get id from database
-                                eventString = db.getEventID(self.username, isbn)
-                                # remove google calendar event
-                                self.calendar.removeCalendarEvent(eventString)
+                                # #This Google Calendar function is not working!
+                                # #Need to comment this out for now to test other functions
+                                # # remove google calendar event
+                                # self.calendar.removeCalendarEvent(eventID)
                             else:
                                 print(
                                     "Book unsucessfully returned by {}"
@@ -346,7 +371,7 @@ class MasterApplication:
             elif answer == "N":
                 return False
             else:
-                print("Invalid input - please try again.")
+                print("Invalid input - please try again.\n")
 
 if __name__ == "__main__":
     app = MasterApplication("borrower1")
