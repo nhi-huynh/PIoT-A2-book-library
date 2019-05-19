@@ -1,0 +1,27 @@
+<!-- vim: set et sw=4 ts=4 sts=4: -->
+{% extends 'bootstrap/base.html' %}
+
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('.static', filename='login.css') }}">
+
+{% endblock %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+<form id='login-form' action='' method='post'>
+    <h2>Login</h2>
+    {{ form.uname(class_='form-control', placeholder='Username', id='username') }}
+    {{ form.password(class_='form-control', placeholder='Password', id='password') }}
+    {{ form.submit(value='Login',class_='form-control', id='login-action') }}
+    <p class='msg'></p>
+</form>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('.static', filename='login.js') }}"></script>
+{% endblock %}

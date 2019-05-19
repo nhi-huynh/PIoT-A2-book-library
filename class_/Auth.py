@@ -409,7 +409,7 @@ class Auth:
 
         try:
             decrypted_passwd = f.decrypt(cipher)
-            return True
+            return decrypted_passwd == passwd
         except:
             return False
 
