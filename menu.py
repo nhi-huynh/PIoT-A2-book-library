@@ -2,9 +2,11 @@
 # email: RMIT.PIOT.A2@gmail.com
 # password: A2abc123
 
+from validator import Validator
 from database_utils import DatabaseUtils
 from calendar import CalendarUtils
-from validator import Validator
+from voice_search import VoiceSearchUtils
+
 from datetime import datetime, date, timedelta
 import json
 import time
@@ -62,6 +64,7 @@ class MasterApplication:
         self.username = username
         self.validator = Validator()
         self.calendar = CalendarUtils()
+        self.voice = VoiceSearchUtils()
 
         with DatabaseUtils() as db:
             db.createBookTable()
@@ -69,6 +72,16 @@ class MasterApplication:
             db.insertSampleBook()
 
         self.showMenu()
+
+    def voiceInput(self):
+        translation = self.voice.voiceSearch()
+
+        if(translation is None):
+            print("Failed to get speech input.")
+        else:
+            print("Your search is:\t {}".format(translation))
+            
+        return translation
 
     def showMenu(self):
         """A function created to display the main menu"""
