@@ -2,7 +2,7 @@
 
 import socket, re
 from getpass import getpass
-# from class_.FaceRecognition import FaceRecognition
+from class_.FaceRecognition import FaceRecognition
 
 
 class Reception():
@@ -12,15 +12,12 @@ class Reception():
     dbi = None
     auth = None
 
-    def __init__(self, config=None, dbi=None, auth=None):
+    def __init__(self, config=None, dbi=None, auth=None, face_recognition=None):
         """
         Instantiates the receiver Pi class
 
-        :type host: string
-        :param host: The server's(master Pi) IP address
-
-        :type port: int
-        :param port: The port used by the server
+        :type config: dict
+        :param config: Config for connection
 
         :type dbi: DBinterface
         :param dbi: interface used to access the db
@@ -38,12 +35,16 @@ class Reception():
         if auth is None:
             raise Exception('Auth object required')
 
+        if face_recognition is None:
+            raise Exception('Face recognition object required')
+
         self.ip = config['ip']
         self.port = config['port']
         self.address = (host, port)
 
         self.dbi = dbi
         self.auth = auth
+        self.face_rec = face_recognition
 
     def start(self):
         """
@@ -273,7 +274,10 @@ class Reception():
 
             print('Inputs do not match, please try again')
 
-
     def login_fr(self):
-        pass
+        username = self.face_rec.login(timeout=20)
 
+        if not username:
+            return
+
+        self.__start_session(username)

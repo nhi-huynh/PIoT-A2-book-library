@@ -1,9 +1,21 @@
 # vim: set et sw=4 ts=4 sts=4:
-from Auth import Auth
+from class_.Auth import Auth
 from flask import redirect, session, render_template, request
 from flask_wtf import FlaskForm
 import wtforms as wtf
 from run import app
+
+
+# NOTE
+# GenerateVisual class:
+#
+# gv = GenerateVisual(
+#       app.config['PLOTLY_USERNAME'],
+#       app.config['PLOTLY_USERNAME']
+# )
+
+
+
 
 def logged_in(sess):
     return 'auth_success' in sess and sess['auth_success']
@@ -60,4 +72,11 @@ def dashboard():
     if not logged_in(session):
         return redirect('/login')
 
-    return render_template('admin-dashboard.bs.html')
+    return render_template('admin-dashboard.bs.html', page='dashboard')
+
+@app.route('/admin/book-manager')
+def book_manage():
+    if not logged_in(session):
+        return redirect('/login')
+    
+    return render_template('admin-book-manage.bs.html', page='manage')
