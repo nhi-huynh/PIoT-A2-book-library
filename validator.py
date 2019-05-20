@@ -32,6 +32,8 @@ class Validator:
         Returns:
             True or False
         """
+        if isbn == None:
+            return False
 
         if len(isbn) > 10 or not isbn.isdigit():
             print("Invalid ISBN")
@@ -52,6 +54,9 @@ class Validator:
         Returns:
             True or False
         """
+        if title == None:
+            return False
+
         if (len(title) == 0 or not all(
                 name.isalnum() or name.isspace() for name in title)
                 ):
@@ -72,6 +77,8 @@ class Validator:
         Returns:
             True or False
         """
+        if author == None:
+            return False
 
         if (len(author) == 0 or not all(
                 name.isalpha() or name.isspace() for name in author)

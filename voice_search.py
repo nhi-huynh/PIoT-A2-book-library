@@ -47,17 +47,3 @@ class VoiceSearchUtils:
         finally:
             return translation
 
-def main():
-    translation = VoiceSearchUtils().voiceSearch()
-
-    if(translation is None):
-        print("Failed to get first name.")
-        return False
-
-    else:
-        print(translation)
-        return True
-
-# Execute program.
-if __name__ == "__main__":
-    main()

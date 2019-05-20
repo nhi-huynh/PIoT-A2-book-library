@@ -161,6 +161,26 @@ class MasterApplication:
             self.printList(
                 "user borrow records", "your borrow records", BORROW_HEADERS,
                 db.getBorrowsByUsername(self.username))
+    
+    def getSearchInput(self, item):
+        """A function created to print the methods available to search"""
+
+        while(True):
+            print("How would you like to search?")
+            print("A) Voice input")
+            print("B) Keyboard input")
+            print("C) Return to main menu")
+            selection = input("Select an option: ").upper()
+            print()
+
+            if(selection == "A"):
+                return self.voiceInput()
+            elif(selection == "B"):
+                return input(item)
+            elif(selection == "C"):
+                return None
+            else:
+                print("Invalid input - please try again.")
 
     def searchBook(self):
         """A function created to print the main search menu options"""
@@ -172,7 +192,7 @@ class MasterApplication:
             print("A) Search by ISBN")
             print("B) Search by Author Name")
             print("C) Search by Book Title")
-            print("D) Return to main menu")
+            print("D) Return to the search menu")
             selection = input("Select an option: ").upper()
             print()
 
@@ -194,8 +214,8 @@ class MasterApplication:
         """A function created to search for a book by ISBN"""
 
         self.printSection("SEARCH BY ISBN")
-
-        isbn = input("ISBN: ")
+        
+        isbn = self.getSearchInput("ISBN: ")
 
         if self.validator.validateISBN(isbn):
             with DatabaseUtils() as db:
@@ -208,7 +228,7 @@ class MasterApplication:
         """A function created to search for a book by Title"""
         self.printSection("SEARCH BY TITLE")
 
-        title = input("Title: ")
+        title = self.getSearchInput("Title: ")
 
         if self.validator.validateTitle(title):
             with DatabaseUtils() as db:
@@ -221,8 +241,8 @@ class MasterApplication:
         """A function created to search for a book by Author"""
         
         self.printSection("SEARCH BY AUTHOR")
-
-        author = input("Author: ")
+        
+        author = self.getSearchInput("Author: ")
 
         if self.validator.validateAuthor(author):
             with DatabaseUtils() as db:
@@ -304,6 +324,7 @@ class MasterApplication:
             runAgain = self.repeatsFunction("borrow")
         
         return False
+    
     def returnBook(self, isbn):
         """A function created to return a book based on its ISBN
 
