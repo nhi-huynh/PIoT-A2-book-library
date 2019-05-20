@@ -291,8 +291,8 @@ class MasterApplication:
                     
                     # #This Google Calendar function is not working!
                     # #Need to debug this
-                    # eventID = self.calendar.createCalendarEvent(
-                    #     dueDate.strftime(DATE_FORMAT), isbn, self.username)
+                    eventID = self.calendar.createCalendarEvent(
+                        dueDate.strftime(DATE_FORMAT), isbn, self.username)
 
                     #for now, use a hard-coded eventID
                     eventID = 10000000
