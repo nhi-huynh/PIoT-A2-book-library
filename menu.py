@@ -313,23 +313,25 @@ class MasterApplication:
         if self.validator.validateISBN(isbn):
             if self.validator.isbnExists(isbn):
                 if self.validator.onLoan(self.username, isbn):
-		    eventID = None
+                    eventID = None
+
                     with DatabaseUtils() as db:
                         eventID = db.updateReturnDate(isbn, self.username)
-			if eventID != None:
-                            print(
-                                "Book ISBN {} sucessfully returned by {}."
-                                .format(isbn, self.username))
+                    
+                    if eventID != None:
+                        print(
+                            "Book ISBN {} sucessfully returned by {}."
+                            .format(isbn, self.username))
 
-                            # remove google calendar event
-                            self.calendar.removeCalendarEvent(eventID)
-			    print(
-                                "Event successfully remove"
-                                .format(self.username))
-			else:
-                            print(
-                                "Book unsucessfully returned by {} due to db error"
-                                .format(self.username))
+                        # remove google calendar event
+                        self.calendar.removeCalendarEvent(eventID)
+                        print(
+                            "EventID {} successfully remove"
+                            .format(eventID))
+                    else:
+                        print(
+                            "Book unsucessfully returned by {} due to db error"
+                            .format(self.username))
 			
 
                 else:
