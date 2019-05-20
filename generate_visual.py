@@ -1,6 +1,7 @@
 import calendar
 from datetime import datetime, timedelta
 import plotly.plotly as py
+import plotly.offline as offline
 import plotly.graph_objs as go
 import numpy as np
 import pytz
@@ -54,7 +55,12 @@ class GenerateVisual:
             )
             data = [trace]
             fig = go.Figure(data=data, layout=layout)
+
             py.plot(data, filename="weekly_by_book")
+            offline.plot({
+                'data': data,
+                'layout': layout
+            }, filename='weekly_book.html')
             return True
         except Exception:
             print("Error generate weekly_book_category graph: ")
@@ -106,7 +112,12 @@ class GenerateVisual:
 
             data = [trace]
             fig = go.Figure(data=data, layout=layout)
-            py.plot(fig, filename='weekly by date')        
+            
+            py.plot(fig, filename='weekly by date')
+            offline.plot({
+                'data': data,
+                'layout': layout
+            }, filename='weekly_date.html')        
             return True
         except Exception:
             print("Error generate weekly_day_category graph: ")
@@ -161,7 +172,12 @@ class GenerateVisual:
 
             data = [trace]
             fig = go.Figure(data=data, layout=layout)
-            py.plot(fig, filename='daily by hour')        
+            py.plot(fig, filename='daily by hour')
+
+            offline.plot({
+                'data': data,
+                'layout': layout
+            }, filename='daily_hour.html')        
             return True
         except Exception:
             print("Error generate weekly_day_category graph: ")
