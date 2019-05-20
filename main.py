@@ -1,6 +1,6 @@
 # vim: set et sw=4 ts=4 sts=4:
 
-from config import CONFIG
+from config import CONFIG_RP, CONFIG_MP
 from class_.Auth import Auth
 from class_.DBInterface import DBInterface
 from class_.Reception import Reception

@@ -2,7 +2,6 @@
 
 import socket
 import select
-from Config import Config
 
 
 class Master():
@@ -21,16 +20,25 @@ class Master():
         ip address
     """
 
-    def __init__(self):
+    def __init__(self, config=None):
         """
         Instantiates the master Pi class
 
+        :type config: dict
+        :param config: Config for connection
+
         """
-        cfg = Config()
-        socketConfig = cfg.get_socket_config()
-        port = socketConfig["port"]
-        host = socketConfig["reception_ip"]
-        self.ADDRESS = (host, port)
+        if config is None:
+            raise Exception('Config required')
+
+        self.ip = config['ip']
+        self.port = config['port']
+        self.address = (self.ip, self.port)    
+        # cfg = Config()
+        # socketConfig = cfg.get_socket_config()
+        # port = socketConfig["port"]
+        # host = socketConfig["reception_ip"]
+        # self.ADDRESS = (host, port)
 
     def start(self):
         """A fuction created to connect to the reception pi
@@ -41,7 +49,7 @@ class Master():
         """
 
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.bind(self.ADDRESS)
+            s.bind(self.address)
             print("master Pi currently listening...")
             s.listen()
 
@@ -54,16 +62,15 @@ class Master():
                 print("Listening on receiver Pi({})...".format(self.ADDRESS))
                 conn, addr = s.accept()
                 with conn:
-                    username = conn.recv(4096)
+                    username = conn.recv(4096).decode()
                     print("Login successfully by {username}"
-                          .format(username=username.decode()))
+                          .format(username=username))
+                    # shows booking menu
+                    # booking menu should call break to exit the menu
+                    # once exit, master pi will end connection
+                    # PLACEHOLDER CODE BELOW, TO BE DELETED AFTER INTEGRATION
+                    # menu(username.decode)
                     while True:
-                        # shows booking menu
-                        # will run break when booking menu function returns
-                        # any value
-                        # terminate = bookingClass.showBookingMenu()
-                        # if (terminate):
-                        #     break
                         message = input("Please select option: ")
                         if(not message):
                             conn.sendall("Logout successfully".encode())
@@ -71,6 +78,3 @@ class Master():
                         print("Input chosen is {} ".format(message))
 
                     print("Disconnecting from receiver Pi")
-
-masterPi = Master()
-masterPi.start()
