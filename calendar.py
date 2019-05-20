@@ -10,24 +10,22 @@ class CalendarUtils:
     """
     A class used to represent different functions for the google calendar
 
-    Methods
-    -------
-    removeCalendarEvent(eventid):
-        A function created to remove a specific google calendar event
-    createCalendarEvent(Duedate, ISBN, username):
-        A function created to add a google calendar event at a specific date
+    Attributes
+    ----------
+    connection : string
+        the _____
+
     """
 
-    # def __init__(self):
-    #     # If modifying these scopes, delete the file token.json.
-    #     SCOPES = "https://www.googleapis.com/auth/calendar"
-    #     store = file.Storage("token.json")
-    #     creds = store.get()
-    #     if(not creds or creds.invalid):
-    #         flow = client.flow_from_clientsecrets("credentials.json", SCOPES)
-    #         creds = tools.run_flow(flow, store)
-    #     service = build("calendar", "v3", http=creds.authorize(Http()))
-    
+    def __init__(self, connection=None):
+        SCOPES = "https://www.googleapis.com/auth/calendar"
+        store = file.Storage("token.json")
+        creds = store.get()
+        if(not creds or creds.invalid):
+            flow = client.flow_from_clientsecrets("credentials.json", SCOPES)
+            creds = tools.run_flow(flow, store)
+        self.service = build("calendar", "v3", http=creds.authorize(Http()))
+
     #Variable service is not defined. 
     #This is a source of error.
     def removeCalendarEvent(self, eventid):
@@ -54,8 +52,8 @@ class CalendarUtils:
         """
 
         date = duedate
-        time_start = "T06:00:00+10:00"
-        time_end = "T07:00:00+10:00"
+        time_start = "{}T09:00:00+10:00".format(date)
+        time_end = "{}T10:00:00+10:00".format(date)
         event = {
             "summary": "ISBN: {}".format(ISBN),
             "location": "RMIT Building 14",
