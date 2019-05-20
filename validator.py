@@ -8,15 +8,15 @@ class Validator:
     Methods
     -------
     validateISBN(isbn):
-        A fuction to validate the ISBN entered
+        A function to validate the ISBN entered
     validateTitle(title):
-        A fuction to validate the book title entered
+        A function to validate the book title entered
     validateAuthor(author):
-        A fuction to validate the author entered
+        A function to validate the author entered
     isbnExists(isbn):
-        A fuction to check that the isbn exists in the library
+        A function to check that the isbn exists in the library
     onLoan(username, isbn):
-        A fuction to check if the user has the isbn book on loan
+        A function to check if the user has the isbn book on loan
     """
 
     def __init__(self):
@@ -24,7 +24,7 @@ class Validator:
 
     def validateISBN(self, isbn):
         """
-        A fuction to validate the ISBN entered
+        A function to validate the ISBN entered
 
         Args:
             isbn: string to be validated
@@ -44,7 +44,7 @@ class Validator:
 
     def validateTitle(self, title):
         """
-        A fuction to validate the book title entered
+        A function to validate the book title entered
 
         Args:
             title: string to be validated
@@ -64,7 +64,7 @@ class Validator:
 
     def validateAuthor(self, author):
         """
-        A fuction to validate the author entered
+        A function to validate the author entered
 
         Args:
             author: string to be validated
@@ -85,7 +85,7 @@ class Validator:
 
     def isbnExists(self, isbn):
         """
-        A fuction to check that the isbn exists in the library
+        A function to check that the isbn exists in the library
 
         Args:
             isbn: string to be checked
@@ -105,7 +105,7 @@ class Validator:
 
     def onLoan(self, username, isbn):
         """
-        A fuction to check if the user has the isbn book on loan
+        A function to check if the user has the isbn book on loan
 
         Args:
             username: string to check records against

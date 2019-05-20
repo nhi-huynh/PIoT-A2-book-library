@@ -6,7 +6,7 @@ from validator import Validator
 from database_utils import DatabaseUtils
 from calendar import CalendarUtils
 from validator import Validator
-from QR import QR
+#from QR import QR
 from voice_search import VoiceSearchUtils
 
 from datetime import datetime, date, timedelta
@@ -40,7 +40,7 @@ class MasterApplication:
         self.validator = Validator()
         self.calendar = CalendarUtils()
         self.voice = VoiceSearchUtils()
-        self.QR = QR()
+        #self.QR = QR()
 
         with DatabaseUtils() as db:
             db.createBookTable()
@@ -268,11 +268,11 @@ class MasterApplication:
                     
                     # #This Google Calendar function is not working!
                     # #Need to debug this
-                    eventID = self.calendar.createCalendarEvent(
+                    #eventID = self.calendar.createCalendarEvent(
                         dueDate.strftime(DATE_FORMAT), isbn, self.username)
 
                     #for now, use a hard-coded eventID
-                    eventID = 10000000
+                    #eventID = 10000000
 
                     with DatabaseUtils() as db:
                         # made change here to create event then
@@ -289,7 +289,7 @@ class MasterApplication:
                         else:
                             # #This Google Calendar function is not working!
                             # #Need to comment this out for now to test other functions
-                            # self.calendar.removeCalendarEvent(eventid)
+                            #self.calendar.removeCalendarEvent(eventid)
                             print("Book unsucessfully borrowed due to some db error")
 
     def borrowBook(self):
@@ -348,7 +348,7 @@ class MasterApplication:
                 self.returnBookISBN()
             elif(selection == "B"):
                 print("Currently not implemented")
-                self.returnBookQR()
+                #self.returnBookQR()
             elif(selection == "C"):
                 break
             else:
@@ -374,7 +374,7 @@ class MasterApplication:
         while(runAgain):
             self.printSection("RETURN A BOOK")
 
-            isbn = self.QR.readQR()
+            #isbn = self.QR.readQR()
             self.returnBook(isbn)
             runAgain = self.repeatsFunction("return")
 

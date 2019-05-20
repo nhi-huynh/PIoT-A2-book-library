@@ -1,6 +1,5 @@
 import MySQLdb
 
-
 class DatabaseUtils:
     """
     A class used to represent different utilites of the database
@@ -105,7 +104,7 @@ class DatabaseUtils:
                     borrowDate DATETIME not null,
                     dueDate DATE not null,
                     returnDate DATETIME DEFAULT null,
-                    eventID VARCHAR(50) not null,
+                    eventID VARCHAR(50) DEFAULT null,
                     constraint PK_Borrow primary key (borrowID),
                     constraint FK_Borrow_Book foreign key (ISBN)"""
                     + """ references Book (ISBN))
