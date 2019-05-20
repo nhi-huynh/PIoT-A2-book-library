@@ -4,7 +4,7 @@
 
 from validator import Validator
 from database_utils import DatabaseUtils
-from calendar import CalendarUtils
+from g_calendar import CalendarUtils
 from validator import Validator
 #from QR import QR
 from voice_search import VoiceSearchUtils
@@ -47,7 +47,7 @@ class MasterApplication:
             db.createBorrowTable()
             db.insertSampleBook()
 
-        #self.showMenu()
+        self.showMenu()
         # this will be removed as the master socket script will intantiate and call this
 
     def voiceInput(self):
@@ -268,7 +268,7 @@ class MasterApplication:
                     
                     # #This Google Calendar function is not working!
                     # #Need to debug this
-                    #eventID = self.calendar.createCalendarEvent(
+                    eventID = self.calendar.createCalendarEvent(
                         dueDate.strftime(DATE_FORMAT), isbn, self.username)
 
                     #for now, use a hard-coded eventID
@@ -289,7 +289,7 @@ class MasterApplication:
                         else:
                             # #This Google Calendar function is not working!
                             # #Need to comment this out for now to test other functions
-                            #self.calendar.removeCalendarEvent(eventid)
+                            self.calendar.removeCalendarEvent(eventid)
                             print("Book unsucessfully borrowed due to some db error")
 
     def borrowBook(self):
@@ -313,20 +313,25 @@ class MasterApplication:
         if self.validator.validateISBN(isbn):
             if self.validator.isbnExists(isbn):
                 if self.validator.onLoan(self.username, isbn):
+		    eventID = None
                     with DatabaseUtils() as db:
-                        if(db.updateReturnDate(isbn, self.username)):
+                        eventID = db.updateReturnDate(isbn, self.username)
+			if eventID != None:
                             print(
                                 "Book ISBN {} sucessfully returned by {}."
                                 .format(isbn, self.username))
 
-                            # get id from database
-                            eventString = db.getEventID(self.username, isbn)
                             # remove google calendar event
-                            self.calendar.removeCalendarEvent(eventString)
-                        else:
-                            print(
-                                "Book unsucessfully returned by {}"
+                            self.calendar.removeCalendarEvent(eventID)
+			    print(
+                                "Event successfully remove"
                                 .format(self.username))
+			else:
+                            print(
+                                "Book unsucessfully returned by {} due to db error"
+                                .format(self.username))
+			
+
                 else:
                     print("You did not borrow Book ISBN {}".format(isbn))
                     print("Please return another book")
