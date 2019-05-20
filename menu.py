@@ -5,6 +5,8 @@
 from validator import Validator
 from database_utils import DatabaseUtils
 from calendar import CalendarUtils
+from validator import Validator
+from QR import QR
 from voice_search import VoiceSearchUtils
 
 from datetime import datetime, date, timedelta
@@ -26,38 +28,11 @@ class MasterApplication:
     username : string
         the username of the person logged in
     validator : Validator
-        the _____
-
-    Methods
-    -------
-    showMenu()
-        A function created to display the main menu
-    printList(subject, listName, headers, data):
-        A function created to print the searched for items in a list
-    printSection(sectionName):
-        A function created to print a section
-    printSection():
-        A function created to print the end of a section
-    listBooks():
-        A function created to print all the books existing in the db
-    listBorrowsByUser():
-        A function created to print borrowing record of the current user
-    searchBook():
-        A function created to print the main search menu options
-    searchBookByISBN():
-        A function created to search for a book by ISBN
-    searchBookByTitle():
-        A function created to search for a book by Title
-    searchBookByAuthor():
-        A function created to search for a book by Author
-    borrowISBN(isbn):
-        A function created to borrow a book based on its ISBN
-    borrowBook():
-        A function created to borrow a book
-    returnBook():
-        A function created to return a book
-    repeatsFunction(action):
-        A function created to ask the user if they wish to repeat the action
+        the link to the validator script
+    QR : QR
+        the link to the QR script
+    calendar : CalendarUtils
+        the link to the CalendarUtils script
     """
 
     def __init__(self, username):
@@ -65,13 +40,15 @@ class MasterApplication:
         self.validator = Validator()
         self.calendar = CalendarUtils()
         self.voice = VoiceSearchUtils()
+        self.QR = QR()
 
         with DatabaseUtils() as db:
             db.createBookTable()
             db.createBorrowTable()
             db.insertSampleBook()
 
-        self.showMenu()
+        #self.showMenu()
+        # this will be removed as the master socket script will intantiate and call this
 
     def voiceInput(self):
         translation = self.voice.voiceSearch()
@@ -111,14 +88,14 @@ class MasterApplication:
             elif(selection == "B"):
                 self.borrowBook()
             elif(selection == "C"):
-                self.returnBook()
+                self.returnBookMenu()
             elif(selection == "D"):
                 self.listBooks()
             elif(selection == "E"):
                 self.listBorrowsByUser()
             elif(selection == "F"):
                 print("Logged out")
-                break   #for testing. 
+                return 
                 # In final submission, we return something here
                 # Then exit back to master.py which will then send a message via the
                 # socket to the reception pi saying that the current user has
@@ -327,9 +304,58 @@ class MasterApplication:
             runAgain = self.repeatsFunction("borrow")
         
         return False
+    def returnBook(self, isbn):
+        """A function created to return a book based on its ISBN
 
-    def returnBook(self):
-        """A function created to return a book"""
+        Args:
+            isbn: string of the isbn of the book looking to be borrowed
+        """
+        if self.validator.validateISBN(isbn):
+            if self.validator.isbnExists(isbn):
+                if self.validator.onLoan(self.username, isbn):
+                    with DatabaseUtils() as db:
+                        if(db.updateReturnDate(isbn, self.username)):
+                            print(
+                                "Book ISBN {} sucessfully returned by {}."
+                                .format(isbn, self.username))
+
+                            # get id from database
+                            eventString = db.getEventID(self.username, isbn)
+                            # remove google calendar event
+                            self.calendar.removeCalendarEvent(eventString)
+                        else:
+                            print(
+                                "Book unsucessfully returned by {}"
+                                .format(self.username))
+                else:
+                    print("You did not borrow Book ISBN {}".format(isbn))
+                    print("Please return another book")
+
+    def returnBookMenu(self):
+        """A function created to print the main return menu options"""
+
+        self.printSection("RETURN A BOOK")
+
+        while(True):
+            print("How would you like to return?")
+            print("A) Return by ISBN")
+            print("B) Return by QR Code")
+            print("C) Return to main menu")
+            selection = input("Select an option: ").upper()
+            print()
+
+            if(selection == "A"):
+                self.returnBookISBN()
+            elif(selection == "B"):
+                print("Currently not implemented")
+                self.returnBookQR()
+            elif(selection == "C"):
+                break
+            else:
+                print("Invalid input - please try again.")
+
+    def returnBookISBN(self):
+        """A function created to return a book - by getting its ISBN"""
 
         runAgain = True
 
@@ -337,30 +363,19 @@ class MasterApplication:
             self.printSection("RETURN A BOOK")
 
             isbn = input("ISBN: ")
-            eventID = None
+            self.returnBook(isbn)
+            runAgain = self.repeatsFunction("return")
 
-            if self.validator.validateISBN(isbn):
-                if self.validator.isbnExists(isbn):
-                    if self.validator.onLoan(self.username, isbn):
-                        with DatabaseUtils() as db:
-                            eventID = db.updateReturnDate(isbn, self.username)
+    def returnBookQR(self):
+        """A function created to return a book - by getting the QR code"""
 
-                            if(eventID != None):
-                                print(
-                                    "Book ISBN {} sucessfully returned by {}."
-                                    .format(isbn, self.username))
+        runAgain = True
 
-                                # #This Google Calendar function is not working!
-                                # #Need to comment this out for now to test other functions
-                                # # remove google calendar event
-                                # self.calendar.removeCalendarEvent(eventID)
-                            else:
-                                print(
-                                    "Book unsucessfully returned by {}"
-                                    .format(self.username))
-                    else:
-                        print("You did not borrow Book ISBN {}".format(isbn))
-                        print("Please return another book")
+        while(runAgain):
+            self.printSection("RETURN A BOOK")
+
+            isbn = self.QR.readQR()
+            self.returnBook(isbn)
             runAgain = self.repeatsFunction("return")
 
     def repeatsFunction(self, action):
