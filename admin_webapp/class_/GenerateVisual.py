@@ -1,6 +1,7 @@
 import calendar
 from datetime import datetime, timedelta
 import plotly.plotly as ply
+import plotly.offline as offline
 import plotly.graph_objs as go
 import numpy as np
 import pytz
@@ -9,7 +10,7 @@ import traceback
 
 class GenerateVisual:
 
-    def __init__(self):
+    def __init__(self, username='s3652122', api_key='waPS3YMdkvNPuO7XXgAA'):
         # fill in plotly username and api key
         ply.sign_in(username=username, api_key=api_key)
 
@@ -54,7 +55,12 @@ class GenerateVisual:
             )
             data = [trace]
             fig = go.Figure(data=data, layout=layout)
+
             ply.plot(data, filename="weekly_by_book")
+            offline.plot({
+                'data': data,
+                'layout': layout
+            }, filename='weekly_book.html')
             return True
         except Exception:
             print("Error generate weekly_book_category graph: ")
@@ -106,7 +112,12 @@ class GenerateVisual:
 
             data = [trace]
             fig = go.Figure(data=data, layout=layout)
-            ply.plot(fig, filename='weekly by date')        
+            
+            ply.plot(fig, filename='weekly by date')
+            offline.plot({
+                'data': data,
+                'layout': layout
+            }, filename='weekly_date.html')        
             return True
         except Exception:
             print("Error generate weekly_day_category graph: ")
@@ -161,7 +172,12 @@ class GenerateVisual:
 
             data = [trace]
             fig = go.Figure(data=data, layout=layout)
-            ply.plot(fig, filename='daily by hour')        
+            
+            ply.plot(fig, filename='daily by hour')
+            offline.plot({
+                'data': data,
+                'layout': layout
+            }, filename='daily_hour.html')        
             return True
         except Exception:
             print("Error generate weekly_day_category graph: ")
