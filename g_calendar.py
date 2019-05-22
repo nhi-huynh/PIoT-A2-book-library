@@ -57,7 +57,7 @@ class CalendarUtils:
 
         event = {
             "summary": "New Programmatic Event",
-            "id": selection+name,
+            "id": selection+username.lower(),
             "location": "RMIT Building 14",
             "description": "Adding new IoT event",
             "start": {
