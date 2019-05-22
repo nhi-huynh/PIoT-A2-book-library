@@ -28,16 +28,15 @@ class CalendarUtils:
 
     #Variable service is not defined. 
     #This is a source of error.
-    def removeCalendarEvent(self, ISBN, username):
+    def removeCalendarEvent(self, eventID):
         """
         A function created to remove a specific google calendar event
 
         Args:
             eventid: the string that identifies the specific event
         """
-        id = ISBN + username
         event = self.service.events().delete(
-            calendarId="primary", eventId=id).execute()
+            calendarId="primary", eventId=eventID).execute()
 
     def createCalendarEvent(self, duedate, ISBN, username):
         """
@@ -57,7 +56,6 @@ class CalendarUtils:
         time_end = "{}T10:00:00+10:00".format(date)
         event = {
             "summary": "ISBN: {}".format(ISBN),
-			"id": ISBN+username,
             "location": "RMIT Building 14",
             "description": "borrowed by:{}, due date:{}".format(
                 username, duedate),
