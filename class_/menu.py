@@ -2,12 +2,12 @@
 # email: RMIT.PIOT.A2@gmail.com
 # password: A2abc123
 
-from validator import Validator
-from database_utils import DatabaseUtils
-from g_calendar import CalendarUtils
-from validator import Validator
+from class_.validator import Validator
+from class_.database_utils import DatabaseUtils
+from class_.g_calendar import CalendarUtils
+from class_.validator import Validator
 #from QR import QR
-from voice_search import VoiceSearchUtils
+from class_.voice_search import VoiceSearchUtils
 
 from datetime import datetime, date, timedelta
 import json
@@ -47,7 +47,7 @@ class MasterApplication:
             db.createBorrowTable()
             db.insertSampleBook()
 
-        self.showMenu()
+        # self.showMenu()
         # this will be removed as the master socket script will intantiate and call this
 
     def voiceInput(self):
@@ -95,7 +95,7 @@ class MasterApplication:
                 self.listBorrowsByUser()
             elif(selection == "F"):
                 print("Logged out")
-                return 
+                break 
                 # In final submission, we return something here
                 # Then exit back to master.py which will then send a message via the
                 # socket to the reception pi saying that the current user has

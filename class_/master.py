@@ -2,7 +2,7 @@
 
 import socket
 import select
-from menu import MasterApplication
+from class_.menu import MasterApplication
 
 
 class Master():
@@ -73,6 +73,6 @@ class Master():
                     #     print("Input chosen is {} ".format(message))
                     ma = MasterApplication(username)
                     ma.showMenu()
-                    
+                    conn.sendall("Successfully log out".encode())
                     print("Disconnecting from receiver Pi")
                     print("master Pi currently listening...")

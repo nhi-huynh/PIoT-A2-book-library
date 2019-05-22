@@ -1,4 +1,4 @@
-from database_utils import DatabaseUtils
+from class_.database_utils import DatabaseUtils
 
 
 class Validator:
