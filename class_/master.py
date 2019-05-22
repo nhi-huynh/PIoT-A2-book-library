@@ -62,15 +62,6 @@ class Master():
                     print("Login successfully by {username}"
                           .format(username=username))
                     # shows booking menu
-                    # booking menu should call break to exit the menu
-                    # once exit, master pi will end connection
-                    # PLACEHOLDER CODE BELOW, TO BE DELETED AFTER INTEGRATION
-                    # while True:
-                    #     message = input("Please select option: ")
-                    #     if(not message):
-                    #         conn.sendall("Logout successfully".encode())
-                    #         break
-                    #     print("Input chosen is {} ".format(message))
                     ma = MasterApplication(username)
                     ma.showMenu()
                     conn.sendall("Successfully log out".encode())
