@@ -13,7 +13,7 @@ class CalendarUtils:
     Attributes
     ----------
     connection : string
-        the _____
+
 
     """
 
@@ -26,17 +26,16 @@ class CalendarUtils:
             creds = tools.run_flow(flow, store)
         self.service = build("calendar", "v3", http=creds.authorize(Http()))
 
-    #Variable service is not defined. 
-    #This is a source of error.
-    def removeCalendarEvent(self, eventID):
+    def removeCalendarEvent(self, ISBN, username):
         """
         A function created to remove a specific google calendar event
 
         Args:
             eventid: the string that identifies the specific event
         """
+        e_id = ISBN + username
         event = self.service.events().delete(
-            calendarId="primary", eventId=eventID).execute()
+            calendarId="primary", eventId=e_id).execute()
 
     def createCalendarEvent(self, duedate, ISBN, username):
         """
@@ -51,14 +50,16 @@ class CalendarUtils:
             eventID string
         """
 
-        date = duedate
+        date = datetime.now()
+        dueDate = (date + timedelta(days=7)).strftime("%Y-%m-%d")
         time_start = "{}T09:00:00+10:00".format(date)
         time_end = "{}T10:00:00+10:00".format(date)
+
         event = {
-            "summary": "ISBN: {}".format(ISBN),
+            "summary": "New Programmatic Event",
+            "id": selection+name,
             "location": "RMIT Building 14",
-            "description": "borrowed by:{}, due date:{}".format(
-                username, duedate),
+            "description": "Adding new IoT event",
             "start": {
                 "dateTime": time_start,
                 "timeZone": "Australia/Melbourne",
@@ -68,7 +69,8 @@ class CalendarUtils:
                 "timeZone": "Australia/Melbourne",
             },
             "attendees": [
-                {"email": "RMIT.PIOT.A2@gmail.com"},
+                {"email": "kevin@scare.you"},
+                {"email": "shekhar@wake.you"},
             ],
             "reminders": {
                 "useDefault": False,
