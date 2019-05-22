@@ -33,12 +33,7 @@ class Master():
 
         self.ip = config['ip']
         self.port = config['port']
-        self.address = (self.ip, self.port)    
-        # cfg = Config()
-        # socketConfig = cfg.get_socket_config()
-        # port = socketConfig["port"]
-        # host = socketConfig["reception_ip"]
-        # self.ADDRESS = (host, port)
+        self.address = (self.ip, self.port)
 
     def start(self):
         """A fuction created to connect to the reception pi
@@ -59,7 +54,7 @@ class Master():
                 if not(newReceiver):
                     print("master pi automatically shuts down")
                     return True
-                print("Listening on receiver Pi({})...".format(self.ADDRESS))
+                print("Listening on receiver Pi({})...".format(self.address))
                 conn, addr = s.accept()
                 with conn:
                     username = conn.recv(4096).decode()
@@ -78,3 +73,4 @@ class Master():
                         print("Input chosen is {} ".format(message))
 
                     print("Disconnecting from receiver Pi")
+                    print("master Pi currently listening...")

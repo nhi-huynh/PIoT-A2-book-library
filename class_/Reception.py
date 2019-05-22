@@ -35,12 +35,12 @@ class Reception():
         if auth is None:
             raise Exception('Auth object required')
 
-        if face_recognition is None:
-            raise Exception('Face recognition object required')
+       # if face_recognition is None:
+           # raise Exception('Face recognition object required')
 
         self.ip = config['ip']
         self.port = config['port']
-        self.address = (host, port)
+        self.address = (self.ip, self.port)
 
         self.dbi = dbi
         self.auth = auth
@@ -88,12 +88,13 @@ class Reception():
     def __start_session(self, username):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             print("Connecting to master Pi...")
-            s.connect(self.ADDRESS)
+            s.connect(self.address)
 
             print("Waiting for user to finish")
-            s.sendall(username)
+            s.sendall(username.encode())
 
             data = s.recv(4096)
+            print(data.decode())
 
     def login(self):
         """
