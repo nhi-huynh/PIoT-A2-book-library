@@ -309,7 +309,7 @@ class MasterApplication:
                         else:
                             # #This Google Calendar function is not working!
                             # #Need to comment this out for now to test other functions
-                            self.calendar.removeCalendarEvent(eventid)
+                            self.calendar.removeCalendarEvent(isbn, self.username)
                             print("Book unsucessfully borrowed due to some db error")
 
     def borrowBook(self):
@@ -345,7 +345,7 @@ class MasterApplication:
                             .format(isbn, self.username))
 
                         # remove google calendar event
-                        self.calendar.removeCalendarEvent(eventID)
+                        self.calendar.removeCalendarEvent(isbn, self.username)
                         print(
                             "EventID {} successfully remove"
                             .format(eventID))
