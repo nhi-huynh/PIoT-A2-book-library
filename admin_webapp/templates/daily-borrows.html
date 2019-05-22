@@ -1,0 +1,26 @@
+<!-- vim: set et sw=4 ts=4 sts=4: -->
+{% extends 'bootstrap/base.html' %}
+
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('.static', filename='admin.css') }}">
+
+{% endblock %}
+
+{% block title %}Admin Console{% endblock %}
+
+{% block content %}
+{{ super() }}
+
+
+    <h1>Daily book borrows</h1>
+    <h3>View number of books borrowed from our library database!</h3>
+    <iframe width="600" height="450" src="https://datastudio.google.com/embed/reporting/1f6MREyvfr03Dxo7c8IzxN_KD1RZ0W3KM/page/jvSq" frameborder="0" style="border:0" allowfullscreen></iframe>
+
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('.static', filename='admin.js') }}"></script>
+{% endblock %}
