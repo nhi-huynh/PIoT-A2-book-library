@@ -2,6 +2,7 @@
 
 import socket
 import select
+from menu import MasterApplication
 
 
 class Master():
@@ -64,13 +65,14 @@ class Master():
                     # booking menu should call break to exit the menu
                     # once exit, master pi will end connection
                     # PLACEHOLDER CODE BELOW, TO BE DELETED AFTER INTEGRATION
-                    # menu(username.decode)
-                    while True:
-                        message = input("Please select option: ")
-                        if(not message):
-                            conn.sendall("Logout successfully".encode())
-                            break
-                        print("Input chosen is {} ".format(message))
-
+                    # while True:
+                    #     message = input("Please select option: ")
+                    #     if(not message):
+                    #         conn.sendall("Logout successfully".encode())
+                    #         break
+                    #     print("Input chosen is {} ".format(message))
+                    ma = MasterApplication(username)
+                    ma.showMenu()
+                    
                     print("Disconnecting from receiver Pi")
                     print("master Pi currently listening...")
