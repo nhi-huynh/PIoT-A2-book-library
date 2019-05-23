@@ -1,12 +1,9 @@
 __pycache__/
 *.pyc
-config.py
+/config.py
 *.log
 .DS_Store
-<<<<<<< HEAD
 gc*.json
-=======
 *.swp
 .vscode
 keys
->>>>>>> master-reception

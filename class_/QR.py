@@ -6,7 +6,7 @@ import datetime
 import imutils
 import time
 import cv2
-from validator import Validator
+from class_.Validator import Validator
 
 # import numpy as np
 # import sys

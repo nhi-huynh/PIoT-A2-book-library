@@ -3,7 +3,7 @@
 import socket, re
 from getpass import getpass
 from class_.FaceRecognition import FaceRecognition
-from class_.TCP import ReceptionConnection()
+from class_.TCP import ReceptionConnection
 
 
 class Reception():

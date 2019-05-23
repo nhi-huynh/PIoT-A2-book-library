@@ -21,7 +21,7 @@ class CalendarUtils:
 
     def __init__(self, connection=None, credentials_path=None, token_path=None):
         if credentials_path is None or token_path is None:
-	    raise Exception('Credentials and token paths required')
+            raise Exception('Credentials and token paths required')
 
         SCOPES = "https://www.googleapis.com/auth/calendar"
         store = file.Storage("token.json")
@@ -59,7 +59,7 @@ class CalendarUtils:
         dueDate = (date + timedelta(days=7)).strftime("%Y-%m-%d")
         time_start = "{}T09:00:00+10:00".format(dueDate)
         time_end = "{}T10:00:00+10:00".format(dueDate)
-	eventID = ISBN+username.lower()
+        eventID = ISBN+username.lower()
 
         event = {
             "summary": "New Programmatic Event",

@@ -54,7 +54,7 @@ CONFIG_MP = {
 }
 
 # Only needed if manual = auto for the other socket settings
-CONFIG_SYNC {
+CONFIG_SYNC = {
     'mp-pubkey': 'keys/key-mp.pub',
     'port': 4321
 }

@@ -7,7 +7,7 @@ from class_.DatabaseUtils import DatabaseUtils
 from class_.CalendarUtils import CalendarUtils
 from class_.Validator import Validator
 from class_.QR import QR
-from VoiceSearchUtils import VoiceSearchUtils
+from class_.VoiceSearchUtils import VoiceSearchUtils
 
 from datetime import datetime, date, timedelta
 import json

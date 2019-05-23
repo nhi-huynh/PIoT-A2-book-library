@@ -8,7 +8,7 @@ from class_.Reception import Reception
 dbi = DBInterface(CONFIG_RP['db'])
 auth = Auth(dbi)
 
-reception_pi = Reception(config=CONFIG_RP['socket'], dbi=dbi, auth=auth)
+reception_pi = Reception(config=CONFIG_RP, dbi=dbi, auth=auth)
 
 reception_pi.start()
 
