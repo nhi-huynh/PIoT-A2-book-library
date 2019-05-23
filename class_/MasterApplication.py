@@ -279,8 +279,7 @@ class MasterApplication:
                     currentdate = datetime.now()
                     dueDate = currentdate.date() + timedelta(days=7)
 
-                    eventID = self.calendar.createCalendarEvent(
-                        dueDate.strftime(DATE_FORMAT), isbn, self.username)
+                    eventID = self.calendar.createCalendarEvent(isbn, self.username)
 
                     # for now, use a hard-coded eventID
                     # eventID = 10000000

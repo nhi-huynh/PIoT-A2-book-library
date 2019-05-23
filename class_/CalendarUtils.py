@@ -38,7 +38,7 @@ class CalendarUtils:
         Args:
             eventid: the string that identifies the specific event
         """
-        e_id = ISBN + username
+        e_id = ISBN + username.lower
         event = self.service.events().delete(
             calendarId="primary", eventId=e_id).execute()
 
@@ -57,12 +57,13 @@ class CalendarUtils:
 
         date = datetime.now()
         dueDate = (date + timedelta(days=7)).strftime("%Y-%m-%d")
-        time_start = "{}T09:00:00+10:00".format(date)
-        time_end = "{}T10:00:00+10:00".format(date)
+        time_start = "{}T09:00:00+10:00".format(dueDate)
+        time_end = "{}T10:00:00+10:00".format(dueDate)
+	eventID = ISBN+username.lower()
 
         event = {
             "summary": "New Programmatic Event",
-            "id": selection+username.lower(),
+            "id": eventID,
             "location": "RMIT Building 14",
             "description": "Adding new IoT event",
             "start": {
