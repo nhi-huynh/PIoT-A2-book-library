@@ -1,0 +1,58 @@
+/* vim: set et sw=4 ts=4 sts=4: */
+body {
+    background-color: #F6F6F6;
+}
+
+#login-form {
+    padding: 2rem;
+    padding-top: 1rem;
+    width: 35rem;
+    margin: 8rem auto;
+    border-radius: 0.4rem;
+    background-color: #FFF;
+    max-width: 100%;
+
+    -webkit-box-shadow: 0px 1px 3px 1px rgba(50, 50, 50, 0.5);
+       -moz-box-shadow: 0px 1px 3px 1px rgba(50, 50, 50, 0.5);
+            box-shadow: 0px 1px 3px 1px rgba(50, 50, 50, 0.5);
+}
+
+#login-form h2 {
+    color: #2C7;
+}
+
+#login-form input {
+    font-size: 1.6rem;
+    padding: 0;
+    height: 4rem;
+    line-height: 4rem;
+}
+
+#username {
+    border-radius: 6px 6px 0 0;
+}
+
+#password {
+    border-radius: 0 0 6px 6px;
+    border-top: 0;
+}
+
+#username, #password {
+    padding-left: 1rem !important;
+}
+
+#login-action {
+    margin-top: 2rem;
+    border-radius: 6px;
+    background-color: #2C7;
+    color: #FFF;
+}
+
+#login-action:hover {
+    background-color: #22C077;
+    color: #FFF;
+}
+
+#login-form .msg {
+    margin-top: 1rem;
+}
