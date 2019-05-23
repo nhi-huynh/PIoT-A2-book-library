@@ -5,3 +5,4 @@ config.py
 .DS_Store
 *.swp
 .vscode
+keys

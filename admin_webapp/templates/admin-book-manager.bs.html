@@ -1,0 +1,65 @@
+<!-- vim: set et sw=4 ts=4 sts=4: -->
+{% extends 'admin.bs.html' %}
+
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('.static', filename='admin.css') }}">
+<link rel="stylesheet" href="{{ url_for('.static', filename='admin-book-manager.css') }}">
+
+{% endblock %}
+
+{% block title %}Admin Console{% endblock %}
+
+{% block content %}
+{{ super() }}
+
+<div id='page-shadow'></div>
+
+<div class='book-form-container'>
+    <form id='book-form'>
+        <div>
+            <div id='form-close'>&#10799;</div>
+            <input type='hidden' name='isbn' value='new'>
+            <label id='isbn-label'>ISBN: New</label>
+            <label>Title<br><input name='title' class='form-control' type='text' required></label>
+            <label>Author<br><input name='author' class='form-control' type='text' required></label>
+            <label>Year<br><input name='yearPublished' class='form-control' type='number' required></label>
+            <p id='book-msg'></p>
+            <input class='btn btn-primary' type='submit' id='book-submit' value='Save'>
+            <input class='btn btn-danger' type='submit' id='book-delete' value='Delete'>
+        </div>
+    </form>
+</div>
+
+<div class='content'>
+    <div class='book-container'>
+        <div class='flex-between'>
+            <h3>Book Manager</h3>
+            <button type='button' class='btn btn-primary' id='open-book-form'>Add</button>
+        </div>
+
+        <p id='msg-book-table'></p>
+
+        <table id='book-table'>
+            <thead>
+                <tr>
+                    <th>ISBN</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Year Published</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr><td colspan=4>No books to show</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('.static', filename='admin-book-manager.js') }}"></script>
+{% endblock %}
