@@ -40,7 +40,7 @@ class MasterApplication:
         self.validator = Validator()
         self.calendar = CalendarUtils()
         self.voice = VoiceSearchUtils()
-        #self.QR = QR()
+        self.QR = QR()
 
         with DatabaseUtils() as db:
             db.createBookTable()
@@ -57,7 +57,7 @@ class MasterApplication:
             print("Failed to get speech input.")
         else:
             print("Your search is:\t {}".format(translation))
-            
+
         return translation
 
     def showMenu(self):
@@ -95,11 +95,7 @@ class MasterApplication:
                 self.listBorrowsByUser()
             elif(selection == "F"):
                 print("Logged out")
-                break 
-                # In final submission, we return something here
-                # Then exit back to master.py which will then send a message via the
-                # socket to the reception pi saying that the current user has
-                # logged out and that it is free to allow another user to login
+                return
             else:
                 print("Invalid input - please try again.\n")
 
@@ -128,7 +124,6 @@ class MasterApplication:
                 print("".join(["{:<30}".format(str(item)) for item in row]))
             self.printEndSection()
             return True
-
 
     def printSection(self, sectionName):
         """
@@ -161,7 +156,7 @@ class MasterApplication:
             self.printList(
                 "user borrow records", "your borrow records", BORROW_HEADERS,
                 db.getBorrowsByUsername(self.username))
-    
+
     def getSearchInput(self, item):
         """A function created to print the methods available to search"""
 
@@ -214,15 +209,14 @@ class MasterApplication:
         """A function created to search for a book by ISBN"""
 
         self.printSection("SEARCH BY ISBN")
-        
+
         isbn = self.getSearchInput("ISBN: ")
 
         if self.validator.validateISBN(isbn):
             with DatabaseUtils() as db:
                 return self.printList(
-                    "search results", "all search results", 
+                    "search results", "all search results",
                     BOOK_HEADERS, db.getBookByISBN(isbn))
-
 
     def searchBookByTitle(self):
         """A function created to search for a book by Title"""
@@ -233,23 +227,21 @@ class MasterApplication:
         if self.validator.validateTitle(title):
             with DatabaseUtils() as db:
                 return self.printList(
-                    "search results", "all search results", 
+                    "search results", "all search results",
                     BOOK_HEADERS, db.getBooksByTitle(title))
- 
 
     def searchBookByAuthor(self):
         """A function created to search for a book by Author"""
-        
+
         self.printSection("SEARCH BY AUTHOR")
-        
         author = self.getSearchInput("Author: ")
 
         if self.validator.validateAuthor(author):
             with DatabaseUtils() as db:
                 return self.printList(
-                    "search results", "all search results", 
+                    "search results", "all search results",
                     BOOK_HEADERS, db.getBooksByAuthor(author))
-    
+
     def wantsToBorrow(self):
         while(True):
             print("Would you like to borrow one of these results? Y/N")
@@ -285,19 +277,15 @@ class MasterApplication:
                     # dueDate = currentdate + timedelta(days=7)
                     currentdate = datetime.now()
                     dueDate = currentdate.date() + timedelta(days=7)
-                    
-                    # #This Google Calendar function is not working!
-                    # #Need to debug this
+
                     eventID = self.calendar.createCalendarEvent(
                         dueDate.strftime(DATE_FORMAT), isbn, self.username)
 
-                    #for now, use a hard-coded eventID
-                    #eventID = 10000000
+                    # for now, use a hard-coded eventID
+                    # eventID = 10000000
 
                     with DatabaseUtils() as db:
-                        # made change here to create event then
-                        # add the borrow with the eventID
-                        
+
                         if(db.insertBorrow(isbn, self.username, eventID)):
                             print(
                                 "Book ISBN {} sucessfully borrowed by {}."
@@ -305,12 +293,11 @@ class MasterApplication:
                             print(
                                 "Due date is: " + dueDate.strftime(
                                     DATE_FORMAT))
-                            print("An event has been set in your Google Calendar")
+                            print("A event has been set in our GoogleCalendar")
                         else:
-                            # #This Google Calendar function is not working!
-                            # #Need to comment this out for now to test other functions
-                            self.calendar.removeCalendarEvent(eventid)
-                            print("Book unsucessfully borrowed due to some db error")
+                            self.calendar.removeCalendarEvent(
+                                isbn, self.username)
+                            print("Book unsucessfully borrowed due")
 
     def borrowBook(self):
         """A function created to borrow a book"""
@@ -322,9 +309,9 @@ class MasterApplication:
             isbn = input("ISBN: ")
             self.borrowISBN(isbn)
             runAgain = self.repeatsFunction("borrow")
-        
+
         return False
-    
+
     def returnBook(self, isbn):
         """A function created to return a book based on its ISBN
 
@@ -338,14 +325,14 @@ class MasterApplication:
 
                     with DatabaseUtils() as db:
                         eventID = db.updateReturnDate(isbn, self.username)
-                    
-                    if eventID != None:
+
+                    if eventID is not None:
                         print(
                             "Book ISBN {} sucessfully returned by {}."
                             .format(isbn, self.username))
 
                         # remove google calendar event
-                        self.calendar.removeCalendarEvent(eventID)
+                        self.calendar.removeCalendarEvent(isbn, self.username)
                         print(
                             "EventID {} successfully remove"
                             .format(eventID))
@@ -353,8 +340,6 @@ class MasterApplication:
                         print(
                             "Book unsucessfully returned by {} due to db error"
                             .format(self.username))
-			
-
                 else:
                     print("You did not borrow Book ISBN {}".format(isbn))
                     print("Please return another book")
@@ -376,7 +361,7 @@ class MasterApplication:
                 self.returnBookISBN()
             elif(selection == "B"):
                 print("Currently not implemented")
-                #self.returnBookQR()
+                self.returnBookQR()
             elif(selection == "C"):
                 break
             else:
@@ -402,7 +387,7 @@ class MasterApplication:
         while(runAgain):
             self.printSection("RETURN A BOOK")
 
-            #isbn = self.QR.readQR()
+            isbn = self.QR.readQR()
             self.returnBook(isbn)
             runAgain = self.repeatsFunction("return")
 

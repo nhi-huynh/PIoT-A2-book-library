@@ -1,5 +1,6 @@
 import MySQLdb
 
+
 class DatabaseUtils:
     """
     A class used to represent different utilites of the database
@@ -106,8 +107,7 @@ class DatabaseUtils:
                     returnDate DATETIME DEFAULT null,
                     eventID VARCHAR(50) DEFAULT null,
                     constraint PK_Borrow primary key (borrowID),
-                    constraint FK_Borrow_Book foreign key (ISBN)"""
-                    + """ references Book (ISBN))
+                    constraint FK_Borrow_Book foreign key (ISBN)""" + """ references Book (ISBN))
                 """)
             self.connection.commit()
 
@@ -244,7 +244,8 @@ class DatabaseUtils:
         with self.connection.cursor() as cursor:
             cursor.execute(
                 """select borrowID, ISBN, username, borrowDate, dueDate,
-                returnDate, eventID from Borrow where username = %s""", (username,))
+                returnDate, eventID from Borrow where username = %s""", (
+                    username,))
             return cursor.fetchall()
 
     def insertBook(self, title, author, yearPublished):
@@ -292,7 +293,8 @@ class DatabaseUtils:
 
     def updateReturnDate(self, isbn, username):  # returnDate
         """
-        A function created to update the return date value and return the eventID for that borrow
+        A function created to update the return date value and
+        return the eventID for that borrow
 
         Args:
             isbn: string that is the ISBN of the book
@@ -306,22 +308,22 @@ class DatabaseUtils:
 
         with self.connection.cursor() as cursor:
             cursor.execute(
-                """select eventID 
-                from Borrow 
+                """select eventID
+                from Borrow
                 where username = %s
-                and ISBN = %s 
-                AND returnDate IS NULL""", 
+                and ISBN = %s
+                AND returnDate IS NULL""",
                 (username, isbn,))
             eventID = cursor.fetchone()
-        
+
         with self.connection.cursor() as cursor:
             cursor.execute(
                 """UPDATE Borrow
                 SET returnDate = NOW()
-                WHERE ISBN = %s AND username = %s AND returnDate IS NULL""", 
-                (isbn, username,))  
+                WHERE ISBN = %s AND username = %s AND returnDate IS NULL""",
+                (isbn, username,))
 
         self.connection.commit()
 
         return eventID
-        #return cursor.rowcount == 1
+        # return cursor.rowcount == 1
