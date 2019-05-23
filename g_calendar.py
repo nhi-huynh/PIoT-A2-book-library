@@ -12,8 +12,10 @@ class CalendarUtils:
 
     Attributes
     ----------
-    connection : string
-
+    SCOPES : string
+    store : 
+    creds : 
+    self.service : 
 
     """
 
