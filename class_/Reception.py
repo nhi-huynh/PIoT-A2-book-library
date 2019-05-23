@@ -3,6 +3,7 @@
 import socket, re
 from getpass import getpass
 from class_.FaceRecognition import FaceRecognition
+from class_.TCP import ReceptionConnection()
 
 
 class Reception():
@@ -38,12 +39,15 @@ class Reception():
        # if face_recognition is None:
            # raise Exception('Face recognition object required')
 
-        self.ip = config['ip']
-        self.port = config['port']
-        self.address = (self.ip, self.port)
-
         self.dbi = dbi
         self.auth = auth
+
+        print('Waiting for Master Pi')
+        self.tcp = ReceptionConnection(config['socket'])
+
+        print('Connecting to Master Pi')
+        self.tcp.connect()
+
         self.face_rec = face_recognition
 
     def start(self):
@@ -86,15 +90,19 @@ class Reception():
                 print('\n\nInvalid option, please enter a valid number or "exit" to end')
 
     def __start_session(self, username):
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            print("Connecting to master Pi...")
-            s.connect(self.address)
+        res = self.tcp.send_all(username)
 
-            print("Waiting for user to finish")
-            s.sendall(username.encode())
+        if not res:
+            print('Connection to Master Pi lost, attempting to reconnect')
+            self.tcp.connect()
 
-            data = s.recv(4096)
-            print(data.decode())
+            res = self.tcp.send_all(username)
+
+            if not res:
+                print('Failed to reconnect, returning to menu')
+                return
+
+        resp = self.tcp.receive()
 
     def login(self):
         """
