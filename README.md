@@ -16,6 +16,7 @@ The aim of assignment is to build a prototype for a Smart Library IoT Applicatio
 
 ### Requirements
 - Python 3.*
+- Raspberry Pi compatible Webcam
 
 ### Built With
 * Sense Hat
