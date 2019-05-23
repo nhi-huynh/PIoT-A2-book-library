@@ -15,6 +15,7 @@ borrowsSchema = BorrowSchema(many=True)
 def logged_in(sess):
     return 'auth_success' in sess and sess['auth_success']
 
+
 class LoginForm(FlaskForm):
     uname = wtf.TextField('Username', [wtf.validators.required()])
     password = wtf.PasswordField('Password', [wtf.validators.required()])
@@ -28,6 +29,7 @@ def index():
         return redirect('/admin')
 
     return redirect('/login')
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -54,12 +56,14 @@ def login():
 
     return '{"auth_success":true}'
 
+
 @app.route('/logout')
 def logout():
     if 'auth_success' in session:
         del session['auth_success']
 
     return redirect('/login')
+
 
 @app.route('/admin')
 @app.route('/admin/dashboard')
@@ -68,6 +72,7 @@ def dashboard():
         return redirect('/login')
 
     return render_template('admin-dashboard.bs.html', page='dashboard')
+
 
 @app.route('/admin/book-manager')
 def book_manage():
@@ -359,3 +364,11 @@ def getCurrentBorrow():
     result = borrowsSchema.dump(currentBorrow)
 
     return jsonify(result.data)
+
+
+@app.route('/admin/daily-borrows')
+def daily_borrows():
+    if not logged_in(session):
+        return redirect('/login')
+    
+    return render_template('admin-dailyborrows.bs.html', page='manage')
