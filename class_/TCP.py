@@ -21,6 +21,7 @@ class MasterConnection():
         self.__rsa_rp = rsa_rp
 
         if config['method'] == 'manual':
+            self.__config['remote_ip'] = config['ip']
             return
 
 
@@ -154,6 +155,7 @@ class ReceptionConnection:
         self.__rsa_mp = rsa_mp
 
         if config['method'] == 'manual':
+            self.__config['remote_ip'] = config['ip']
             return
 
         sync_conn = TCP()
