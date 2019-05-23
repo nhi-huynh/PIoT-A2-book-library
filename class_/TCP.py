@@ -134,7 +134,7 @@ class MasterConnection():
     def send_all(self, msg):
         return self.__conn.send_all(msg)
 
-    def receive(self, msg):
+    def receive(self):
         return self.__conn.receive()
 
     def disconnect(self):

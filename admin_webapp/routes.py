@@ -371,4 +371,4 @@ def daily_borrows():
     if not logged_in(session):
         return redirect('/login')
     
-    return render_template('admin-dailyborrows.bs.html', page='manage')
+    return render_template('admin-dashboard.bs.html', page='dashboard')

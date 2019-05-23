@@ -148,6 +148,8 @@ class Reception():
         self.__start_session(user.get_info('username'))
 
     def register(self):
+        
+        # TODO debug
 
         first_name = self.get_validated_input('First name: ', minlen=1, maxlen=50)
 
