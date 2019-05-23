@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
-#from imutils.video import VideoStream
+from imutils.video import VideoStream
 from pyzbar import pyzbar
 import datetime
 import imutils
 import time
-#import cv2
+import cv2
 from validator import Validator
 
 # import numpy as np

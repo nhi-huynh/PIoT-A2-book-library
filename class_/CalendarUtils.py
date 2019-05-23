@@ -12,22 +12,25 @@ class CalendarUtils:
 
     Attributes
     ----------
-    connection : string
-        the _____
+    SCOPES : string
+    store : 
+    creds : 
+    self.service : 
 
     """
 
-    def __init__(self, connection=None):
+    def __init__(self, connection=None, credentials_path=None, token_path=None):
+        if credentials_path is None or token_path is None:
+	    raise Exception('Credentials and token paths required')
+
         SCOPES = "https://www.googleapis.com/auth/calendar"
         store = file.Storage("token.json")
         creds = store.get()
         if(not creds or creds.invalid):
-            flow = client.flow_from_clientsecrets("credentials.json", SCOPES)
+            flow = client.flow_from_clientsecrets(credentials_path, SCOPES)
             creds = tools.run_flow(flow, store)
         self.service = build("calendar", "v3", http=creds.authorize(Http()))
 
-    #Variable service is not defined. 
-    #This is a source of error.
     def removeCalendarEvent(self, ISBN, username):
         """
         A function created to remove a specific google calendar event
@@ -35,9 +38,9 @@ class CalendarUtils:
         Args:
             eventid: the string that identifies the specific event
         """
-        id = ISBN + username
+        e_id = ISBN + username
         event = self.service.events().delete(
-            calendarId="primary", eventId=id).execute()
+            calendarId="primary", eventId=e_id).execute()
 
     def createCalendarEvent(self, duedate, ISBN, username):
         """
@@ -52,15 +55,16 @@ class CalendarUtils:
             eventID string
         """
 
-        date = duedate
+        date = datetime.now()
+        dueDate = (date + timedelta(days=7)).strftime("%Y-%m-%d")
         time_start = "{}T09:00:00+10:00".format(date)
         time_end = "{}T10:00:00+10:00".format(date)
+
         event = {
-            "summary": "ISBN: {}".format(ISBN),
-			"id": ISBN+username,
+            "summary": "New Programmatic Event",
+            "id": selection+username.lower(),
             "location": "RMIT Building 14",
-            "description": "borrowed by:{}, due date:{}".format(
-                username, duedate),
+            "description": "Adding new IoT event",
             "start": {
                 "dateTime": time_start,
                 "timeZone": "Australia/Melbourne",
@@ -70,7 +74,8 @@ class CalendarUtils:
                 "timeZone": "Australia/Melbourne",
             },
             "attendees": [
-                {"email": "RMIT.PIOT.A2@gmail.com"},
+                {"email": "kevin@scare.you"},
+                {"email": "shekhar@wake.you"},
             ],
             "reminders": {
                 "useDefault": False,
