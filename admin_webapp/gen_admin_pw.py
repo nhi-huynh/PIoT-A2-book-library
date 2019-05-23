@@ -1,6 +1,6 @@
 # vim: set et sw=4 ts=4 sts=4:
 
-from Auth import Auth
+from class_.Auth import Auth
 from getpass import getpass
 
 cipher = None
