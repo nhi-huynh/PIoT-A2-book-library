@@ -116,7 +116,7 @@ class FaceRecognition:
                 pass
 
     def __del__(self):
-        """A fuction created to delete users facial scan"""
+        """ Destructor. Saves facial data if changes were made """
         cv2.destroyAllWindows()
         if not self.__made_user_changes:
             return

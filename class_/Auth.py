@@ -102,7 +102,7 @@ class Auth:
 
         if not res or not Auth.verify_passwd(password, res['passwd']):
             # Consistent check time on fail
-            time.sleep(3.0 - (time.time() - time_start))
+            time.sleep(max(3.0 - (time.time() - time_start), 0))
             return False
 
         return User(

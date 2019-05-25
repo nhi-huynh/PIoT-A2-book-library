@@ -18,6 +18,7 @@ $('body').on('click', '#book-table tbody tr', function() {
     var tr = $(this).closest('tr');
 
     var data = {
+        bookid: tr.attr('data-bookid'),
         isbn: tr.children('td:eq(0)').html(),
         title: tr.children('td:eq(1)').html(),
         author: tr.children('td:eq(2)').html(),
@@ -35,15 +36,16 @@ function open_book_form(data) {
     $('#book-msg').empty();
 
     if (data) {
-        frm.find('#isbn-label').html('ISBN: ' + data.isbn);
+        console.log(data.bookid);
+        frm.find('[name=bookid]').val(data.bookid);
         frm.find('[name=isbn]').val(data.isbn);
         frm.find('[name=title]').val(data.title);
         frm.find('[name=author]').val(data.author);
         frm.find('[name=yearPublished]').val(data.year);
+
         $('#book-delete').show();
     } else {
-        frm.find('#isbn-label').html('ISBN: New');
-        frm.find('[name=isbn]').val('new');
+        frm.find('[name=bookid]').val('new');
         $('#book-delete').hide();
     }
 
@@ -60,20 +62,19 @@ function open_book_form(data) {
 
 function save_book() {
     var data = $('#book-form').serialize();
-    var isbn = $('#book-form').find('[name=isbn]').val();
+    var bookid = $('#book-form').find('[name=bookid]').val();
 
-    if (isbn == 'new') {
+    if (bookid == 'new') {
         $.post('/api/book', data, save_action);
         return true;
     }
 
     $.ajax({
-        url: '/api/book/' + isbn,
+        url: '/api/book/' + bookid,
         type: 'PUT',
         data: data,
         success: save_action
     });
-    // $.put('/api/book/' + isbn, data, save_action);
 }
 
 function save_action(data, status) {
@@ -96,12 +97,12 @@ function save_action(data, status) {
 }
 
 function delete_book() {
-    var isbn = $('#book-form').find('[name=isbn]').val();
+    var bookid = $('#book-form').find('[name=bookid]').val();
 
-    if (isbn == 'new') return false;
+    if (bookid == 'new') return false;
 
     $.ajax({
-        url: '/api/book/' + isbn,
+        url: '/api/book/' + bookid,
         type: 'DELETE',
         success: delete_action
     });
@@ -162,7 +163,7 @@ function reload_books() {
         tbody.empty();
 
         $.each(data, function(i,e) {
-            var tr = '<tr data-isbn="' + e['ISBN'] + '">';
+            var tr = '<tr data-bookid="' + e['BookID'] + '">';
 
             $.each(fields, function(fi, fe) {
                 tr += '<td>' + e[fe] + '</td>';

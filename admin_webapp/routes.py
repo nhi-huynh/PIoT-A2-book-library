@@ -4,12 +4,10 @@ from flask import redirect, session, render_template, request, jsonify
 from flask_wtf import FlaskForm
 import wtforms as wtf
 from run import app, db
-from api import ma, Book, BookSchema, Borrow, BorrowSchema
+from api import ma, Book, BookSchema
 
 bookSchema = BookSchema()
 booksSchema = BookSchema(many=True)
-borrowSchema = BorrowSchema()
-borrowsSchema = BorrowSchema(many=True)
 
 
 def logged_in(sess):
@@ -102,7 +100,9 @@ def getBooks():
     books = Book.query.all()
     result = booksSchema.dump(books)
 
-    return jsonify(result.data)
+    js = jsonify(result.data)
+    print(result.data)
+    return js
 
 
 # Endpoint to get book by isbn.
@@ -142,12 +142,18 @@ def addBook():
         JSON response
     """
 
+    isbn = request.form['isbn']
     title = request.form["title"]
     author = request.form["author"]
     yearPublished = request.form["yearPublished"]
 
     newBook = Book(
-        Title=title, Author=author, YearPublished=yearPublished)
+        ISBN=isbn,
+        Title=title,
+        Author=author,
+        YearPublished=yearPublished
+    )
+
     db.session.add(newBook)
     db.session.commit()
 
@@ -166,8 +172,8 @@ def addBook():
 # in the db and which is not
 
 
-@app.route("/api/book/<isbn>", methods=["PUT"])
-def bookEdit(isbn):
+@app.route("/api/book/<bookid>", methods=["PUT"])
+def bookEdit(bookid):
     """
     A function created to edit a book
 
@@ -178,12 +184,15 @@ def bookEdit(isbn):
         JSON response
     """
 
-    book = Book.query.get(isbn)
+    book = Book.query.get(bookid)
 
+    isbn = request.form["isbn"]
     title = request.form["title"]
     author = request.form["author"]
     yearPublished = request.form["yearPublished"]
 
+    if (isbn != ""):
+        book.ISBN = isbn
     if (title != ""):
         book.Title = title
     if (author != ""):
@@ -197,8 +206,8 @@ def bookEdit(isbn):
 
 
 # Endpoint to delete a book.
-@app.route("/api/book/<isbn>", methods=["DELETE"])
-def bookDelete(isbn):
+@app.route("/api/book/<bookid>", methods=["DELETE"])
+def bookDelete(bookid):
     """
     A function created to delete a book
 
@@ -209,166 +218,9 @@ def bookDelete(isbn):
         JSON response
     """
 
-    book = Book.query.get(isbn)
+    book = Book.query.get(bookid)
 
     db.session.delete(book)
     db.session.commit()
 
     return bookSchema.jsonify(book)
-
-
-# Endpoint to show all borrows.
-@app.route("/api/borrow", methods=["GET"])
-def getBorrows():
-    """
-    A function created to get  borrowed books
-
-    Returns:
-        JSON response
-    """
-
-    borrow = Borrow.query.all()
-    result = borrowsSchema.dump(borrow)
-    return jsonify(result.data)
-
-
-# Endpoint to get borrow by borrowID.
-@app.route("/api/borrow/<id>", methods=["GET"])
-def getborrow(id):
-    """
-    A function created to find a borrowed book
-
-    Args:
-        id: ID of the borrowed book to be found
-
-    Returns:
-        JSON response
-    """
-
-    borrow = Borrow.query.get(id)
-
-    return borrowSchema.jsonify(borrow)
-
-
-# Endpoint to create new borrow.
-@app.route("/api/borrow", methods=["POST"])
-def addborrow():
-    """
-    A function created to add a borrowed book
-
-    Args:
-        borrowID: ID of the borrowed book to be added
-
-    Returns:
-        JSON response
-    """
-
-    isbn = request.form["ISBN"]
-    username = request.form["username"]
-
-    newBorrow = Borrow(isbn=isbn, username=username)
-    db.session.add(newBorrow)
-    db.session.commit()
-
-    return borrowSchema.jsonify(newBorrow)
-
-
-# Endpoint to update borrow.
-@app.route("/api/borrow/<borrowID>", methods=["PUT"])
-def borrowUpdate(borrowID):
-    """
-    A function created to update a borrowed book
-
-    Args:
-        borrowID: ID of the borrowed book to be updates
-
-    Returns:
-        JSON response
-    """
-
-    borrow = Borrow.query.get(borrowID)
-
-    ISBN = request.form["ISBN"]
-    username = request.form["username"]
-    borrowDate = request.form["borrowDate"]
-    dueDate = request.form["borrowDate"]
-    returnDate = request.form["returnDate"]
-    eventID = request.form["eventID"]
-
-    print("ISBN to update: {}".format(ISBN))
-    print("username to update: {}".format(username))
-    print("borrowDate to update: {}".format(borrowDate))
-    print("dueDate to update: {}".format(dueDate))
-    print("returnDate to update: {}".format(returnDate))
-    print("eventID to update: {}".format(eventID))
-
-    borrow.ISBN = ISBN
-    borrow.username = username
-    borrow.borrowDate = borrowDate
-    borrow.dueDate = dueDate
-    borrow.returnDate = returnDate
-    borrow.eventID = eventID
-
-    db.session.commit()
-
-    return borrowSchema.jsonify(borrow)
-
-
-# Endpoint to delete a borrow.
-@app.route("/api/borrow/<borrowID>", methods=["DELETE"])
-def borrowDelete(borrowID):
-    """
-    A function created to delete a borrowed book
-
-    Args:
-        borrowID: ID of the borrowed book to be removed
-
-    Returns:
-        JSON response
-    """
-
-    borrow = Borrow.query.get(borrowID)
-
-    db.session.delete(borrow)
-    db.session.commit()
-
-    return borrowSchema.jsonify(borrow)
-
-
-# Endpoint to get weekly borrows
-@app.route("/api/borrow/weekly", methods=["GET"])
-def getWeeklyBorrow():
-    now = date.today()
-    seven_days_ago = now - timedelta(days=7)
-
-    weeklyBorrow = Borrow.query.filter(
-        func.date(Borrow.borrowDate) > seven_days_ago).all()
-    result = borrowsSchema.dump(weeklyBorrow)    
-    return jsonify(result.data)
-
-
-# Endpoint to get daily borrows
-@app.route("/api/borrow/daily", methods=["GET"])
-def getDailyBorrow():
-    dailyBorrow = Borrow.query.filter(
-        func.date(Borrow.borrowDate) == func.date(func.current_date())).all()
-
-    result = borrowsSchema.dump(dailyBorrow)    
-    return jsonify(result.data)
-
-
-# Endpoint to get currently borrowed books
-@app.route("/api/borrow/current", methods=["GET"])
-def getCurrentBorrow():
-    currentBorrow = Borrow.query.filter(Borrow.returnDate.is_(None)).all()
-    result = borrowsSchema.dump(currentBorrow)
-
-    return jsonify(result.data)
-
-
-@app.route('/admin/daily-borrows')
-def daily_borrows():
-    if not logged_in(session):
-        return redirect('/login')
-    
-    return render_template('admin-dashboard.bs.html', page='dashboard')

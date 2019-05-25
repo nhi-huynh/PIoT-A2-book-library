@@ -35,7 +35,7 @@ class Validator:
         if isbn is None:
             return False
 
-        if len(isbn) > 10 or not isbn.isdigit():
+        if len(isbn) > 13 or not isbn.isdigit():
             print("Invalid ISBN")
             print("ISBN's were 10 digits until December 2006, they now consist of 13 digits,\
             \n you must enter atleast 10 digits.\

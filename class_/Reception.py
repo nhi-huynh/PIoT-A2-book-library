@@ -36,8 +36,8 @@ class Reception():
         if auth is None:
             raise Exception('Auth object required')
 
-       # if face_recognition is None:
-           # raise Exception('Face recognition object required')
+        if face_recognition is None:
+            raise Exception('Face recognition object required')
 
         self.dbi = dbi
         self.auth = auth
@@ -92,17 +92,27 @@ class Reception():
     def __start_session(self, username):
         res = self.tcp.send_all(username)
 
-        if not res:
-            print('Connection to Master Pi lost, attempting to reconnect')
-            self.tcp.connect()
-
-            res = self.tcp.send_all(username)
-
-            if not res:
-                print('Failed to reconnect, returning to menu')
-                return
+        if not res and not self.__reconnect():
+                print('Cancelling')
+                return False
 
         resp = self.tcp.receive()
+
+        if not resp and not self.__reconnect():
+            print('Cancelling')
+            return False
+
+        print('session start response:', resp)
+
+    def __reconnect(self):
+        print('Connection to Master Pi lost, attempting to reconnect')
+
+        if self.tcp.connect():
+            print('Successfully reconnected')
+            return True
+
+        print('Failed to reconnect')
+        return False
 
     def login(self):
         """
@@ -205,6 +215,7 @@ class Reception():
             minlen=8,
             maxlen=110,
             reg=r'.*[0-9].*',
+            reg_msg='Must contain at least one number',
             hide_input=True,
             confirm=True
         )
@@ -221,7 +232,55 @@ class Reception():
             return False
 
         print('\n\nRegistration successful')
+
+        while True:
+
+            i = input('Would you like to enable face recognition?\nYes/No')
+
+            i = i.lower()
+
+            if i[0] == 'y':
+                self.register_face(uname)
+                break
+            elif i[0] == 'n':
+                break
+            else:
+                print('Invalid option')
+
+        print('Loggin in')
         self.__start_session(uname)
+
+    def register_face(self, uname):
+        while True:
+            if self.fr.register(uname):
+                print('Successfully enabled face recognition')
+                break
+
+
+            print('Failed to register')
+
+            retry = False
+
+            while True:
+
+                i = input('Try again?\nYes/No')
+
+                i = i.lower()
+
+                if i[0] == 'y':
+                    retry = True
+                    break
+                elif i[0] == 'n':
+                    break
+                else:
+                    print('Invalid option')
+
+            if not retry:
+                print('Cancelled')
+                break
+
+        self.__start_session(uname)
+        
 
     @staticmethod
     def get_validated_input(
@@ -271,9 +330,7 @@ class Reception():
 
 
             if not confirm:
-                print('skipping confirm')
                 return uinput
-            print('confirming')
 
             cfrm = getpass('Type again to confirm')
 
@@ -289,6 +346,8 @@ class Reception():
         username = self.face_rec.login(timeout=20)
 
         if not username:
+            print('Could not recognise you, please try again')
             return
 
+        print('Welcome, {}'.format(username))
         self.__start_session(username)

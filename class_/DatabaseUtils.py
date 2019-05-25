@@ -8,7 +8,7 @@ class DatabaseUtils:
     Attributes
     ----------
     connection : string
-        the _____
+        the database connection
     HOST : string
         the host ip address
     USER : string
@@ -17,43 +17,6 @@ class DatabaseUtils:
         the password to login
     DATABASE : string
         the database name
-
-    Methods
-    -------
-    close():
-    __enter__():
-    __exit__(type, value, traceback):
-    createBookTable():
-        A function created to create the book database
-        if it doesnt already exist
-    createBorrowTable():
-        A function created to create the borrow database
-        if it doesnt already exist
-    insertSampleBook():
-        A function created to insert a sample book to the book database
-    getEventID(isbn, username):
-        A function created to get the event id from a specific row
-    getBooksByISBN(isbn):
-        A function created to get all the books that match the isbn
-    getBooksByTitle(title):
-        A function created to get all the books that match the title
-    getBooksByAuthor(author):
-        A function created to get all the books that match the author
-    getBooks():
-        A function created to return all entries in the Book table
-    getBorrows():
-        A function created to return all entries in the Borrow table
-    stillOnLoan(username, isbn):
-        A function created to get the borrow date and return date of
-        a book the user has borrowed
-    getBorrowsByUsername(username):
-        A function created to get all the books the user has borrowed
-    insertBook(title, author, yearPublished):
-        A function created to insert a book into the book table
-    insertBorrow(isbn, username):
-        A function created to insert a book into the borrow table
-    updateReturnDate(isbn, username):
-        A function created to update the return date value
     """
 
     HOST = "35.189.60.60"
@@ -69,6 +32,7 @@ class DatabaseUtils:
         self.connection = connection
 
     def close(self):
+        """Close the connection"""
         self.connection.close()
 
     def __enter__(self):
@@ -84,11 +48,12 @@ class DatabaseUtils:
         with self.connection.cursor() as cursor:
             cursor.execute("""
                 create table if not exists Book (
-                    ISBN int not null auto_increment,
+                    BookID int not null auto_increment,
+                    ISBN bigint not null UNIQUE,
                     Title text not null,
                     Author text not null,
                     YearPublished int not null,
-                    constraint PK_Book primary key (ISBN))
+                    constraint PK_Book primary key (BookID))
                 """)
             self.connection.commit()
 
@@ -100,7 +65,7 @@ class DatabaseUtils:
             cursor.execute("""
                 create table if not exists Borrow (
                     borrowID int not null auto_increment,
-                    ISBN int not null,
+                    ISBN bigint not null,
                     username VARCHAR(50) not null,
                     borrowDate DATETIME not null,
                     dueDate DATE not null,
@@ -121,11 +86,28 @@ class DatabaseUtils:
 
             # print("Book table has {} rows".format(isEmpty))
             if isEmpty == 0:
-                self.insertBook("Frankenstein", "Mary Shelley", "1818")
-                self.insertBook("Doraemon", "Fujiko Fujio", "1969")
-                self.insertBook("Dragon Ball", "Akira Toriyama", "1984")
-                self.insertBook("Naruto", "Masashi Kishimoto", "1997")
-                self.insertBook("One Piece", "Eiichiro Oda", "1997")
+                self.insertBook("1"*13, "Frankenstein", "Mary Shelley", "1818")
+                self.insertBook("2"*13, "Doraemon", "Fujiko Fujio", "1969")
+                self.insertBook(
+                    "3"*13, "Dragon Ball", "Akira Toriyama", "1984")
+                self.insertBook("4"*13, "Naruto", "Masashi Kishimoto", "1997")
+                self.insertBook("5"*13, "One Piece", "Eiichiro Oda", "1997")
+                self.insertBook(
+                    "6"*13, "Attack On Titan", "Hajime Isayama", "2009")
+                self.insertBook(
+                    "1234567891234",
+                    "Mary Poppins", "Pamela Lyndon Travers", "1934")
+                self.insertBook(
+                    "2244668800111",
+                    "Mary Poppins In The Park",
+                    "Pamela Lyndon Travers", "1952")
+                self.insertBook(
+                    "2493517268545",
+                    "Mary Poppins Opens The Door",
+                    "Pamela Lyndon Travers", "1943")
+                self.insertBook(
+                    "3492641857726",
+                    "Mary Poppins Comes Back", "Pamela Lyndon Travers", "1935")
                 self.connection.commit()
 
     # def getEventID(self, isbn, username):
@@ -195,7 +177,11 @@ class DatabaseUtils:
             return cursor.fetchall()
 
     def getBooks(self):
-        """A function created to return all entries in the Book table"""
+        """A function created to return all entries in the Book table
+
+        Returns:
+            all books that match
+        """
 
         with self.connection.cursor() as cursor:
             cursor.execute("""select ISBN, Title, Author,
@@ -203,7 +189,11 @@ class DatabaseUtils:
             return cursor.fetchall()
 
     def getBorrows(self):
-        """A function created to return all entries in the Borrow table"""
+        """A function created to return all entries in the Borrow table
+
+        Returns:
+            all books that match
+        """
 
         with self.connection.cursor() as cursor:
             cursor.execute(
@@ -248,13 +238,15 @@ class DatabaseUtils:
                     username,))
             return cursor.fetchall()
 
-    def insertBook(self, title, author, yearPublished):
+    def insertBook(self, isbn, title, author, yearPublished):
         """
         A function created to insert a book into the book table
 
         Args:
-            isbn: string to find in table
-            username: string to find in table
+            isbn: string to add
+            title: string to add
+            author: string to add
+            yearPublished: string to add
 
         Returns:
             True if exactly one row in the table is added or modified
@@ -263,8 +255,8 @@ class DatabaseUtils:
 
         with self.connection.cursor() as cursor:
             cursor.execute("""
-            insert into Book (Title, Author, YearPublished)
-            values (%s, %s, %s)""", (title, author, yearPublished))
+            insert into Book (ISBN, Title, Author, YearPublished)
+            values (%s, %s, %s, %s)""", (isbn, title, author, yearPublished))
         self.connection.commit()
 
         return cursor.rowcount == 1
@@ -276,6 +268,7 @@ class DatabaseUtils:
         Args:
             isbn: string that is the ISBN of the book
             username: the username of the person who borrowed the book
+            eventID: the eventID of the calendar event created
 
         Returns:
             True if exactly one row in the table is added or modified
@@ -291,7 +284,7 @@ class DatabaseUtils:
 
         return cursor.rowcount == 1
 
-    def updateReturnDate(self, isbn, username):  # returnDate
+    def updateReturnDate(self, isbn, username):
         """
         A function created to update the return date value and
         return the eventID for that borrow
@@ -326,4 +319,3 @@ class DatabaseUtils:
         self.connection.commit()
 
         return eventID
-        # return cursor.rowcount == 1
