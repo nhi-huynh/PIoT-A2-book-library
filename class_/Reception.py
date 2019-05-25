@@ -48,7 +48,7 @@ class Reception():
         print('Connecting to Master Pi')
         self.tcp.connect()
 
-        self.face_rec = face_recognition
+        self.fr = face_recognition
 
     def start(self):
         """
@@ -343,7 +343,7 @@ class Reception():
             print('Inputs do not match, please try again')
 
     def login_fr(self):
-        username = self.face_rec.login(timeout=20)
+        username = self.fr.login(timeout=20)
 
         if not username:
             print('Could not recognise you, please try again')
