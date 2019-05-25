@@ -1,5 +1,11 @@
 """ vim: set et sw=4 ts=4 sts=4:
 
+NOTE: REMEMBER TO export()
+If you don't, the destructor will attempt to export
+but might fail if dependencies may have already been
+cleaned up
+
+
 Register user:
     fr = FaceRecognition()
     res = fr.register(username)
@@ -96,14 +102,14 @@ class FaceRecognition:
     """
 
     __tolerance = 0.6
-    __data_file = 'resources/face_data.pickle'
+    __data_file = 'class_/resources/face_data.pickle'
     __user_faces = {}
     __face_detector = None
     __made_user_changes = False
     """{ username: (face_data_1, face_data_2), ... }"""
 
     def __init__(self, save_file='face_data.pickle'):
-        fpath = 'resources/haarcascade_frontalface_default.xml'
+        fpath = 'class_/resources/haarcascade_frontalface_default.xml'
         self.__face_detector = cv2.CascadeClassifier(fpath)
 
         if not os.path.isfile(self.__data_file):
@@ -118,15 +124,26 @@ class FaceRecognition:
     def __del__(self):
         """ Destructor. Saves facial data if changes were made """
         cv2.destroyAllWindows()
-        if not self.__made_user_changes:
+
+        if self.__export_data():
             return
 
+        print('Failed to export user data\nMake sure to export manually\n')
+
+
+    def export_data(self):
         if not self.__made_user_changes:
             # Don't pickle if no changes were made
             return
 
         with open(self.__data_file, 'wb') as df:
-            pickle.dump(self.__user_faces, df)
+            try:
+                pickle.dump(self.__user_faces, df)
+                self.__made_user_changes = False
+                return True
+            except:
+                return False
+
 
     def register(self, username):
         """

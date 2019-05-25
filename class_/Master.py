@@ -31,13 +31,13 @@ class Master():
         if config is None:
             raise Exception('Config required')
 
-    
+
         print('Waiting for Reception Pi')
         self.conn = MasterConnection(config)
 
         print('Connecting to Reception Pi')
         self.conn.connect()
-    
+
     def start(self):
         """A fuction created to connect to the reception pi
         and to run the menu class"""
@@ -54,7 +54,13 @@ class Master():
 
                 self.conn.connect()
 
-                username = self.conn.receive()
+                msg = self.conn.receive()
+
+                if msg == b'exit':
+		    print('Exiting')
+		    self.conn.disconnect()
+                    return True
+
 
                 if not username:
                     print('Failed to reconnect')

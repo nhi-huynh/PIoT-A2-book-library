@@ -72,6 +72,9 @@ class Reception():
             option = option.lower()
 
             if option == 'exit':
+                self.tcp.send_all(b'exit')
+                self.tcp.disconnect()
+                self.fr.export()
                 return
 
             elif option == '1':
