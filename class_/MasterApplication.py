@@ -1,7 +1,3 @@
-#!/usr/bin/env python3
-# email: RMIT.PIOT.A2@gmail.com
-# password: A2abc123
-
 from class_.Validator import Validator
 from class_.DatabaseUtils import DatabaseUtils
 from class_.CalendarUtils import CalendarUtils
@@ -23,16 +19,17 @@ class MasterApplication:
     """
     A class used to represent the Console Application on the Master Pi
 
-    Attributes
-    ----------
-    username : string
-        the username of the person logged in
-    validator : Validator
-        the link to the validator script
-    QR : QR
-        the link to the QR script
-    calendar : CalendarUtils
-        the link to the CalendarUtils script
+    Attributes:
+        username : string
+            the username of the person logged in
+        validator : Validator
+            the link to the validator script
+        calendar : CalendarUtils
+            the link to the CalendarUtils script
+        QR : QR
+            the link to the QR script
+        voice : VoiceSearchUtils
+            the link to the VoiceSearchUtils script
     """
 
     def __init__(self, username, config):
@@ -47,11 +44,14 @@ class MasterApplication:
             db.createBorrowTable()
             db.insertSampleBook()
 
-        self.showMenu()
-        # this will be removed as the master socket script will
-        # intantiate and call this
-
     def voiceInput(self):
+        """
+        A function created to get voice input from the user
+
+        Returns:
+            translation, string returned from voice search
+        """
+
         translation = self.voice.voiceSearch()
 
         if(translation is None):
@@ -107,9 +107,12 @@ class MasterApplication:
         Args:
             subject: which database to get the data from
             listName: title to print
-            headers:
+            headers: header to print under
             data: the list items
 
+        Returns:
+            True if data is found
+            False if no data is found
         """
 
         self.printSection(listName.upper())
@@ -149,17 +152,28 @@ class MasterApplication:
         print()
 
     def listBooks(self):
+        """A function to list the books"""
         with DatabaseUtils() as db:
             self.printList("books", "all books", BOOK_HEADERS, db.getBooks())
 
     def listBorrowsByUser(self):
+        """A function to list the books borrowed by the user"""
         with DatabaseUtils() as db:
             self.printList(
                 "user borrow records", "your borrow records", BORROW_HEADERS,
                 db.getBorrowsByUsername(self.username))
 
     def getSearchInput(self, item):
-        """A function created to print the methods available to search"""
+        """
+        A function created to print the methods available to search
+
+        Args:
+            item: string stating what the input wants
+
+        Returns:
+            string of what the user is looking for
+            or None
+        """
 
         while(True):
             print("How would you like to search?")
@@ -207,7 +221,12 @@ class MasterApplication:
                 print("Invalid input - please try again.\n")
 
     def searchBookByISBN(self):
-        """A function created to search for a book by ISBN"""
+        """
+        A function created to search for a book by ISBN
+
+        Returns:
+            bool true or false
+        """
 
         self.printSection("SEARCH BY ISBN")
 
@@ -220,7 +239,12 @@ class MasterApplication:
                     BOOK_HEADERS, db.getBookByISBN(isbn))
 
     def searchBookByTitle(self):
-        """A function created to search for a book by Title"""
+        """A function created to search for a book by Title
+
+        Returns:
+            bool true or false
+        """
+
         self.printSection("SEARCH BY TITLE")
 
         title = self.getSearchInput("Title: ")
@@ -232,7 +256,11 @@ class MasterApplication:
                     BOOK_HEADERS, db.getBooksByTitle(title))
 
     def searchBookByAuthor(self):
-        """A function created to search for a book by Author"""
+        """A function created to search for a book by Author
+
+        Returns:
+            bool true or false
+        """
 
         self.printSection("SEARCH BY AUTHOR")
         author = self.getSearchInput("Author: ")
@@ -244,6 +272,8 @@ class MasterApplication:
                     BOOK_HEADERS, db.getBooksByAuthor(author))
 
     def wantsToBorrow(self):
+        """A function to check if the user wants to borrow a searched book"""
+
         while(True):
             print("Would you like to borrow one of these results? Y/N")
             print("Y) Yes")
@@ -266,7 +296,6 @@ class MasterApplication:
 
         Args:
             isbn: string of the isbn of the book looking to be borrowed
-
         """
 
         if self.validator.validateISBN(isbn):
@@ -274,15 +303,11 @@ class MasterApplication:
                 if self.validator.onLoan(self.username, isbn):
                     print("You can not borrow this book again.\n")
                 else:
-                    # currentdate = date.today()
-                    # dueDate = currentdate + timedelta(days=7)
                     currentdate = datetime.now()
                     dueDate = currentdate.date() + timedelta(days=7)
 
-                    eventID = self.calendar.createCalendarEvent(isbn, self.username)
-
-                    # for now, use a hard-coded eventID
-                    # eventID = 10000000
+                    eventID = self.calendar.createCalendarEvent(
+                        isbn, self.username)
 
                     with DatabaseUtils() as db:
 
@@ -300,7 +325,11 @@ class MasterApplication:
                             print("Book unsucessfully borrowed due")
 
     def borrowBook(self):
-        """A function created to borrow a book"""
+        """A function created to borrow a book
+
+        Returns:
+            False
+        """
 
         runAgain = True
 
@@ -330,8 +359,6 @@ class MasterApplication:
                         print(
                             "Book ISBN {} sucessfully returned by {}."
                             .format(isbn, self.username))
-
-                        # remove google calendar event
                         self.calendar.removeCalendarEvent(isbn, self.username)
                         print(
                             "EventID {} successfully remove"
@@ -399,7 +426,8 @@ class MasterApplication:
             action: borrow or return - action to be repeated if required
 
         Returns:
-            True or False
+            True if they would like to borrow/return again
+            False if not
         """
 
         while True:

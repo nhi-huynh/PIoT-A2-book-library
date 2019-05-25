@@ -5,18 +5,19 @@ class User:
     """
     A class used to represent the User
 
-    Attributes
-    ----------
-    user_id : string
-        the users identification number
-    username : string
-        the users login username
-    first_name : string
-        first name of the user
-    surname : string
-        last name of the user
-    email : string
-        the users email address
+    Attributes:
+        user_id : string
+            the users identification number
+        username : string
+            the users login username
+        first_name : string
+            first name of the user
+        surname : string
+            last name of the user
+        email : string
+            the users email address
+        self.__data : dictionary
+            dict to hold all above information
     """
 
     __data = {
@@ -64,4 +65,5 @@ class User:
 
     @staticmethod
     def get_field_names():
+        """A function to get feild names"""
         return [x for x in User.__data]

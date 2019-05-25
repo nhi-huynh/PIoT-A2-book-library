@@ -5,24 +5,23 @@ class DatabaseUtils:
     """
     A class used to represent different utilites of the database
 
-    Attributes
-    ----------
-    connection : string
-        the database connection
-    HOST : string
-        the host ip address
-    USER : string
-        the username to login
-    PASSWORD : string
-        the password to login
-    DATABASE : string
-        the database name
+    Attributes:
+        connection : string
+            the database connection
+        HOST : string
+            the host ip address
+        USER : string
+            the username to login
+        PASSWORD : string
+            the password to login
+        DATABASE : string
+            the database name
     """
 
     HOST = "35.189.60.60"
     USER = "root"
     PASSWORD = "piot"
-    DATABASE = "Library"       # Database name
+    DATABASE = "Library"
 
     def __init__(self, connection=None):
         if(connection is None):
@@ -109,24 +108,6 @@ class DatabaseUtils:
                     "3492641857726",
                     "Mary Poppins Comes Back", "Pamela Lyndon Travers", "1935")
                 self.connection.commit()
-
-    # def getEventID(self, isbn, username):
-    #     """
-    #     A function created to get the event id from a specific row
-
-    #     Args:
-    #         isbn: string to find in table
-    #         username: string to find in table
-
-    #     Returns:
-    #         the eventid that matches the row that the username and isbn match
-    #     """
-
-    #     with self.connection.cursor() as cursor:
-    #         cursor.execute(
-    #             """select eventID from Borrow where username = %s
-    #             and ISBN = %s""", (username, isbn,))
-    #         return cursor.fetchone()
 
     def getBookByISBN(self, isbn):
         """
@@ -243,10 +224,10 @@ class DatabaseUtils:
         A function created to insert a book into the book table
 
         Args:
-            isbn: string to add
-            title: string to add
-            author: string to add
-            yearPublished: string to add
+            isbn: string ibsn of book to add
+            title: string title of book to add
+            author: string author of book to add
+            yearPublished: string year published of book to add
 
         Returns:
             True if exactly one row in the table is added or modified

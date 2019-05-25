@@ -106,7 +106,8 @@ class DBInterface:
             vals: list of tuples or list of non-collection values
 
         Returns:
-            True on success, else False
+            True on success
+            False on failure
         """
 
         if not self.__is_valid:

@@ -1,23 +1,4 @@
-""" vim: set et sw=4 ts=4 sts=4:
-
-Register user:
-    fr = FaceRecognition()
-    res = fr.register(username)
-    if res:
-        succes()
-    else:
-        fail()
-
-User login:
-    fr = FaceRecognition()
-    # This is a string of the username of the closest matching user.
-    # If no users match close enough, this is false
-    username = fr.login(username)
-    if username:
-        success(username)
-    else:
-        fail()
-"""
+""" vim: set et sw=4 ts=4 sts=4:"""
 
 # Imports
 try:
@@ -79,20 +60,19 @@ class FaceRecognition:
     """
     A class used to handle the Facial Recognition in the reception pi
 
-    Attributes
-    ----------
-    __tolerance : float
-        the tolerance value
-    __data_file : string
-        the pickle file name
-    __user_faces : list
-        the list containing all saved faces
-    __face_detector : cv2
-        the camera used to detect faces
-    __made_user_changes : bool
-        weather the user has made changes
-    fpath : string
-        the file path for the camera setup
+    Attributes:
+        __tolerance : float
+            the tolerance value
+        __data_file : string
+            the pickle file name
+        __user_faces : list
+            the list containing all saved faces
+        __face_detector : cv2
+            the camera used to detect faces
+        __made_user_changes : bool
+            weather the user has made changes
+        fpath : string
+            the file path for the camera setup
     """
 
     __tolerance = 0.6
@@ -116,7 +96,7 @@ class FaceRecognition:
                 pass
 
     def __del__(self):
-        """ Destructor. Saves facial data if changes were made """
+        """A fuction(destructor) created to delete users facial scan"""
         cv2.destroyAllWindows()
         if not self.__made_user_changes:
             return

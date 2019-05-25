@@ -1,19 +1,4 @@
-""" vim: set et sw=4 ts=4 sts=4:
-
-EXAMPLES
-Encrypting new user password:
-    auth = Auth()
-    passwd = 'user_password'
-    cipher = auth.encrypt_passwd(passwd)
-    # Store cipher in db
-
-
-Authenticating user using password:
-    auth = Auth()
-    passwd = 'entered_password'
-    cipher = 'cipher_from_db_for_relevant_user'
-    success = auth.verify_passwd(passwd, cipher)
-"""
+""" vim: set et sw=4 ts=4 sts=4:"""
 
 # Imports
 try:
@@ -49,14 +34,14 @@ try:
 except:
     raise Exception('Failed to import regex module')
 
+
 class Auth:
     """
     A class used to handle authentication and authorisation
 
-    Attributes
-    ----------
-    __dbi : database interface
-        Database interface from DBInterface
+    Attributes:
+        __dbi : database interface
+            Database interface from DBInterface
     """
 
     __dbi = None
@@ -265,7 +250,6 @@ class Auth:
                 r'^[a-z0-9.+%]+@[a-z0-9-.]+\.[a-z0-9-.]+$',
                 email, re.IGNORECASE))
 
-
     def username_available(self, uname):
         res = self.__search_for_user(username=uname)
 
@@ -275,8 +259,6 @@ class Auth:
         res = self.__search_for_user(email=email)
 
         return len(res) < 1
-
-
 
     def __load_user(self, username=None, email=None):
         """

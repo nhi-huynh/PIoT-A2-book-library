@@ -2,22 +2,7 @@ from class_.DatabaseUtils import DatabaseUtils
 
 
 class Validator:
-    """
-    A class used to represent the validation of input
-
-    Methods
-    -------
-    validateISBN(isbn):
-        A function to validate the ISBN entered
-    validateTitle(title):
-        A function to validate the book title entered
-    validateAuthor(author):
-        A function to validate the author entered
-    isbnExists(isbn):
-        A function to check that the isbn exists in the library
-    onLoan(username, isbn):
-        A function to check if the user has the isbn book on loan
-    """
+    """A class used to represent the validation of input"""
 
     def __init__(self):
         pass
@@ -30,15 +15,16 @@ class Validator:
             isbn: string to be validated
 
         Returns:
-            True or False
+            True if the input is of valid length and are all digits
+            False if not, or is none
         """
         if isbn is None:
             return False
 
-        if len(isbn) > 13 or not isbn.isdigit():
+        if (len(isbn) < 10 or len(isbn) > 13) or not isbn.isdigit():
             print("Invalid ISBN")
             print("ISBN's were 10 digits until December 2006, they now consist of 13 digits,\
-            \n you must enter atleast 10 digits.\
+            \n you must enter atleast 10 digits and no more than 13.\
             \nPlease try again\n""")
             return False
         else:
@@ -52,8 +38,10 @@ class Validator:
             title: string to be validated
 
         Returns:
-            True or False
+            True if the input is of valid length and valid input
+            False if not, or is none
         """
+
         if title is None:
             return False
 
@@ -74,8 +62,10 @@ class Validator:
             author: string to be validated
 
         Returns:
-            True or False
+            True if the input is of valid length and valid input
+            False if not, or is none
         """
+
         if author is None:
             return False
 
@@ -96,7 +86,8 @@ class Validator:
             isbn: string to be checked
 
         Returns:
-            True or False
+            True is the isbn exists
+            False if it doesnt exist
         """
 
         # check if isbn exits in the database
@@ -117,13 +108,13 @@ class Validator:
             isbn: string to check records against
 
         Returns:
-            True or False
+            True is the book is on loan to this user
+            False if it isnt
         """
 
         # check if the user has not returned the book
         with DatabaseUtils() as db:
             currentLoan = db.stillOnLoan(username, isbn)
-            # print(currentLoan)
             if currentLoan is not None:
                 print("You are currently borrowing book ISBN {}".format(isbn))
                 print("Book ISBN {} was borrowed on {}".format(

@@ -1,14 +1,26 @@
+# This was sourced and adapted from Matthew Bolger Week 9 tute
 import speech_recognition as sr
 import MySQLdb
 import subprocess
 
+HOST = "35.189.60.60"
+USER = "root"
+PASSWORD = "piot"
+DATABASE = "Library"
 MIC_NAME = "Microsoft® LifeCam HD-3000: USB Audio (hw:1,0)"
 
 
 class VoiceSearchUtils:
+    """A class used to represent voice searching"""
+
     def voiceSearch(self):
-        # To test searching without the microphone uncomment this line of code
-        # return input("Enter the first name to search for: ")
+        """
+        A function created to ask the user if they wish to repeat the action
+
+        Returns:
+            Translation string of the
+            none if time out
+        """
 
         # Set the device ID of the mic that we
         # specifically want to use to avoid ambiguity
@@ -37,10 +49,6 @@ class VoiceSearchUtils:
         # recognize speech using Google Speech Recognition
         translation = None
         try:
-            # for testing purposes, we're just using the default API key
-            # to use another API key, use `r.recognize_google(
-            # audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
-            # instead of `r.recognize_google(audio)`
             translation = r.recognize_google(audio)
         except(sr.UnknownValueError, sr.RequestError):
             pass
