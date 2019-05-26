@@ -1,0 +1,1365 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Code docs &#8212; RMIT PIoT Assignment Two 0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="About this project" href="about.html" />
+    <link rel="prev" title="Welcome to AssignmentTwo’s documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-Auth">
+<span id="code-docs"></span><h1>Code docs<a class="headerlink" href="#module-Auth" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="Auth.Auth">
+<em class="property">class </em><code class="descclassname">Auth.</code><code class="descname">Auth</code><span class="sig-paren">(</span><em>dbi</em><span class="sig-paren">)</span><a class="headerlink" href="#Auth.Auth" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class used to handle authentication and authorisation</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><dl class="simple">
+<dt>__dbi<span class="classifier">database interface</span></dt><dd><p>Database interface from DBInterface</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="staticmethod">
+<dt id="Auth.Auth.encrypt_passwd">
+<em class="property">static </em><code class="descname">encrypt_passwd</code><span class="sig-paren">(</span><em>passwd</em><span class="sig-paren">)</span><a class="headerlink" href="#Auth.Auth.encrypt_passwd" title="Permalink to this definition">¶</a></dt>
+<dd><p>A fuction created to encrypt a password</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>passwd: password to encrypt</p>
+</dd>
+<dt>Returns:</dt><dd><p>bytes: salt(base64 encoded) + cipher</p>
+</dd>
+<dt>Raises:</dt><dd><p>Exception if invalid password format received</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Auth.Auth.login">
+<code class="descname">login</code><span class="sig-paren">(</span><em>username=None</em>, <em>email=None</em>, <em>password=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Auth.Auth.login" title="Permalink to this definition">¶</a></dt>
+<dd><p>A fuction created to log in a user if their information is correct</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>username: the users username
+email: the users email
+password: the users password</p>
+</dd>
+<dt>Returns:</dt><dd><p>a User object: The User constructor takes in the fields             returned from the query, but only if they’re needed.             The “if x in User.get_field_names()” filters out any             args not needed in the constructor</p>
+</dd>
+<dt>Raises:</dt><dd><p>LoginException if password/username/email is missing</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Auth.Auth.register">
+<code class="descname">register</code><span class="sig-paren">(</span><em>username=None</em>, <em>first_name=None</em>, <em>surname=None</em>, <em>email=None</em>, <em>password=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Auth.Auth.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>A fuction created to register a user.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>username: the users username
+first_name : the users firstname
+surname : the users last name
+email: the users email
+password: the users password</p>
+</dd>
+<dt>Returns:</dt><dd><p>a User object: The User constructor takes in the fields             returned from the query, but only if they’re needed.             The “if x in User.get_field_names()” filters out any             args not needed in the constructor</p>
+</dd>
+<dt>Raises:</dt><dd><p>RegisterException with appropriate if anything goes wrong</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="Auth.Auth.validate_email">
+<em class="property">static </em><code class="descname">validate_email</code><span class="sig-paren">(</span><em>email</em><span class="sig-paren">)</span><a class="headerlink" href="#Auth.Auth.validate_email" title="Permalink to this definition">¶</a></dt>
+<dd><p>A fuction created to validate a email</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>email: the email to validate</p>
+</dd>
+<dt>Returns:</dt><dd><p>True if validated
+False if not validated</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="Auth.Auth.validate_username">
+<em class="property">static </em><code class="descname">validate_username</code><span class="sig-paren">(</span><em>uname</em><span class="sig-paren">)</span><a class="headerlink" href="#Auth.Auth.validate_username" title="Permalink to this definition">¶</a></dt>
+<dd><p>A fuction created to validate a username</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>uname: the username to validate</p>
+</dd>
+<dt>Returns:</dt><dd><p>True if validated
+False if not validated</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="Auth.Auth.verify_passwd">
+<em class="property">static </em><code class="descname">verify_passwd</code><span class="sig-paren">(</span><em>passwd</em>, <em>cipher</em><span class="sig-paren">)</span><a class="headerlink" href="#Auth.Auth.verify_passwd" title="Permalink to this definition">¶</a></dt>
+<dd><p>A fuction created to verify a password</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>passwd: password to verify
+cipher: password encrypted using Auth.encrypt_passwd()</p>
+</dd>
+<dt>Returns:</dt><dd><p>True on sucsess
+False on fail</p>
+</dd>
+<dt>Raises:</dt><dd><p>Exception if invalid password format received</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-CalendarUtils"></span><dl class="class">
+<dt id="CalendarUtils.CalendarUtils">
+<em class="property">class </em><code class="descclassname">CalendarUtils.</code><code class="descname">CalendarUtils</code><span class="sig-paren">(</span><em>connection=None</em>, <em>credentials_path=None</em>, <em>token_path=None</em><span class="sig-paren">)</span><a class="headerlink" href="#CalendarUtils.CalendarUtils" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class used to represent different functions for the google calendar</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><dl class="simple">
+<dt>SCOPES<span class="classifier">string</span></dt><dd><p>website for</p>
+</dd>
+<dt>store<span class="classifier">JSON file</span></dt><dd><p>token json file; stores the users access and refresh tokens</p>
+</dd>
+<dt>creds<span class="classifier">dictionary</span></dt><dd><p>read in from store</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="method">
+<dt id="CalendarUtils.CalendarUtils.createCalendarEvent">
+<code class="descname">createCalendarEvent</code><span class="sig-paren">(</span><em>ISBN</em>, <em>username</em><span class="sig-paren">)</span><a class="headerlink" href="#CalendarUtils.CalendarUtils.createCalendarEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to add a google calendar event at a specific date</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>ISBN: the ISBN of the book due back the day of the event
+username: the username of the person who borrowed the book</p>
+</dd>
+<dt>Returns:</dt><dd><p>eventID string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="CalendarUtils.CalendarUtils.removeCalendarEvent">
+<code class="descname">removeCalendarEvent</code><span class="sig-paren">(</span><em>ISBN</em>, <em>username</em><span class="sig-paren">)</span><a class="headerlink" href="#CalendarUtils.CalendarUtils.removeCalendarEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to remove a specific google calendar event</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>ISBN: the ISBN of the book due back the day of the event
+username: the username of the person who borrowed the book</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-DatabaseUtils"></span><dl class="class">
+<dt id="DatabaseUtils.DatabaseUtils">
+<em class="property">class </em><code class="descclassname">DatabaseUtils.</code><code class="descname">DatabaseUtils</code><span class="sig-paren">(</span><em>connection=None</em><span class="sig-paren">)</span><a class="headerlink" href="#DatabaseUtils.DatabaseUtils" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class used to represent different utilites of the database</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><dl class="simple">
+<dt>connection<span class="classifier">string</span></dt><dd><p>the database connection</p>
+</dd>
+<dt>HOST<span class="classifier">string</span></dt><dd><p>the host ip address</p>
+</dd>
+<dt>USER<span class="classifier">string</span></dt><dd><p>the username to login</p>
+</dd>
+<dt>PASSWORD<span class="classifier">string</span></dt><dd><p>the password to login</p>
+</dd>
+<dt>DATABASE<span class="classifier">string</span></dt><dd><p>the database name</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="method">
+<dt id="DatabaseUtils.DatabaseUtils.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#DatabaseUtils.DatabaseUtils.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close the connection</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="DatabaseUtils.DatabaseUtils.createBookTable">
+<code class="descname">createBookTable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#DatabaseUtils.DatabaseUtils.createBookTable" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to create the book database
+if it doesnt already exist</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="DatabaseUtils.DatabaseUtils.createBorrowTable">
+<code class="descname">createBorrowTable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#DatabaseUtils.DatabaseUtils.createBorrowTable" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to create the borrow database
+if it doesnt already exist</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="DatabaseUtils.DatabaseUtils.getBookByISBN">
+<code class="descname">getBookByISBN</code><span class="sig-paren">(</span><em>isbn</em><span class="sig-paren">)</span><a class="headerlink" href="#DatabaseUtils.DatabaseUtils.getBookByISBN" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to get all the books that match the isbn</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>isbn: string to find in table</p>
+</dd>
+<dt>Returns:</dt><dd><p>all books that match</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="DatabaseUtils.DatabaseUtils.getBooks">
+<code class="descname">getBooks</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#DatabaseUtils.DatabaseUtils.getBooks" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to return all entries in the Book table</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>all books that match</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="DatabaseUtils.DatabaseUtils.getBooksByAuthor">
+<code class="descname">getBooksByAuthor</code><span class="sig-paren">(</span><em>author</em><span class="sig-paren">)</span><a class="headerlink" href="#DatabaseUtils.DatabaseUtils.getBooksByAuthor" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to get all the books that match the author</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>author: string to find in table</p>
+</dd>
+<dt>Returns:</dt><dd><p>all books that match</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="DatabaseUtils.DatabaseUtils.getBooksByTitle">
+<code class="descname">getBooksByTitle</code><span class="sig-paren">(</span><em>title</em><span class="sig-paren">)</span><a class="headerlink" href="#DatabaseUtils.DatabaseUtils.getBooksByTitle" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to get all the books that match the title</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>title: string to find in table</p>
+</dd>
+<dt>Returns:</dt><dd><p>all books that match</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="DatabaseUtils.DatabaseUtils.getBorrows">
+<code class="descname">getBorrows</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#DatabaseUtils.DatabaseUtils.getBorrows" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to return all entries in the Borrow table</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>all books that match</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="DatabaseUtils.DatabaseUtils.getBorrowsByUsername">
+<code class="descname">getBorrowsByUsername</code><span class="sig-paren">(</span><em>username</em><span class="sig-paren">)</span><a class="headerlink" href="#DatabaseUtils.DatabaseUtils.getBorrowsByUsername" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to get all the books the user has borrowed</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>username: string to find in table</p>
+</dd>
+<dt>Returns:</dt><dd><p>all books that match</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="DatabaseUtils.DatabaseUtils.insertBook">
+<code class="descname">insertBook</code><span class="sig-paren">(</span><em>isbn</em>, <em>title</em>, <em>author</em>, <em>yearPublished</em><span class="sig-paren">)</span><a class="headerlink" href="#DatabaseUtils.DatabaseUtils.insertBook" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to insert a book into the book table</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>isbn: string ibsn of book to add
+title: string title of book to add
+author: string author of book to add
+yearPublished: string year published of book to add</p>
+</dd>
+<dt>Returns:</dt><dd><p>True if exactly one row in the table is added or modified
+False if otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="DatabaseUtils.DatabaseUtils.insertBorrow">
+<code class="descname">insertBorrow</code><span class="sig-paren">(</span><em>isbn</em>, <em>username</em>, <em>eventID</em><span class="sig-paren">)</span><a class="headerlink" href="#DatabaseUtils.DatabaseUtils.insertBorrow" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to insert a book into the borrow table</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>isbn: string that is the ISBN of the book
+username: the username of the person who borrowed the book
+eventID: the eventID of the calendar event created</p>
+</dd>
+<dt>Returns:</dt><dd><p>True if exactly one row in the table is added or modified
+False if otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="DatabaseUtils.DatabaseUtils.insertSampleBook">
+<code class="descname">insertSampleBook</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#DatabaseUtils.DatabaseUtils.insertSampleBook" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to insert a sample book to the book database</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="DatabaseUtils.DatabaseUtils.stillOnLoan">
+<code class="descname">stillOnLoan</code><span class="sig-paren">(</span><em>username</em>, <em>isbn</em><span class="sig-paren">)</span><a class="headerlink" href="#DatabaseUtils.DatabaseUtils.stillOnLoan" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to get the borrow date and return date of a
+book the user has borrowed</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>isbn: string to find in table
+username: string to find in table</p>
+</dd>
+<dt>Returns:</dt><dd><p>borrowDate and returnDate</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="DatabaseUtils.DatabaseUtils.updateReturnDate">
+<code class="descname">updateReturnDate</code><span class="sig-paren">(</span><em>isbn</em>, <em>username</em><span class="sig-paren">)</span><a class="headerlink" href="#DatabaseUtils.DatabaseUtils.updateReturnDate" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to update the return date value and
+return the eventID for that borrow</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>isbn: string that is the ISBN of the book
+username: the username of the person who borrowed the book</p>
+</dd>
+<dt>Returns:</dt><dd><p>the eventid that matches the row that the username and isbn match</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-DBInterface"></span><dl class="class">
+<dt id="DBInterface.DBInterface">
+<em class="property">class </em><code class="descclassname">DBInterface.</code><code class="descname">DBInterface</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#DBInterface.DBInterface" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class used to represent the Database Interface</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><dl class="simple">
+<dt>__is_valid<span class="classifier">bool</span></dt><dd><p>is the database valid</p>
+</dd>
+<dt>__dbi<span class="classifier">database</span></dt><dd><p>mysql database</p>
+</dd>
+<dt>__dbi_cursor<span class="classifier">cursor</span></dt><dd><p>database cursor</p>
+</dd>
+<dt>__last_result<span class="classifier">none</span></dt><dd><p>the last resuls</p>
+</dd>
+<dt>__config<span class="classifier">dict</span></dt><dd><p>dict include host, user, passwd, database, port (optional)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="method">
+<dt id="DBInterface.DBInterface.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>sql</em>, <em>vals=None</em><span class="sig-paren">)</span><a class="headerlink" href="#DBInterface.DBInterface.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>A fuction created to run a query</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>sql: string, sql query
+vals: optional, type can be list, tuple, or non-collection value</p>
+</dd>
+<dt>Returns:</dt><dd><p>False if query failed
+dict if successful/applicable</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="DBInterface.DBInterface.run_many">
+<code class="descname">run_many</code><span class="sig-paren">(</span><em>sql</em>, <em>vals</em><span class="sig-paren">)</span><a class="headerlink" href="#DBInterface.DBInterface.run_many" title="Permalink to this definition">¶</a></dt>
+<dd><p>A fuction created to run a query multiple times using supplied vals</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>sql: string, sql query
+vals: list of tuples or list of non-collection values</p>
+</dd>
+<dt>Returns:</dt><dd><p>True on success
+False on failure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="DBInterface.DBInterface.view">
+<code class="descname">view</code><span class="sig-paren">(</span><em>sql</em>, <em>vals=None</em><span class="sig-paren">)</span><a class="headerlink" href="#DBInterface.DBInterface.view" title="Permalink to this definition">¶</a></dt>
+<dd><p>A fuction created to view queries</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>sql: string, sql query
+vals: optional, type can be list, tuple, or non-collection value</p>
+</dd>
+<dt>Returns:</dt><dd><p>False if query failed
+dict if successful/applicable</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="DBInterface.DBInterface.view_single">
+<code class="descname">view_single</code><span class="sig-paren">(</span><em>sql</em>, <em>vals=None</em><span class="sig-paren">)</span><a class="headerlink" href="#DBInterface.DBInterface.view_single" title="Permalink to this definition">¶</a></dt>
+<dd><p>A fuction created to view a query</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>sql: string, sql query
+vals: optional, type can be list, tuple, or non-collection value</p>
+</dd>
+<dt>Returns:</dt><dd><p>False if query failed or number of rows returned != 1
+dict if successful/applicable</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-FaceRecognition"></span><dl class="class">
+<dt id="FaceRecognition.FaceRecognition">
+<em class="property">class </em><code class="descclassname">FaceRecognition.</code><code class="descname">FaceRecognition</code><span class="sig-paren">(</span><em>save_file='face_data.pickle'</em><span class="sig-paren">)</span><a class="headerlink" href="#FaceRecognition.FaceRecognition" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class used to handle the Facial Recognition in the reception pi</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><dl class="simple">
+<dt>__tolerance<span class="classifier">float</span></dt><dd><p>the tolerance value</p>
+</dd>
+<dt>__data_file<span class="classifier">string</span></dt><dd><p>the pickle file name</p>
+</dd>
+<dt>__user_faces<span class="classifier">list</span></dt><dd><p>the list containing all saved faces</p>
+</dd>
+<dt>__face_detector<span class="classifier">cv2</span></dt><dd><p>the camera used to detect faces</p>
+</dd>
+<dt>__made_user_changes<span class="classifier">bool</span></dt><dd><p>weather the user has made changes</p>
+</dd>
+<dt>fpath<span class="classifier">string</span></dt><dd><p>the file path for the camera setup</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="method">
+<dt id="FaceRecognition.FaceRecognition.login">
+<code class="descname">login</code><span class="sig-paren">(</span><em>timeout=60</em>, <em>show_messages=True</em>, <em>capture_delay=1</em><span class="sig-paren">)</span><a class="headerlink" href="#FaceRecognition.FaceRecognition.login" title="Permalink to this definition">¶</a></dt>
+<dd><p>A fuction created to get a user to login using facial detection</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>timeout: time, if reached any faces found so far are returned
+show_messages: bool to show messages or not
+capture_delay: time to wait between detection attempts</p>
+</dd>
+<dt>Returns:</dt><dd><p>username of best found match
+False if face detection failes or no close enough match found</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="FaceRecognition.FaceRecognition.register">
+<code class="descname">register</code><span class="sig-paren">(</span><em>username</em><span class="sig-paren">)</span><a class="headerlink" href="#FaceRecognition.FaceRecognition.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>A fuction created to get a user to register a facial scan</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>username: the users who is doing the facial scan</p>
+</dd>
+<dt>Returns:</dt><dd><p>True if facial scan sucessful
+False if face scan fails</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="FaceRecognition.FaceRecognition.set_tolerance">
+<code class="descname">set_tolerance</code><span class="sig-paren">(</span><em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#FaceRecognition.FaceRecognition.set_tolerance" title="Permalink to this definition">¶</a></dt>
+<dd><p>A fuction created to set the tolerance value</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>val: float to be assigned to tolerance</p>
+</dd>
+<dt>Raises:</dt><dd><p>Exception if val is outside the range or the wrong type</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-Master"></span><dl class="class">
+<dt id="Master.Master">
+<em class="property">class </em><code class="descclassname">Master.</code><code class="descname">Master</code><span class="sig-paren">(</span><em>config=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Master.Master" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class used to represent the master pi class as a client socket</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><dl class="simple">
+<dt>config<span class="classifier">dict</span></dt><dd><p>Config for connection</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="method">
+<dt id="Master.Master.start">
+<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Master.Master.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>A fuction created to connect to the reception pi
+and to run the menu class</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-MasterApplication"></span><dl class="class">
+<dt id="MasterApplication.MasterApplication">
+<em class="property">class </em><code class="descclassname">MasterApplication.</code><code class="descname">MasterApplication</code><span class="sig-paren">(</span><em>username</em>, <em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#MasterApplication.MasterApplication" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class used to represent the Console Application on the Master Pi</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><dl class="simple">
+<dt>username<span class="classifier">string</span></dt><dd><p>the username of the person logged in</p>
+</dd>
+<dt>validator<span class="classifier">Validator</span></dt><dd><p>the link to the validator script</p>
+</dd>
+<dt>calendar<span class="classifier">CalendarUtils</span></dt><dd><p>the link to the CalendarUtils script</p>
+</dd>
+<dt>QR<span class="classifier">QR</span></dt><dd><p>the link to the QR script</p>
+</dd>
+<dt>voice<span class="classifier">VoiceSearchUtils</span></dt><dd><p>the link to the VoiceSearchUtils script</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="method">
+<dt id="MasterApplication.MasterApplication.borrowBook">
+<code class="descname">borrowBook</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MasterApplication.MasterApplication.borrowBook" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to borrow a book</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>False</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="MasterApplication.MasterApplication.borrowISBN">
+<code class="descname">borrowISBN</code><span class="sig-paren">(</span><em>isbn</em><span class="sig-paren">)</span><a class="headerlink" href="#MasterApplication.MasterApplication.borrowISBN" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to borrow a book based on its ISBN</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>isbn: string of the isbn of the book looking to be borrowed</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="MasterApplication.MasterApplication.getSearchInput">
+<code class="descname">getSearchInput</code><span class="sig-paren">(</span><em>item</em><span class="sig-paren">)</span><a class="headerlink" href="#MasterApplication.MasterApplication.getSearchInput" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to print the methods available to search</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>item: string stating what the input wants</p>
+</dd>
+<dt>Returns:</dt><dd><p>string of what the user is looking for
+or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="MasterApplication.MasterApplication.listBooks">
+<code class="descname">listBooks</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MasterApplication.MasterApplication.listBooks" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function to list the books</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MasterApplication.MasterApplication.listBorrowsByUser">
+<code class="descname">listBorrowsByUser</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MasterApplication.MasterApplication.listBorrowsByUser" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function to list the books borrowed by the user</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MasterApplication.MasterApplication.printEndSection">
+<code class="descname">printEndSection</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MasterApplication.MasterApplication.printEndSection" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to print a message ending the section</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MasterApplication.MasterApplication.printList">
+<code class="descname">printList</code><span class="sig-paren">(</span><em>subject</em>, <em>listName</em>, <em>headers</em>, <em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#MasterApplication.MasterApplication.printList" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to print the searched for items in a list</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>subject: which database to get the data from
+listName: title to print
+headers: header to print under
+data: the list items</p>
+</dd>
+<dt>Returns:</dt><dd><p>True if data is found
+False if no data is found</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="MasterApplication.MasterApplication.printSection">
+<code class="descname">printSection</code><span class="sig-paren">(</span><em>sectionName</em><span class="sig-paren">)</span><a class="headerlink" href="#MasterApplication.MasterApplication.printSection" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to print a section title</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>sectionName: title to print</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="MasterApplication.MasterApplication.repeatsFunction">
+<code class="descname">repeatsFunction</code><span class="sig-paren">(</span><em>action</em><span class="sig-paren">)</span><a class="headerlink" href="#MasterApplication.MasterApplication.repeatsFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to ask the user if they wish to repeat the action</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>action: borrow or return - action to be repeated if required</p>
+</dd>
+<dt>Returns:</dt><dd><p>True if they would like to borrow/return again
+False if not</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="MasterApplication.MasterApplication.returnBook">
+<code class="descname">returnBook</code><span class="sig-paren">(</span><em>isbn</em><span class="sig-paren">)</span><a class="headerlink" href="#MasterApplication.MasterApplication.returnBook" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to return a book based on its ISBN</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>isbn: string of the isbn of the book looking to be borrowed</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="MasterApplication.MasterApplication.returnBookISBN">
+<code class="descname">returnBookISBN</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MasterApplication.MasterApplication.returnBookISBN" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to return a book - by getting its ISBN</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MasterApplication.MasterApplication.returnBookMenu">
+<code class="descname">returnBookMenu</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MasterApplication.MasterApplication.returnBookMenu" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to print the main return menu options</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MasterApplication.MasterApplication.returnBookQR">
+<code class="descname">returnBookQR</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MasterApplication.MasterApplication.returnBookQR" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to return a book - by getting the QR code</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MasterApplication.MasterApplication.searchBook">
+<code class="descname">searchBook</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MasterApplication.MasterApplication.searchBook" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to print the main search menu options</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MasterApplication.MasterApplication.searchBookByAuthor">
+<code class="descname">searchBookByAuthor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MasterApplication.MasterApplication.searchBookByAuthor" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to search for a book by Author</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>True or False based on printList function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="MasterApplication.MasterApplication.searchBookByISBN">
+<code class="descname">searchBookByISBN</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MasterApplication.MasterApplication.searchBookByISBN" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to search for a book by ISBN</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>True or False based on printList function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="MasterApplication.MasterApplication.searchBookByTitle">
+<code class="descname">searchBookByTitle</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MasterApplication.MasterApplication.searchBookByTitle" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to search for a book by Title</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>True or False based on printList function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="MasterApplication.MasterApplication.showMenu">
+<code class="descname">showMenu</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MasterApplication.MasterApplication.showMenu" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to display the main menu</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="MasterApplication.MasterApplication.voiceInput">
+<code class="descname">voiceInput</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MasterApplication.MasterApplication.voiceInput" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to get voice input from the user</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>translation, string returned from voice search</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="MasterApplication.MasterApplication.wantsToBorrow">
+<code class="descname">wantsToBorrow</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#MasterApplication.MasterApplication.wantsToBorrow" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function to check if the user wants to borrow a searched book</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-QR"></span><dl class="class">
+<dt id="QR.QR">
+<em class="property">class </em><code class="descclassname">QR.</code><code class="descname">QR</code><a class="headerlink" href="#QR.QR" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class used to represent the QR return system</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><dl class="simple">
+<dt>foundISBN<span class="classifier">string</span></dt><dd><p>the isbn decoded from the QR code</p>
+</dd>
+<dt>validator<span class="classifier">Validator</span></dt><dd><p>the link to the validator script</p>
+</dd>
+<dt>vstream<span class="classifier">VideoStream</span></dt><dd><p>the camera used to capture the QR code</p>
+</dd>
+<dt>found<span class="classifier">set</span></dt><dd><p>the set of QR codes found</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="method">
+<dt id="QR.QR.readQR">
+<code class="descname">readQR</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#QR.QR.readQR" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to read/capture the qr code from the camera</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>the decoded isbn</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="QR.QR.stop">
+<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#QR.QR.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to stop the camera from recording</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-Reception"></span><dl class="class">
+<dt id="Reception.Reception">
+<em class="property">class </em><code class="descclassname">Reception.</code><code class="descname">Reception</code><span class="sig-paren">(</span><em>config=None</em>, <em>dbi=None</em>, <em>auth=None</em>, <em>face_recognition=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Reception.Reception" title="Permalink to this definition">¶</a></dt>
+<dd><p>The receiver Pi class as a client socket</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><dl class="simple">
+<dt>config<span class="classifier">dict</span></dt><dd><p>Config for connection</p>
+</dd>
+<dt>dbi<span class="classifier">DBinterface</span></dt><dd><p>interface used to access the db</p>
+</dd>
+<dt>auth<span class="classifier">Auth</span></dt><dd><p>used for user authentication</p>
+</dd>
+<dt>face_rec<span class="classifier">face_recognition</span></dt><dd><p>used for facial recognition</p>
+</dd>
+<dt>self.ip<span class="classifier">string</span></dt><dd><p>ip address from the config file</p>
+</dd>
+<dt>self.port<span class="classifier">string</span></dt><dd><p>port from the config file</p>
+</dd>
+<dt>self.address<span class="classifier">string</span></dt><dd><p>address from the ip address and the port</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="staticmethod">
+<dt id="Reception.Reception.get_validated_input">
+<em class="property">static </em><code class="descname">get_validated_input</code><span class="sig-paren">(</span><em>msg</em>, <em>fname=None</em>, <em>minlen=None</em>, <em>maxlen=None</em>, <em>reg=None</em>, <em>reg_msg=None</em>, <em>hide_input=False</em>, <em>confirm=False</em>, <em>val_func=None</em>, <em>val_func_msg=None</em><span class="sig-paren">)</span><a class="headerlink" href="#Reception.Reception.get_validated_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to get validate input</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>msg: the string you want to validate
+fname: the file name
+minlen: the minimum length the string can be
+maxlen: the maximum length the string can be
+reg: regex, characters that the string must contain
+reg_msg: a message to display if needed
+hide_input: to show or hide the input (eg hide passwords)
+confirm: bool if they want confirmation
+val_func: a function to validate with
+val_func_msg: the message to display if invalid</p>
+</dd>
+<dt>Returns:</dt><dd><p>False if user enter exit
+else return user input</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Reception.Reception.login">
+<code class="descname">login</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Reception.Reception.login" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to prompt user input for login</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Reception.Reception.login_fr">
+<code class="descname">login_fr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Reception.Reception.login_fr" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to login using facial recognition</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Reception.Reception.register">
+<code class="descname">register</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Reception.Reception.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to register a user</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>False if exception</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Reception.Reception.register_face">
+<code class="descname">register_face</code><span class="sig-paren">(</span><em>uname</em><span class="sig-paren">)</span><a class="headerlink" href="#Reception.Reception.register_face" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to register a new face</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>uname: username of the person logged in</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Reception.Reception.start">
+<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Reception.Reception.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to show the main menu for the receiver pi</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>to function when the user selects exit</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-RSA"></span><dl class="class">
+<dt id="RSA.RSA">
+<em class="property">class </em><code class="descclassname">RSA.</code><code class="descname">RSA</code><span class="sig-paren">(</span><em>private_key_file=None</em>, <em>public_key_file=None</em><span class="sig-paren">)</span><a class="headerlink" href="#RSA.RSA" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class used to encrypt socket communication using Asymmetric encryption</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><dl class="simple">
+<dt>__private<span class="classifier">key</span></dt><dd><p>the private key</p>
+</dd>
+<dt>__public<span class="classifier">key</span></dt><dd><p>the public key</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="method">
+<dt id="RSA.RSA.export_private_key">
+<code class="descname">export_private_key</code><span class="sig-paren">(</span><em>fname</em><span class="sig-paren">)</span><a class="headerlink" href="#RSA.RSA.export_private_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to export the private key with PEM encoding</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>fname: where to export the keypair</p>
+</dd>
+<dt>Returns:</dt><dd><p>False if no private keys have been generated/loaded</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="RSA.RSA.export_public_key">
+<code class="descname">export_public_key</code><span class="sig-paren">(</span><em>fname</em><span class="sig-paren">)</span><a class="headerlink" href="#RSA.RSA.export_public_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to export the public key with PEM encoding</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>fname: the file name to open</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="RSA.RSA.generate_key">
+<code class="descname">generate_key</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#RSA.RSA.generate_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to generate an RSA keypair</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="RSA.RSA.load_keys">
+<code class="descname">load_keys</code><span class="sig-paren">(</span><em>fname</em><span class="sig-paren">)</span><a class="headerlink" href="#RSA.RSA.load_keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to load PEM encoded private keys</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>fname: the file name to open</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="RSA.RSA.load_public_key">
+<code class="descname">load_public_key</code><span class="sig-paren">(</span><em>fname</em><span class="sig-paren">)</span><a class="headerlink" href="#RSA.RSA.load_public_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to specifically load the PEM encoded public key</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>fname: the file name to open</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="RSA.RSA.private_decrypt">
+<code class="descname">private_decrypt</code><span class="sig-paren">(</span><em>cipher</em><span class="sig-paren">)</span><a class="headerlink" href="#RSA.RSA.private_decrypt" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to decrypt the private key</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>cipher: the cipher used in decrypting</p>
+</dd>
+<dt>Returns:</dt><dd><p>Plaintext after decrypting cipher with __private_key
+False if the key is none or if decryption fails</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="RSA.RSA.public_encrypt">
+<code class="descname">public_encrypt</code><span class="sig-paren">(</span><em>msg</em><span class="sig-paren">)</span><a class="headerlink" href="#RSA.RSA.public_encrypt" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to encrypt the public key</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>msg: the message to encode</p>
+</dd>
+<dt>Returns:</dt><dd><p>Ciphertext msg has been encrypted with __public key
+False if the private key is none</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-TCP"></span><dl class="class">
+<dt id="TCP.MasterConnection">
+<em class="property">class </em><code class="descclassname">TCP.</code><code class="descname">MasterConnection</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#TCP.MasterConnection" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class used to represent the Master Connection</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><dl class="simple">
+<dt>__config<span class="classifier">string</span></dt><dd><p>Connection config</p>
+</dd>
+<dt>__conn<span class="classifier">TCP</span></dt><dd><p>Main TCP connection to reception pi</p>
+</dd>
+<dt>__sync_conn<span class="classifier">TCP</span></dt><dd><p>temp connection during init for uploading our lan ip</p>
+</dd>
+<dt>__rsa_mp<span class="classifier">RSA</span></dt><dd><p>RSA object for the master pi keypair</p>
+</dd>
+<dt>__rsa_rp<span class="classifier">RSA</span></dt><dd><p>RSA object for reception pi public key</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="method">
+<dt id="TCP.MasterConnection.connect">
+<code class="descname">connect</code><span class="sig-paren">(</span><em>wait=True</em>, <em>timeout=None</em>, <em>attempt_interval=5</em><span class="sig-paren">)</span><a class="headerlink" href="#TCP.MasterConnection.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Listens for connections from the reception pi and verifies identity</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>wait: bool to wait
+timeout: time value to timeout
+attempt_interval: interval time value</p>
+</dd>
+<dt>Returns:</dt><dd><p>True if sucessful
+False if not</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="TCP.MasterConnection.disconnect">
+<code class="descname">disconnect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#TCP.MasterConnection.disconnect" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to disconnect</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="TCP.MasterConnection.receive">
+<code class="descname">receive</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#TCP.MasterConnection.receive" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to recieve</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="TCP.MasterConnection.send_all">
+<code class="descname">send_all</code><span class="sig-paren">(</span><em>msg</em><span class="sig-paren">)</span><a class="headerlink" href="#TCP.MasterConnection.send_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends msg to connected partner</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>msg: message to be sent</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="TCP.ReceptionConnection">
+<em class="property">class </em><code class="descclassname">TCP.</code><code class="descname">ReceptionConnection</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#TCP.ReceptionConnection" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class used to represent the Reception Connection</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><dl class="simple">
+<dt>__config<span class="classifier">dict</span></dt><dd><p>connection config</p>
+</dd>
+<dt>__conn<span class="classifier">TCP</span></dt><dd><p>main TCP connection to master pi</p>
+</dd>
+<dt>__sync_conn<span class="classifier">TCP</span></dt><dd><p>temp tcp connection to sync servic</p>
+</dd>
+<dt>__rsa_mp<span class="classifier">RSA</span></dt><dd><p>RSA object for master pi public key</p>
+</dd>
+<dt>__rsa_rp<span class="classifier">RSA</span></dt><dd><p>RSA object for reception pi keypair</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="method">
+<dt id="TCP.ReceptionConnection.connect">
+<code class="descname">connect</code><span class="sig-paren">(</span><em>wait=True</em>, <em>timeout=None</em>, <em>attempt_interval=5</em><span class="sig-paren">)</span><a class="headerlink" href="#TCP.ReceptionConnection.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempts to connect to master pi</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>wait: whether to wait until connected
+timeout: max time to attempt to connect
+attempt_interval: Time to wait between attempts</p>
+</dd>
+<dt>Returns:</dt><dd><p>True if sucessful
+False if not</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="TCP.ReceptionConnection.disconnect">
+<code class="descname">disconnect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#TCP.ReceptionConnection.disconnect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disconnect from connection partner</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="TCP.ReceptionConnection.receive">
+<code class="descname">receive</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#TCP.ReceptionConnection.receive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempts to receive a message from connection partner</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="TCP.ReceptionConnection.send_all">
+<code class="descname">send_all</code><span class="sig-paren">(</span><em>msg</em><span class="sig-paren">)</span><a class="headerlink" href="#TCP.ReceptionConnection.send_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends msg to connection partner</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>msg: message to be sent</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="TCP.SyncConnection">
+<em class="property">class </em><code class="descclassname">TCP.</code><code class="descname">SyncConnection</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#TCP.SyncConnection" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class to sync the master pi lan ip between the Master and Reception Pi’s</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><dl class="simple">
+<dt>__conn<span class="classifier">TCP</span></dt><dd><p>the link to the TCP script</p>
+</dd>
+<dt>__rsa_mp<span class="classifier">RSA</span></dt><dd><p>the link to the RSA script</p>
+</dd>
+<dt>__latest_ip<span class="classifier">string</span></dt><dd><p>the ip</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="method">
+<dt id="TCP.SyncConnection.handle_get">
+<code class="descname">handle_get</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#TCP.SyncConnection.handle_get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends the encrypted ip. If there is none, sends ‘wait’</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="TCP.SyncConnection.handle_put">
+<code class="descname">handle_put</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#TCP.SyncConnection.handle_put" title="Permalink to this definition">¶</a></dt>
+<dd><p>Verifies identity then, receives encrypted lan ip</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="TCP.TCP">
+<em class="property">class </em><code class="descclassname">TCP.</code><code class="descname">TCP</code><a class="headerlink" href="#TCP.TCP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper for managing TCP socket communication</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><dl class="simple">
+<dt>__sock<span class="classifier">socket</span></dt><dd><p>current socket</p>
+</dd>
+<dt>__conn<span class="classifier">socket</span></dt><dd><p>Connection to peer</p>
+</dd>
+<dt>__bound<span class="classifier">bool</span></dt><dd><p>Whether an address has been bound</p>
+</dd>
+<dt>__bind_addr<span class="classifier">tuple</span></dt><dd><p>The current address, if bound</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="method">
+<dt id="TCP.TCP.connect">
+<code class="descname">connect</code><span class="sig-paren">(</span><em>addr</em>, <em>port</em><span class="sig-paren">)</span><a class="headerlink" href="#TCP.TCP.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to connect via the port and address supplied</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>addr: ip address to connect to
+port: port to connect to</p>
+</dd>
+<dt>Returns:</dt><dd><p>True if connection sucessful
+False if not</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="TCP.TCP.disconnect">
+<code class="descname">disconnect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#TCP.TCP.disconnect" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to disconnect</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="TCP.TCP.listen">
+<code class="descname">listen</code><span class="sig-paren">(</span><em>addr</em>, <em>port</em><span class="sig-paren">)</span><a class="headerlink" href="#TCP.TCP.listen" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to listen via the port and address supplied</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>addr: ip address to connect to
+port: port to connect to</p>
+</dd>
+<dt>Returns:</dt><dd><p>True if a peer connects
+False if anything fails</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="TCP.TCP.receive">
+<code class="descname">receive</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#TCP.TCP.receive" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to recieve a message</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>string or bytes
+False if error</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="TCP.TCP.renew_listen">
+<code class="descname">renew_listen</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#TCP.TCP.renew_listen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Begin listening and wait for accept.
+Does not recreate the socket or rebind.
+Used if listening with the same ip/port.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>True if connection is successful
+False if error</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="TCP.TCP.send_all">
+<code class="descname">send_all</code><span class="sig-paren">(</span><em>msg</em><span class="sig-paren">)</span><a class="headerlink" href="#TCP.TCP.send_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends a message to connected peer</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>msg: string message to send</p>
+</dd>
+<dt>Returns:</dt><dd><p>True if msg was sent
+False if error</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-User"></span><dl class="class">
+<dt id="User.User">
+<em class="property">class </em><code class="descclassname">User.</code><code class="descname">User</code><span class="sig-paren">(</span><em>user_id=None</em>, <em>username=None</em>, <em>first_name=None</em>, <em>surname=None</em>, <em>email=None</em><span class="sig-paren">)</span><a class="headerlink" href="#User.User" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class used to represent the User</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><dl class="simple">
+<dt>user_id<span class="classifier">string</span></dt><dd><p>the users identification number</p>
+</dd>
+<dt>username<span class="classifier">string</span></dt><dd><p>the users login username</p>
+</dd>
+<dt>first_name<span class="classifier">string</span></dt><dd><p>first name of the user</p>
+</dd>
+<dt>surname<span class="classifier">string</span></dt><dd><p>last name of the user</p>
+</dd>
+<dt>email<span class="classifier">string</span></dt><dd><p>the users email address</p>
+</dd>
+<dt>self.__data<span class="classifier">dictionary</span></dt><dd><p>dict to hold all above information</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="staticmethod">
+<dt id="User.User.get_field_names">
+<em class="property">static </em><code class="descname">get_field_names</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#User.User.get_field_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function to get feild names</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="User.User.get_info">
+<code class="descname">get_info</code><span class="sig-paren">(</span><em>var=None</em><span class="sig-paren">)</span><a class="headerlink" href="#User.User.get_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>A fuction created to return specified information</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>var: the information being requested</p>
+</dd>
+<dt>Returns:</dt><dd><p>if var is none, a dict with all user date
+if var is specified return the feild specified by var
+else return False</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-Validator"></span><dl class="class">
+<dt id="Validator.Validator">
+<em class="property">class </em><code class="descclassname">Validator.</code><code class="descname">Validator</code><a class="headerlink" href="#Validator.Validator" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class used to represent the validation of input</p>
+<dl class="method">
+<dt id="Validator.Validator.isbnExists">
+<code class="descname">isbnExists</code><span class="sig-paren">(</span><em>isbn</em><span class="sig-paren">)</span><a class="headerlink" href="#Validator.Validator.isbnExists" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function to check that the isbn exists in the library</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>isbn: string to be checked</p>
+</dd>
+<dt>Returns:</dt><dd><p>True is the isbn exists
+False if it doesnt exist</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Validator.Validator.onLoan">
+<code class="descname">onLoan</code><span class="sig-paren">(</span><em>username</em>, <em>isbn</em><span class="sig-paren">)</span><a class="headerlink" href="#Validator.Validator.onLoan" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function to check if the user has the isbn book on loan</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>username: string to check records against
+isbn: string to check records against</p>
+</dd>
+<dt>Returns:</dt><dd><p>True is the book is on loan to this user
+False if it isnt</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Validator.Validator.validateAuthor">
+<code class="descname">validateAuthor</code><span class="sig-paren">(</span><em>author</em><span class="sig-paren">)</span><a class="headerlink" href="#Validator.Validator.validateAuthor" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function to validate the author entered</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>author: string to be validated</p>
+</dd>
+<dt>Returns:</dt><dd><p>True if the input is of valid length and valid input
+False if not, or is none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Validator.Validator.validateISBN">
+<code class="descname">validateISBN</code><span class="sig-paren">(</span><em>isbn</em><span class="sig-paren">)</span><a class="headerlink" href="#Validator.Validator.validateISBN" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function to validate the ISBN entered</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>isbn: string to be validated</p>
+</dd>
+<dt>Returns:</dt><dd><p>True if the input is of valid length and are all digits
+False if not, or is none</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Validator.Validator.validateTitle">
+<code class="descname">validateTitle</code><span class="sig-paren">(</span><em>title</em><span class="sig-paren">)</span><a class="headerlink" href="#Validator.Validator.validateTitle" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function to validate the book title entered</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>title: string to be validated</p>
+</dd>
+<dt>Returns:</dt><dd><p>True if the input is of valid length and valid input
+False if not, or is none</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-VoiceSearchUtils"></span><dl class="class">
+<dt id="VoiceSearchUtils.VoiceSearchUtils">
+<em class="property">class </em><code class="descclassname">VoiceSearchUtils.</code><code class="descname">VoiceSearchUtils</code><a class="headerlink" href="#VoiceSearchUtils.VoiceSearchUtils" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class used to represent voice searching</p>
+<dl class="method">
+<dt id="VoiceSearchUtils.VoiceSearchUtils.voiceSearch">
+<code class="descname">voiceSearch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#VoiceSearchUtils.VoiceSearchUtils.voiceSearch" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function created to ask the user if they wish to repeat the action</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Translation string of the
+none if time out</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">RMIT PIoT Assignment Two</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Code docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About this project</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to AssignmentTwo’s documentation!</a></li>
+      <li>Next: <a href="about.html" title="next chapter">About this project</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Claire T-C.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/code.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

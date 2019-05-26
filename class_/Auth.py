@@ -1,19 +1,4 @@
-""" vim: set et sw=4 ts=4 sts=4:
-
-EXAMPLES
-Encrypting new user password:
-    auth = Auth()
-    passwd = 'user_password'
-    cipher = auth.encrypt_passwd(passwd)
-    # Store cipher in db
-
-
-Authenticating user using password:
-    auth = Auth()
-    passwd = 'entered_password'
-    cipher = 'cipher_from_db_for_relevant_user'
-    success = auth.verify_passwd(passwd, cipher)
-"""
+""" vim: set et sw=4 ts=4 sts=4:"""
 
 # Imports
 try:
@@ -49,14 +34,14 @@ try:
 except:
     raise Exception('Failed to import regex module')
 
+
 class Auth:
     """
     A class used to handle authentication and authorisation
 
-    Attributes
-    ----------
-    __dbi : database interface
-        Database interface from DBInterface
+    Attributes:
+        __dbi : database interface
+            Database interface from DBInterface
     """
 
     __dbi = None
@@ -76,10 +61,10 @@ class Auth:
             password: the users password
 
         Returns:
-            a User object; The User constructor takes in the fields returned
-            from the query, but only if they're needed. The **{...} unpacks
-            the dictionary. The "if x in User.get_field_names()" filters out
-            any args not needed in the constructor
+            a User object: The User constructor takes in the fields \
+            returned from the query, but only if they're needed. \
+            The "if x in User.get_field_names()" filters out any \
+            args not needed in the constructor
 
         Raises:
             LoginException if password/username/email is missing
@@ -105,8 +90,8 @@ class Auth:
             time.sleep(max(3.0 - (time.time() - time_start), 0))
             return False
 
-        return User(
-            **{x: y for x, y in res.items() if x in User.get_field_names()})
+        return User(**{
+            x: y for x, y in res.items() if x in User.get_field_names()})
 
     def register(
             self,
@@ -116,7 +101,7 @@ class Auth:
             email=None,
             password=None):
         """
-        A fuction created to register a user
+        A fuction created to register a user.
 
         Args:
             username: the users username
@@ -125,10 +110,11 @@ class Auth:
             email: the users email
             password: the users password
 
-            a User object; The User constructor takes in the fields returned
-            from the query, but only if they're needed. The **{...} unpacks
-            the dictionary. The "if x in User.get_field_names()" filters out
-            any args not needed in the constructor
+        Returns:
+            a User object: The User constructor takes in the fields \
+            returned from the query, but only if they're needed. \
+            The "if x in User.get_field_names()" filters out any \
+            args not needed in the constructor
 
         Raises:
             RegisterException with appropriate if anything goes wrong
@@ -216,8 +202,8 @@ class Auth:
         if not user:
             raise RegisterException('Failed to create user (3)')
 
-        return User(
-            **{x: y for x, y in user.items() if x in User.get_field_names()})
+        return User(**{
+                x: y for x, y in user.items() if x in User.get_field_names()})
 
     @staticmethod
     def validate_username(uname):
@@ -265,18 +251,13 @@ class Auth:
                 r'^[a-z0-9.+%]+@[a-z0-9-.]+\.[a-z0-9-.]+$',
                 email, re.IGNORECASE))
 
-
     def username_available(self, uname):
         res = self.__search_for_user(username=uname)
-
         return not res or not len(res)
 
     def email_taken(self, email):
         res = self.__search_for_user(email=email)
-
         return len(res) < 1
-
-
 
     def __load_user(self, username=None, email=None):
         """

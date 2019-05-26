@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 from datetime import datetime
 from datetime import timedelta
 from googleapiclient.discovery import build
@@ -10,16 +9,17 @@ class CalendarUtils:
     """
     A class used to represent different functions for the google calendar
 
-    Attributes
-    ----------
-    SCOPES : string
-    store : 
-    creds : 
-    self.service : 
-
+    Attributes:
+        SCOPES : string
+            website for
+        store : JSON file
+            token json file; stores the users access and refresh tokens
+        creds : dictionary
+            read in from store
     """
 
-    def __init__(self, connection=None, credentials_path=None, token_path=None):
+    def __init__(
+                self, connection=None, credentials_path=None, token_path=None):
         if credentials_path is None or token_path is None:
             raise Exception('Credentials and token paths required')
 
@@ -36,18 +36,18 @@ class CalendarUtils:
         A function created to remove a specific google calendar event
 
         Args:
-            eventid: the string that identifies the specific event
+            ISBN: the ISBN of the book due back the day of the event
+            username: the username of the person who borrowed the book
         """
-        e_id = ISBN + username.lower
+        e_id = ISBN + username.lower()
         event = self.service.events().delete(
             calendarId="primary", eventId=e_id).execute()
 
-    def createCalendarEvent(self, duedate, ISBN, username):
+    def createCalendarEvent(self, ISBN, username):
         """
         A function created to add a google calendar event at a specific date
 
         Args:
-            Duedate: the date the event is to be created on
             ISBN: the ISBN of the book due back the day of the event
             username: the username of the person who borrowed the book
 
@@ -62,10 +62,10 @@ class CalendarUtils:
         eventID = ISBN+username.lower()
 
         event = {
-            "summary": "New Programmatic Event",
+            "summary": ISBN,
             "id": eventID,
             "location": "RMIT Building 14",
-            "description": "Adding new IoT event",
+            "description": "Book Due to be Returned",
             "start": {
                 "dateTime": time_start,
                 "timeZone": "Australia/Melbourne",
@@ -89,5 +89,4 @@ class CalendarUtils:
 
         event = self.service.events().insert(
             calendarId="primary", body=event).execute()
-        print(event['id'])
         return event['id']

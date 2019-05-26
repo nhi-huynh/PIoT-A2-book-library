@@ -1,11 +1,9 @@
 """ vim: set et sw=4 ts=4 sts=4: """
-
 # Imports
 try:
     import json
 except:
     raise Exception('Failed to import json module')
-
 try:
     import mysql.connector
 except:
@@ -16,17 +14,17 @@ class DBInterface:
     """
     A class used to represent the Database Interface
 
-    Attributes
-    ----------
-    __is_valid : bool
-        is the database valid
-    __dbi : database
-        mysql database
-    __dbi_cursor : cursor
-        database cursor
-    __last_result : none
-    __config : dict
-        dict include host, user, passwd, database, port (optional)
+    Attributes:
+        __is_valid : bool
+            is the database valid
+        __dbi : database
+            mysql database
+        __dbi_cursor : cursor
+            database cursor
+        __last_result : none
+            the last resuls
+        __config : dict
+            dict include host, user, passwd, database, port (optional)
     """
 
     __is_valid = False
@@ -106,7 +104,8 @@ class DBInterface:
             vals: list of tuples or list of non-collection values
 
         Returns:
-            True on success, else False
+            True on success
+            False on failure
         """
 
         if not self.__is_valid:

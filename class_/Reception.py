@@ -1,31 +1,37 @@
 # vim: set et sw=4 ts=4 sts=4:
-
-import socket, re
+import socket
+import re
 from getpass import getpass
 from class_.FaceRecognition import FaceRecognition
 from class_.TCP import ReceptionConnection
 
 
 class Reception():
+    """The receiver Pi class as a client socket
+
+    Attributes:
+        config : dict
+            Config for connection
+        dbi : DBinterface
+            interface used to access the db
+        auth : Auth
+            used for user authentication
+        face_rec : face_recognition
+            used for facial recognition
+        self.ip : string
+            ip address from the config file
+        self.port : string
+            port from the config file
+        self.address : string
+            address from the ip address and the port
     """
-    The receiver Pi class as a client socket
-    """
+
     dbi = None
     auth = None
 
-    def __init__(self, config=None, dbi=None, auth=None, face_recognition=None):
-        """
-        Instantiates the receiver Pi class
-
-        :type config: dict
-        :param config: Config for connection
-
-        :type dbi: DBinterface
-        :param dbi: interface used to access the db
-
-        :type auth: Auth
-        :param auth: used for user authentication
-        """
+    def __init__(
+            self, config=None, dbi=None, auth=None, face_recognition=None):
+        """Instantiates the receiver Pi class"""
 
         if config is None:
             raise Exception('Config required')
@@ -52,13 +58,10 @@ class Reception():
 
     def start(self):
         """
-        Shows main menu for receiver Pi
-        Option 1 for register new user
-        Option 2 for login via console
-        Option 3 for login via face recognition
-        Blank input exits reception
-        return: True
-        rtype: boolean
+        A function created to show the main menu for the receiver pi
+
+        Returns:
+            to function when the user selects exit
         """
 
         end = False
@@ -90,9 +93,17 @@ class Reception():
                 print('\n\nPlease select one of the following')
 
             else:
-                print('\n\nInvalid option, please enter a valid number or "exit" to end')
+                print("""\n\nInvalid option,
+                        please enter a valid number or "exit" to end""")
 
     def __start_session(self, username):
+        """
+        A function created to start a session
+
+        Args:
+            username: username of person logged in
+        """
+
         res = self.tcp.send_all(username)
 
         if not res and not self.__reconnect():
@@ -108,6 +119,14 @@ class Reception():
         print('session start response:', resp)
 
     def __reconnect(self):
+        """
+        A function created to reconnect to the master pi
+
+        Returns:
+            True if reconnected
+            False if else
+        """
+
         print('Connection to Master Pi lost, attempting to reconnect')
 
         if self.tcp.connect():
@@ -118,12 +137,7 @@ class Reception():
         return False
 
     def login(self):
-        """
-        Prompt user input for login
-        TODO: add login functionality based on local database
-
-        Return: None
-        """
+        """A function created to prompt user input for login"""
 
         user = None
 
@@ -161,10 +175,14 @@ class Reception():
         self.__start_session(user.get_info('username'))
 
     def register(self):
-        
-        # TODO debug
+        """A function created to register a user
 
-        first_name = self.get_validated_input('First name: ', minlen=1, maxlen=50)
+        Returns:
+            False if exception
+        """
+
+        first_name = self.get_validated_input(
+            'First name: ', minlen=1, maxlen=50)
 
         if not first_name:
             return
@@ -174,8 +192,10 @@ class Reception():
         if not surname:
             return
 
-        uname_invalid_msg = 'Invalid username. Must be between 5 and 25 characters (inclusive)'
-        uname_invalid_msg += ', start and end with a letter, and can only contain letters'
+        uname_invalid_msg = """Invalid username.
+                            Must be between 5 and 25 characters (inclusive)"""
+        uname_invalid_msg += """, start and end with a letter,
+                            and can only contain letters"""
         uname_invalid_msg += ', numbers, -, and _'
 
         uname = None
@@ -197,7 +217,8 @@ class Reception():
             print('Username taken, please choose something different.')
 
         email = None
-        invalid_email_msg = 'Invalid email, please ensure you are entering a valid email'
+        invalid_email_msg = """Invalid email,
+                            please ensure you are entering a valid email"""
 
         while True:
             email = self.get_validated_input(
@@ -209,7 +230,7 @@ class Reception():
             if self.auth.username_available(email):
                 break
 
-            print('Email already registered, please log in or register a new email')
+            print('Email already registered, please register a new email')
 
         password = None
 
@@ -254,11 +275,16 @@ class Reception():
         self.__start_session(uname)
 
     def register_face(self, uname):
+        """A function created to register a new face
+
+        Args:
+            uname: username of the person logged in
+        """
+
         while True:
             if self.fr.register(uname):
                 print('Successfully enabled face recognition')
                 break
-
 
             print('Failed to register')
 
@@ -283,7 +309,6 @@ class Reception():
                 break
 
         self.__start_session(uname)
-        
 
     @staticmethod
     def get_validated_input(
@@ -297,6 +322,26 @@ class Reception():
             confirm=False,
             val_func=None,
             val_func_msg=None):
+
+        """
+        A function created to get validate input
+
+        Args:
+            msg: the string you want to validate
+            fname: the file name
+            minlen: the minimum length the string can be
+            maxlen: the maximum length the string can be
+            reg: regex, characters that the string must contain
+            reg_msg: a message to display if needed
+            hide_input: to show or hide the input (eg hide passwords)
+            confirm: bool if they want confirmation
+            val_func: a function to validate with
+            val_func_msg: the message to display if invalid
+
+        Returns:
+            False if user enter exit
+            else return user input
+        """
 
         while True:
             print('type exit to cancel')
@@ -331,7 +376,6 @@ class Reception():
 
                 continue
 
-
             if not confirm:
                 return uinput
 
@@ -346,6 +390,8 @@ class Reception():
             print('Inputs do not match, please try again')
 
     def login_fr(self):
+        """A function created to login using facial recognition"""
+
         username = self.fr.login(timeout=20)
 
         if not username:

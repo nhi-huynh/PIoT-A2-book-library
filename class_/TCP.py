@@ -1,11 +1,27 @@
 # vim: set et sw=4 ts=4 sts=4:
-
 from class_.RSA import RSA
 from random import randint
 import socket
 import time
 
+
 class MasterConnection():
+    """
+    A class used to represent the Master Connection
+
+    Attributes:
+        __config : string
+            Connection config
+        __conn : TCP
+            Main TCP connection to reception pi
+        __sync_conn : TCP
+            temp connection during init for uploading our lan ip
+        __rsa_mp : RSA
+            RSA object for the master pi keypair
+        __rsa_rp : RSA
+            RSA object for reception pi public key
+    """
+
     def __init__(self, config):
         self.__config = config
         self.__conn = TCP()
@@ -24,12 +40,11 @@ class MasterConnection():
             self.__config['remote_ip'] = config['ip']
             return
 
-
         lan_ip = self.__get_self_lan_ip()
 
         if lan_ip is None:
             raise Exception('Failed to find lan ip')
-        
+
         self.__lan_ip = lan_ip
 
         while True:
@@ -40,6 +55,14 @@ class MasterConnection():
             time.sleep(4)
 
     def __attempt_ip_sync(self):
+        """
+        A function created to upload the lan ip in an encrypted format
+
+        Returns:
+            True if no errors or nulls
+            False if there is
+        """
+
         res = self.__sync_conn.connect(
             self.__config['sync_ip'],
             self.__config['sync_port']
@@ -65,7 +88,6 @@ class MasterConnection():
         if self.__sync_conn.receive() != 'ready':
             return False
 
-        
         self.__sync_conn.send_all(self.__rsa_rp.public_encrypt(self.__lan_ip))
 
         if self.__sync_conn.receive() != 'bye':
@@ -73,8 +95,20 @@ class MasterConnection():
 
         return True
 
-
     def connect(self, wait=True, timeout=None, attempt_interval=5):
+        """
+        Listens for connections from the reception pi and verifies identity
+
+        Args:
+            wait: bool to wait
+            timeout: time value to timeout
+            attempt_interval: interval time value
+
+        Returns:
+            True if sucessful
+            False if not
+        """
+
         deadline = False
 
         if timeout is not None and timeout > 0:
@@ -90,7 +124,7 @@ class MasterConnection():
                 time.sleep(attempt_interval)
                 continue
 
-            rnd = str(randint(100000,99999999))
+            rnd = str(randint(100000, 99999999))
 
             msg = self.__conn.receive()
 
@@ -102,7 +136,7 @@ class MasterConnection():
 
             res = self.__conn.send_all(challenge)
 
-            if res == False:
+            if res is False:
                 time.sleep(attempt_interval)
                 continue
 
@@ -116,6 +150,13 @@ class MasterConnection():
             time.sleep(attempt_interval)
 
     def __get_self_lan_ip(self):
+        """
+        Finds the lan ip of this devices
+
+        Returns:
+            ip address
+        """
+
         s = socket.socket(
             socket.AF_INET,
             socket.SOCK_DGRAM
@@ -132,15 +173,40 @@ class MasterConnection():
         return ip
 
     def send_all(self, msg):
+        """
+        Sends msg to connected partner
+
+        Args:
+            msg: message to be sent
+        """
         return self.__conn.send_all(msg)
 
     def receive(self):
+        """A function created to recieve"""
         return self.__conn.receive()
 
     def disconnect(self):
+        """A function created to disconnect"""
         self.__conn.disconnect()
 
+
 class ReceptionConnection:
+    """
+    A class used to represent the Reception Connection
+
+    Attributes:
+        __config : dict
+            connection config
+        __conn : TCP
+            main TCP connection to master pi
+        __sync_conn : TCP
+            temp tcp connection to sync servic
+        __rsa_mp : RSA
+            RSA object for master pi public key
+        __rsa_rp : RSA
+            RSA object for reception pi keypair
+    """
+
     def __init__(self, config):
         self.__conn = TCP()
         self.__config = config
@@ -159,7 +225,6 @@ class ReceptionConnection:
             return
 
         sync_conn = TCP()
-
 
         while True:
             try:
@@ -188,6 +253,19 @@ class ReceptionConnection:
         self.__config['remote_ip'] = plaintext
 
     def connect(self, wait=True, timeout=None, attempt_interval=5):
+        """
+        Attempts to connect to master pi
+
+        Args:
+            wait: whether to wait until connected
+            timeout: max time to attempt to connect
+            attempt_interval: Time to wait between attempts
+
+        Returns:
+            True if sucessful
+            False if not
+        """
+
         deadline = False
 
         if timeout is not None and timeout > 0:
@@ -212,7 +290,7 @@ class ReceptionConnection:
 
             chal = self.__conn.receive()
 
-            if chal == False:
+            if chal is False:
                 time.sleep(attempt_interval)
                 continue
 
@@ -236,15 +314,36 @@ class ReceptionConnection:
             time.sleep(attempt_interval)
 
     def send_all(self, msg):
+        """
+        Sends msg to connection partner
+
+        Args:
+            msg: message to be sent
+        """
         return self.__conn.send_all(msg)
 
     def receive(self):
+        """Attempts to receive a message from connection partner"""
         return self.__conn.receive()
 
     def disconnect(self):
+        """Disconnect from connection partner"""
         self.__conn.disconnect()
 
+
 class SyncConnection:
+    """
+    A class to sync the master pi lan ip between the Master and Reception Pi's
+
+    Attributes:
+        __conn : TCP
+            the link to the TCP script
+        __rsa_mp : RSA
+            the link to the RSA script
+        __latest_ip : string
+            the ip
+    """
+
     def __init__(self, config):
         rsa_mp = RSA()
         rsa_mp.load_public_key(config['mp-pubkey'])
@@ -263,15 +362,16 @@ class SyncConnection:
 
             msg = self.__conn.receive()
 
-            if msg not in ['get','put']:
+            if msg not in ['get', 'put']:
                 continue
 
             if msg == 'get':
                 self.handle_get()
-            else:   
+            else:
                 self.handle_put()
 
     def handle_get(self):
+        """Sends the encrypted ip. If there is none, sends 'wait' """
         if self.__latest_ip is None:
             self.__conn.send_all('wait')
             return
@@ -279,11 +379,12 @@ class SyncConnection:
         self.__conn.send_all(self.__latest_ip)
 
     def handle_put(self):
+        """ Verifies identity then, receives encrypted lan ip """
 
-        rnd = str(randint(100000,9999999))
+        rnd = str(randint(100000, 9999999))
 
         cipher = self.__rsa_mp.public_encrypt(rnd)
-        
+
         self.__conn.send_all(cipher)
 
         resp = self.__conn.receive()
@@ -296,14 +397,29 @@ class SyncConnection:
 
         resp = self.__conn.receive()
 
-        if resp == False:
+        if resp is False:
             return
 
         self.__latest_ip = resp
 
         self.__conn.send_all('bye')
 
+
 class TCP:
+    """
+    Wrapper for managing TCP socket communication
+
+    Attributes:
+        __sock : socket
+            current socket
+        __conn : socket
+            Connection to peer
+        __bound : bool
+            Whether an address has been bound
+        __bind_addr : tuple
+            The current address, if bound
+    """
+
     def __init__(self):
         self.__sock = None
         self.__conn = None
@@ -311,9 +427,22 @@ class TCP:
         self.__bind_addr = None
 
     def __del__(self):
+        """Destructor, cleans up"""
         self.disconnect()
 
     def connect(self, addr, port):
+        """
+        A function created to connect via the port and address supplied
+
+        Args:
+            addr: ip address to connect to
+            port: port to connect to
+
+        Returns:
+            True if connection sucessful
+            False if not
+        """
+
         self.disconnect()
 
         self.__sock = socket.socket(
@@ -330,9 +459,20 @@ class TCP:
         return True
 
     def listen(self, addr, port):
+        """
+        A function created to listen via the port and address supplied
+
+        Args:
+            addr: ip address to connect to
+            port: port to connect to
+
+        Returns:
+            True if a peer connects
+            False if anything fails
+        """
+
         if self.__bound and (addr, port) == self.__bind_addr:
             return self.renew_listen()
-
 
         self.__sock = socket.socket(
             socket.AF_INET,
@@ -340,8 +480,6 @@ class TCP:
         )
 
         try:
-            # Resuse addr if reconnecting, otherwise it can't be connected to
-            # until TIME_WAIT state expires for original connection
             self.__sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             self.__sock.bind((addr, port))
         except OSError as oerr:
@@ -356,6 +494,16 @@ class TCP:
         return self.__begin_listen_accept()
 
     def renew_listen(self):
+        """
+        Begin listening and wait for accept.
+        Does not recreate the socket or rebind.
+        Used if listening with the same ip/port.
+
+        Returns:
+            True if connection is successful
+            False if error
+        """
+
         if not self.__bound:
             return False
 
@@ -367,6 +515,13 @@ class TCP:
         return self.__begin_listen_accept()
 
     def __begin_listen_accept(self):
+        """
+        Begins listening and waits to accept a connection
+
+        Returns:
+            True if sucessful
+            False if not
+        """
 
         try:
             self.__sock.listen()
@@ -375,8 +530,9 @@ class TCP:
         except:
             return False
 
-
     def disconnect(self):
+        """A function created to disconnect"""
+
         try:
             self.__conn.close()
         except:
@@ -390,6 +546,17 @@ class TCP:
         self.__bound = False
 
     def send_all(self, msg):
+        """
+        Sends a message to connected peer
+
+        Args:
+            msg: string message to send
+
+        Returns:
+            True if msg was sent
+            False if error
+        """
+
         if self.__conn is None:
             return False
 
@@ -409,6 +576,14 @@ class TCP:
             return False
 
     def receive(self):
+        """
+        A function created to recieve a message
+
+        Returns:
+            string or bytes
+            False if error
+        """
+
         if self.__conn is None:
             return False
 

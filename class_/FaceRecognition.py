@@ -85,20 +85,19 @@ class FaceRecognition:
     """
     A class used to handle the Facial Recognition in the reception pi
 
-    Attributes
-    ----------
-    __tolerance : float
-        the tolerance value
-    __data_file : string
-        the pickle file name
-    __user_faces : list
-        the list containing all saved faces
-    __face_detector : cv2
-        the camera used to detect faces
-    __made_user_changes : bool
-        weather the user has made changes
-    fpath : string
-        the file path for the camera setup
+    Attributes:
+        __tolerance : float
+            the tolerance value
+        __data_file : string
+            the pickle file name
+        __user_faces : list
+            the list containing all saved faces
+        __face_detector : cv2
+            the camera used to detect faces
+        __made_user_changes : bool
+            weather the user has made changes
+        fpath : string
+            the file path for the camera setup
     """
 
     __tolerance = 0.6
@@ -122,7 +121,7 @@ class FaceRecognition:
                 pass
 
     def __del__(self):
-        """ Destructor. Saves facial data if changes were made """
+        """A fuction(destructor) created to delete users facial scan"""
         cv2.destroyAllWindows()
 
         if self.__export_data():
@@ -204,8 +203,6 @@ class FaceRecognition:
             match_count = 0
 
             for encoding in encodings:
-                # matches = face_recognition.compare_faces(
-                # user_data, encoding, self.__tolerance)
                 matches = face_recognition.compare_faces(user_data, encoding)
                 match_count += sum(matches)
 
