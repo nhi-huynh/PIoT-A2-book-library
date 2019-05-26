@@ -22,61 +22,60 @@ The aim of assignment is to build a prototype for a Smart Library IoT Applicatio
 
 ### Setting up
 
-SETTING UP KEYS
+#### Setting up keys
 
-    Run generate_keypair.py to create a new keypair
+Run generate_keypair.py to create a new keypair
 
-    This will create a 'keys' directory if it doesn't
-    exist. Inside that directory it will create two
-    new .pub and .pem keys.  .pem is private, .pub is
-    public.  It will not create them if there there are
-    already keys with that name
+This will create a 'keys' directory if it doesn't
+exist. Inside that directory it will create two
+new .pub and .pem keys.  .pem is private, .pub is
+public.  It will not create them if there there are
+already keys with that name
 
-    Generate keys for reception pi and master pi
+Generate keys for reception pi and master pi
 
-    The reception pi and master pi should have each
-    other's public keys (but obviously not each other's
-    private keys)
+The reception pi and master pi should have each
+other's public keys (but obviously not each other's
+private keys)
 
-    Keys can be stored anywhere as long as it's reflected
-    in the main config
+Keys can be stored anywhere as long as it's reflected
+in the main config
 
-    If using automatic connection:
-        Generate another keypair for the device used
-        for the sync service
+If using automatic connection:
+Generate another keypair for the device used
+for the sync service
 
-        Make sure each device has each pub file
-
-
-MAIN CONFIG
-    Read through config_example.py
+Make sure each device has each pub file
 
 
-WEBAPP CONFIG
-    Read through admin_webapp/instance/config_example.py
+#### Main Config
+Read through config_example.py
 
 
-AUTOMATIC CONNECTION
+#### Webapp Config
+Read through admin_webapp/instance/config_example.py
 
-    You will need a third device on a static ip.
-    Make any required changes to config.py.
 
-    It's recommended to run this as a systemd service.
-    You may run it manually for testing
+#### Automatic Connection
 
-    Setting up the service:
-        Open example.service and edit the ExecStart path
-    to point to run_sync_service.sh
+You will need a third device on a static ip.
+Make any required changes to config.py.
 
-    Rename it (e.g. "ip.sync.service")
+It's recommended to run this as a systemd service.
+You may run it manually for testing
 
-    copy it to /etc/systemd/system/ip.sync.service
+Setting up the service:
+Open example.service and edit the ExecStart path to point to run_sync_service.sh
 
-    enable and start the service:
-        "sudo systemctl enable ip.sync && sudo systemctl start ip.sync"
+Rename it (e.g. "ip.sync.service")
 
-    Check to make sure it's working (Look for "Active: active(running)"):
-        "sudo systemctl status ip.sync"
+copy it to /etc/systemd/system/ip.sync.service
+
+enable and start the service:
+    sudo systemctl enable ip.sync && sudo systemctl start ip.sync
+
+Check to make sure it's working (Look for "Active: active(running)"):
+    sudo systemctl status ip.sync
 
 
 ### Built With
