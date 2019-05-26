@@ -1,11 +1,9 @@
 """ vim: set et sw=4 ts=4 sts=4: """
-
 # Imports
 try:
     import json
 except:
     raise Exception('Failed to import json module')
-
 try:
     import mysql.connector
 except:
@@ -24,10 +22,10 @@ class DBInterface:
         __dbi_cursor : cursor
             database cursor
         __last_result : none
+            the last resuls
         __config : dict
             dict include host, user, passwd, database, port (optional)
     """
-
 
     __is_valid = False
     __dbi = None

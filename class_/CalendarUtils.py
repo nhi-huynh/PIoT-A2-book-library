@@ -89,5 +89,4 @@ class CalendarUtils:
 
         event = self.service.events().insert(
             calendarId="primary", body=event).execute()
-        print(event['id'])
         return event['id']

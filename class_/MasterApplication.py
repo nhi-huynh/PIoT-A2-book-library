@@ -4,7 +4,6 @@ from class_.CalendarUtils import CalendarUtils
 from class_.Validator import Validator
 from class_.QR import QR
 from class_.VoiceSearchUtils import VoiceSearchUtils
-
 from datetime import datetime, date, timedelta
 import json
 import time
@@ -135,7 +134,6 @@ class MasterApplication:
 
         Args:
             sectionName: title to print
-
         """
 
         print()
@@ -225,7 +223,7 @@ class MasterApplication:
         A function created to search for a book by ISBN
 
         Returns:
-            bool true or false
+            True or False based on printList function
         """
 
         self.printSection("SEARCH BY ISBN")
@@ -242,7 +240,7 @@ class MasterApplication:
         """A function created to search for a book by Title
 
         Returns:
-            bool true or false
+            True or False based on printList function
         """
 
         self.printSection("SEARCH BY TITLE")
@@ -259,7 +257,7 @@ class MasterApplication:
         """A function created to search for a book by Author
 
         Returns:
-            bool true or false
+            True or False based on printList function
         """
 
         self.printSection("SEARCH BY AUTHOR")

@@ -167,8 +167,6 @@ class FaceRecognition:
             match_count = 0
 
             for encoding in encodings:
-                # matches = face_recognition.compare_faces(
-                # user_data, encoding, self.__tolerance)
                 matches = face_recognition.compare_faces(user_data, encoding)
                 match_count += sum(matches)
 
