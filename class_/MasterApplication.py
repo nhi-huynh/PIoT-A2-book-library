@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-# email: RMIT.PIOT.A2@gmail.com
-# password: A2abc123
 
 from class_.Validator import Validator
 from class_.DatabaseUtils import DatabaseUtils
@@ -274,15 +272,10 @@ class MasterApplication:
                 if self.validator.onLoan(self.username, isbn):
                     print("You can not borrow this book again.\n")
                 else:
-                    # currentdate = date.today()
-                    # dueDate = currentdate + timedelta(days=7)
                     currentdate = datetime.now()
                     dueDate = currentdate.date() + timedelta(days=7)
 
                     eventID = self.calendar.createCalendarEvent(isbn, self.username)
-
-                    # for now, use a hard-coded eventID
-                    # eventID = 10000000
 
                     with DatabaseUtils() as db:
 

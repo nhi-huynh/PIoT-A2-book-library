@@ -84,7 +84,6 @@ class DatabaseUtils:
                 select isbn from Book
                 """)
 
-            # print("Book table has {} rows".format(isEmpty))
             if isEmpty == 0:
                 self.insertBook("1"*13, "Frankenstein", "Mary Shelley", "1818")
                 self.insertBook("2"*13, "Doraemon", "Fujiko Fujio", "1969")

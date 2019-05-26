@@ -57,8 +57,8 @@ class Master():
                 msg = self.conn.receive()
 
                 if msg == b'exit':
-		    print('Exiting')
-		    self.conn.disconnect()
+                    print('Exiting')
+                    self.conn.disconnect()
                     return True
 
 

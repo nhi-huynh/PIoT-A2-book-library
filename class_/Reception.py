@@ -238,7 +238,7 @@ class Reception():
 
         while True:
 
-            i = input('Would you like to enable face recognition?\nYes/No')
+            i = input('Would you like to enable face recognition?\nYes/No: ')
 
             i = i.lower()
 
@@ -266,7 +266,7 @@ class Reception():
 
             while True:
 
-                i = input('Try again?\nYes/No')
+                i = input('Try again?\nYes/No: ')
 
                 i = i.lower()
 
