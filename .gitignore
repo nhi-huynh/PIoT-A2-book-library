@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+/config.py
+*.log
+.DS_Store
+gc*.json
+*.swp
+.vscode
+keys

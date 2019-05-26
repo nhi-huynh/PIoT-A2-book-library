@@ -1,0 +1,9 @@
+[Unit]
+Description=IP Synchronisation service
+
+[Service]
+Type=idle
+ExecStart=/path/to/run_sync_service.sh
+
+[Install]
+WantedBy=multi-user.target
