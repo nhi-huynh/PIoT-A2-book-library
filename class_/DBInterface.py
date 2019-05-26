@@ -16,18 +16,18 @@ class DBInterface:
     """
     A class used to represent the Database Interface
 
-    Attributes
-    ----------
-    __is_valid : bool
-        is the database valid
-    __dbi : database
-        mysql database
-    __dbi_cursor : cursor
-        database cursor
-    __last_result : none
-    __config : dict
-        dict include host, user, passwd, database, port (optional)
+    Attributes:
+        __is_valid : bool
+            is the database valid
+        __dbi : database
+            mysql database
+        __dbi_cursor : cursor
+            database cursor
+        __last_result : none
+        __config : dict
+            dict include host, user, passwd, database, port (optional)
     """
+
 
     __is_valid = False
     __dbi = None
