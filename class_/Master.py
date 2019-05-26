@@ -35,7 +35,13 @@ class Master():
 
                 self.conn.connect()
 
-                username = self.conn.receive()
+                msg = self.conn.receive()
+
+                if msg == b'exit':
+                    print('Exiting')
+                    self.conn.disconnect()
+                    return True
+
 
                 if not username:
                     print('Failed to reconnect')

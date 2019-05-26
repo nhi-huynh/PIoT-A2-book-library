@@ -1,5 +1,4 @@
 # vim: set et sw=4 ts=4 sts=4:
-
 import socket
 import re
 from getpass import getpass
@@ -76,6 +75,9 @@ class Reception():
             option = option.lower()
 
             if option == 'exit':
+                self.tcp.send_all(b'exit')
+                self.tcp.disconnect()
+                self.fr.export()
                 return
 
             elif option == '1':
@@ -257,7 +259,7 @@ class Reception():
 
         while True:
 
-            i = input('Would you like to enable face recognition?\nYes/No')
+            i = input('Would you like to enable face recognition?\nYes/No: ')
 
             i = i.lower()
 
@@ -273,7 +275,11 @@ class Reception():
         self.__start_session(uname)
 
     def register_face(self, uname):
-        """A function created to register a new face"""
+        """A function created to register a new face
+
+        Args:
+            uname: username of the person logged in
+        """
 
         while True:
             if self.fr.register(uname):
@@ -286,7 +292,7 @@ class Reception():
 
             while True:
 
-                i = input('Try again?\nYes/No')
+                i = input('Try again?\nYes/No: ')
 
                 i = i.lower()
 
@@ -322,13 +328,13 @@ class Reception():
 
         Args:
             msg: the string you want to validate
-            fname:
+            fname: the file name
             minlen: the minimum length the string can be
             maxlen: the maximum length the string can be
-            reg:
-            reg_msg:
+            reg: regex, characters that the string must contain
+            reg_msg: a message to display if needed
             hide_input: to show or hide the input (eg hide passwords)
-            confirm:
+            confirm: bool if they want confirmation
             val_func: a function to validate with
             val_func_msg: the message to display if invalid
 

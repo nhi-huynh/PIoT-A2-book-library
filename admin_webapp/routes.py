@@ -100,9 +100,7 @@ def getBooks():
     books = Book.query.all()
     result = booksSchema.dump(books)
 
-    js = jsonify(result.data)
-    print(result.data)
-    return js
+    return jsonify(result.data)
 
 
 # Endpoint to get book by isbn.
@@ -127,8 +125,8 @@ def getBookByISBN(isbn):
 # Send a POST json as below
 # {
 #     "title": "The Lean Startup",
-# 	"author": "Eric Ries",
-# 	"yearPublished": 2011
+#     "author": "Eric Ries",
+#     "yearPublished": 2011
 # }
 @app.route("/api/book", methods=["POST"])
 def addBook():
@@ -162,9 +160,9 @@ def addBook():
 # Endpoint to update book.
 # Send a PUT json as below
 # {
-# 	"title": "The Lean Startup",
-# 	"author": "Eric Ries",
-# 	"yearPublished": 2012
+#     "title": "The Lean Startup",
+#     "author": "Eric Ries",
+#     "yearPublished": 2012
 # }
 # If we don't want to change a field, just assign that field to an empty string
 # e.g. "title": ""
